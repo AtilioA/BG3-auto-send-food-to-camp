@@ -21,4 +21,18 @@ function Utils.GetGUID(uuid)
   return string.sub(uuid, -36)
 end
 
+function Utils.GetPartyMembers()
+  local teamMembers = {}
+
+  local allPlayers = Osi.DB_Players:Get(nil)
+  for _, player in ipairs(allPlayers) do
+    if not string.match(player[1]:lower(), "%f[%A]dummy%f[%A]") then
+      teamMembers[#teamMembers + 1] = Utils.GetGUID(player[1])
+    end
+  end
+
+  return teamMembers
+end
+
+
 return Utils

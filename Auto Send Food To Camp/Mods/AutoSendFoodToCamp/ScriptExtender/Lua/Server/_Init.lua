@@ -1,4 +1,5 @@
 Ext.Require("Server/Utils.lua")
+Ext.Require("Server/Helpers/Inventory.lua")
 Ext.Require("Server/Config.lua")
 Ext.Require("Server/EventHandlers.lua")
 Ext.Require("Server/FoodDelivery.lua")

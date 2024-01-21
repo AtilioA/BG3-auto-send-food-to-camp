@@ -32,6 +32,20 @@ function FoodDelivery.MoveToCampChest(item)
   end
 end
 
+function FoodDelivery.SendInventoryFoodToChest()
+  local partyMembers = Utils.GetPartyMembers()
+
+  for _, character in ipairs(partyMembers) do
+    local food = GetFoodInInventory(character)
+    if food ~= nil then
+      for _, item in ipairs(food) do
+        Utils.DebugPrint(2, "Sending food to chest: " .. item)
+        FoodDelivery.DeliverFood(item)
+      end
+    end
+  end
+end
+
 function FoodDelivery.DeliverFood(item)
   local shouldMove = false
 

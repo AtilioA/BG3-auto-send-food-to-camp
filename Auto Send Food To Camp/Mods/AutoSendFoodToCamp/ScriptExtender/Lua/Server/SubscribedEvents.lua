@@ -13,6 +13,10 @@ local function SubscribeToEvents()
     Ext.Osiris.RegisterListener("RequestCanPickup", 3, "after", EHandlers.OnRequestCanPickup)
     Ext.Osiris.RegisterListener("PickupFailed", 2, "after", EHandlers.OnPickupFailed)
 
+    if JsonConfig.FEATURES.send_existing_food then
+      Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", EHandlers.OnTeleportedToCamp)
+    end
+    
     -- Ext.Osiris.RegisterListener("TemplateOpening", 3, "before", EHandlers.OnTemplateOpening)
     -- Ext.Osiris.RegisterListener("Moved", 1, "before", EHandlers.OnMoved)
     -- Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)

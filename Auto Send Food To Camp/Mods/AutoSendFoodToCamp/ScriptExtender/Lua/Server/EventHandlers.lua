@@ -96,6 +96,14 @@ function EHandlers.OnPickupFailed(character, object)
   end
 end
 
+function EHandlers.OnTeleportedToCamp(character)
+  Utils.DebugPrint(2, "OnTeleportedToCamp: " .. character)
+  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "Character is in party with host.")
+    FoodDelivery.SendInventoryFoodToChest()
+  end
+end
+
 -- function EHandlers.OnCharacterStoleItem(character, item, itemRootTemplate, x, y, z, oldOwner, srcContainer, amount,
 --                                         goldValue)
 --   Utils.DebugPrint(2,
