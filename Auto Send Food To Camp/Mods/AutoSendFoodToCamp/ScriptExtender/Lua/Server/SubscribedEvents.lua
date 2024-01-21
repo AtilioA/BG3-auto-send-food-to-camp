@@ -4,8 +4,6 @@ local function SubscribeToEvents()
 
     -- Moving/looting
     Ext.Osiris.RegisterListener("MovedFromTo", 4, "before", EHandlers.OnMovedFromTo)
-    -- Ext.Osiris.RegisterListener("DroppedBy", 2, "before", EHandlers.OnDroppedBy)
-    -- Ext.Osiris.RegisterListener("PreMovedBy", 2, "after", EHandlers.OnPreMovedBy)
 
     Ext.Osiris.RegisterListener("TimerFinished", 1, "before", EHandlers.OnTimerFinished)
 
@@ -15,11 +13,16 @@ local function SubscribeToEvents()
     Ext.Osiris.RegisterListener("RequestCanPickup", 3, "after", EHandlers.OnRequestCanPickup)
     Ext.Osiris.RegisterListener("PickupFailed", 2, "after", EHandlers.OnPickupFailed)
 
-
     -- Ext.Osiris.RegisterListener("TemplateOpening", 3, "before", EHandlers.OnTemplateOpening)
     -- Ext.Osiris.RegisterListener("Moved", 1, "before", EHandlers.OnMoved)
     -- Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
     -- Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
+
+    -- Do not use:
+    -- Ext.Osiris.RegisterListener("DroppedBy", 2, "before", EHandlers.OnDroppedBy)
+    -- Ext.Osiris.RegisterListener("PreMovedBy", 2, "after", EHandlers.OnPreMovedBy)
+    -- Ext.Osiris.RegisterListener("CharacterStoleItem", 10, "before", EHandlers.OnCharacterStoleItem)
+    -- Ext.Osiris.RegisterListener("CharacterPickpocketSuccess", 10, "before", EHandlers.OnCharacterPickpocketSuccess)
 
     -- TODO:
     -- Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", EHandlers.OnRequestCanLoot)

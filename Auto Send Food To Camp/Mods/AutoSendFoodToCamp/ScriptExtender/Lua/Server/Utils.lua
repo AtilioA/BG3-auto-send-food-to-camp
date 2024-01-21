@@ -16,4 +16,9 @@ function Utils.GetChestUUID()
   return chestName
 end
 
+-- Get the last 36 characters of the UUID
+function Utils.GetGUID(uuid)
+  return string.sub(uuid, -36)
+end
+
 return Utils

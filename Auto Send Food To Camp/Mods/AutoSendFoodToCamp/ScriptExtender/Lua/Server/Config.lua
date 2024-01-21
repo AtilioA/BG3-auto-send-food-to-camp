@@ -10,7 +10,8 @@ Config.defaultConfig = {
     FEATURES = {
         move_food = true,  -- Move food to the camp chest
         move_beverages = true, -- Move beverages to the camp chest
-        -- stolen_items = true, -- TODO: Move stolen items (loose but owned/pickpocketed) to the camp chest
+        move_bought_food = true, -- Move food bought from merchants to the camp chest
+        -- stolen_items = true, -- TODO: Move stolen items (loose but owned/pickpocketed) to the camp chest. Not feasible/worth it
     },
     DEBUG = {
         level = 0 -- 0 = no debug, 1 = minimal, 2 = verbose logs

@@ -12,11 +12,11 @@ EHandlers = {}
 -- end
 
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
-  if FoodDelivery.ignore_item.item == movedObject then
-    Utils.DebugPrint(2, "Ignoring item: " .. movedObject)
-    FoodDelivery.UpdateIgnoredItem(nil, nil)
-    return
-  end
+  -- if FoodDelivery.ignore_item.item == movedObject then
+  --   Utils.DebugPrint(2, "Ignoring item: " .. movedObject)
+  --   FoodDelivery.UpdateIgnoredItem(nil, nil)
+  --   return
+  -- end
 
   Utils.DebugPrint(2,
     "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. isTrade)
@@ -30,7 +30,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   end
 
   -- Don't try to move items that are being moved from the party
-  if (Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter())) then
+  if (Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and isTrade ~= 1) then
     Utils.DebugPrint(2, "fromObject is in party with host. Not trying to send to chest.")
     return
   end
@@ -38,6 +38,18 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   if not Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "Moved item from outside party to party member, trying to send to chest.")
     FoodDelivery.DeliverFood(movedObject)
+    return
+  end
+
+  -- Do not send items to the chest if we are selling them in a trade
+  if JsonConfig.FEATURES.move_bought_food then
+    Utils.DebugPrint(2,
+      "isTrade: " .. isTrade .. " fromObject: " .. fromObject .. " HostCharacter: " .. Osi.GetHostCharacter())
+    if isTrade == 1 and Utils.GetGUID(fromObject) ~= Osi.GetHostCharacter() then
+      Utils.DebugPrint(2, "Got item from trade, trying to send to chest.")
+      FoodDelivery.DeliverFood(movedObject)
+      return
+    end
   end
 end
 
@@ -50,14 +62,14 @@ end
 
 function EHandlers.OnTimerFinished(timerName)
   if timerName == "FoodDeliveryTimer" then
-    Utils.DebugPrint(2, "OnTimerFinished: Awaiting delivery: " .. tostring(FoodDelivery.awaiting_delivery.item))
-    Utils.DebugPrint(2, "OnTimerFinished: Ignoring item: " .. tostring(FoodDelivery.ignore_item.item))
+    -- Utils.DebugPrint(2, "OnTimerFinished: Awaiting delivery: " .. tostring(FoodDelivery.awaiting_delivery.item))
+    -- Utils.DebugPrint(2, "OnTimerFinished: Ignoring item: " .. tostring(FoodDelivery.ignore_item.item))
     if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
-      Utils.DebugPrint(2, "OnTimerFinished: Delivering food: " .. FoodDelivery.awaiting_delivery.item)
+      -- Utils.DebugPrint(2, "OnTimerFinished: Delivering food: " .. FoodDelivery.awaiting_delivery.item)
       FoodDelivery.DeliverFood(FoodDelivery.awaiting_delivery.item)
       FoodDelivery.UpdateAwaitingItem(nil, nil)
     end
-    FoodDelivery.UpdateIgnoredItem(nil, nil)
+    -- FoodDelivery.UpdateIgnoredItem(nil, nil)
   end
 end
 
@@ -83,6 +95,21 @@ function EHandlers.OnPickupFailed(character, object)
     Utils.DebugPrint(2, "Character is in party with host.")
   end
 end
+
+-- function EHandlers.OnCharacterStoleItem(character, item, itemRootTemplate, x, y, z, oldOwner, srcContainer, amount,
+--                                         goldValue)
+--   Utils.DebugPrint(2,
+--     "OnCharacterStoleItem: " ..
+--     character ..
+--     " " ..
+--     item ..
+--     " " ..
+--     itemRootTemplate ..
+--     " " .. x .. " " .. y .. " " .. z .. " " .. oldOwner .. " " .. srcContainer .. " " .. amount .. " " .. goldValue)
+--   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+--     Utils.DebugPrint(2, "Character is in party with host.")
+--   end
+-- end
 
 -- function EHandlers.OnUseStarted(character, item)
 --   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
