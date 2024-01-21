@@ -2,7 +2,22 @@ Ext.Require("Server/Helpers/Food.lua")
 
 EHandlers = {}
 
+-- function EHandlers.OnDroppedBy(object, mover)
+--   if Osi.IsInPartyWith(mover, Osi.GetHostCharacter()) == 1 then
+--     if IsFood(object) then
+--       Utils.DebugPrint(2, "OnDroppedBy: " .. object .. " " .. mover)
+--       FoodDelivery.UpdateIgnoredItem(object, "DroppedBy")
+--     end
+--   end
+-- end
+
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
+  if FoodDelivery.ignore_item.item == movedObject then
+    Utils.DebugPrint(2, "Ignoring item: " .. movedObject)
+    FoodDelivery.UpdateIgnoredItem(nil, nil)
+    return
+  end
+
   Utils.DebugPrint(2,
     "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. isTrade)
 
@@ -27,16 +42,43 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 end
 
 -- Used to handle loose items. NOTE: will also be called when moving items in the game world, such as when moving, throwing, dropping.
-function EHandlers.OnPreMovedBy(item, character)
-  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
-    Utils.DebugPrint(2, "OnPreMovedBy: " .. item .. " " .. character)
-    FoodDelivery.DeliverFood(item)
+-- function EHandlers.OnPreMovedBy(item, character)
+--   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+--     Utils.DebugPrint(2, "OnPreMovedBy: " .. item .. " " .. character)
+--   end
+-- end
+
+function EHandlers.OnTimerFinished(timerName)
+  if timerName == "FoodDeliveryTimer" then
+    Utils.DebugPrint(2, "OnTimerFinished: Awaiting delivery: " .. tostring(FoodDelivery.awaiting_delivery.item))
+    Utils.DebugPrint(2, "OnTimerFinished: Ignoring item: " .. tostring(FoodDelivery.ignore_item.item))
+    if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
+      Utils.DebugPrint(2, "OnTimerFinished: Delivering food: " .. FoodDelivery.awaiting_delivery.item)
+      FoodDelivery.DeliverFood(FoodDelivery.awaiting_delivery.item)
+      FoodDelivery.UpdateAwaitingItem(nil, nil)
+    end
+    FoodDelivery.UpdateIgnoredItem(nil, nil)
   end
 end
 
 -- TODO: we might have to handle this (might be already handled by OnMovedFromTo!)
 function EHandlers.OnTradeEnds(character, trader)
   Utils.DebugPrint(2, "OnTradeEnds: " .. character .. " " .. trader)
+  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "Character is in party with host.")
+  end
+end
+
+function EHandlers.OnRequestCanPickup(character, object, requestID)
+  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "OnRequestCanPickup: " .. character .. " " .. object .. " " .. requestID)
+    FoodDelivery.UpdateAwaitingItem(object, "RequestCanPickup")
+    Osi.TimerLaunch("FoodDeliveryTimer", 500)
+  end
+end
+
+function EHandlers.OnPickupFailed(character, object)
+  Utils.DebugPrint(2, "OnPickupFailed: " .. character .. " " .. object)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "Character is in party with host.")
   end

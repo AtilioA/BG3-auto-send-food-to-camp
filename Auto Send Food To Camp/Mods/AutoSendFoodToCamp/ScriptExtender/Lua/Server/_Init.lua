@@ -1,7 +1,7 @@
 Ext.Require("Server/Utils.lua")
 Ext.Require("Server/Config.lua")
-Ext.Require("Server/FoodDelivery.lua")
 Ext.Require("Server/EventHandlers.lua")
+Ext.Require("Server/FoodDelivery.lua")
 
 MOD_UUID = "1c132ec4-4cd2-4c40-aeb9-ff6ee0467da8"
 local MODVERSION = Ext.Mod.GetMod(MOD_UUID).Info.ModVersion

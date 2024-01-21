@@ -1,7 +1,35 @@
 FoodDelivery = {}
 
+FoodDelivery.ignore_item = {
+  item = nil,
+  reason = nil
+}
+
+FoodDelivery.awaiting_delivery = {
+  item = nil,
+  reason = nil
+}
+
+function FoodDelivery.UpdateIgnoredItem(item, reason)
+  FoodDelivery.ignore_item.item = item
+  FoodDelivery.ignore_item.reason = reason
+end
+
+function FoodDelivery.UpdateAwaitingItem(item, reason)
+  FoodDelivery.awaiting_delivery.item = item
+  FoodDelivery.awaiting_delivery.reason = reason
+end
+
 function FoodDelivery.MoveToCampChest(item)
-  return Osi.SendToCampChest(item, Osi.GetHostCharacter())
+  Utils.DebugPrint(2, tostring(FoodDelivery.ignore_item.item) .. " " .. tostring(FoodDelivery.ignore_item.reason))
+  if (FoodDelivery.ignore_item.item == item) then
+    Utils.DebugPrint(2, "Ignoring item: " .. item .. "reason: " .. FoodDelivery.ignore_item.reason)
+    FoodDelivery.ignore_item.item = nil
+    return
+  else
+    Utils.DebugPrint(1, "Moving " .. item .. " to camp chest.")
+    return Osi.SendToCampChest(item, Osi.GetHostCharacter())
+  end
 end
 
 function FoodDelivery.DeliverFood(item)
@@ -27,6 +55,7 @@ function FoodDelivery.DeliverFood(item)
     end
 
     if shouldMove then
+      Utils.DebugPrint(2, "Should move " .. item .. " to camp chest.")
       FoodDelivery.MoveToCampChest(item)
     end
   else
