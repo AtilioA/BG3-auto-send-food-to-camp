@@ -46,34 +46,38 @@ function FoodDelivery.SendInventoryFoodToChest()
   end
 end
 
-function FoodDelivery.DeliverFood(item)
+function FoodDelivery.DeliverFood(object)
   local shouldMove = false
 
-  if IsFood(item) then
-    if IsBeverage(item) then
-      if JsonConfig.FEATURES.move_beverages then
-        shouldMove = true
-        Utils.DebugPrint(1, item .. " is beverage, will move to camp chest.")
+  if IsItem(object) then
+    if IsFood(object) then
+      if IsBeverage(object) then
+        if JsonConfig.FEATURES.move_beverages then
+          shouldMove = true
+          Utils.DebugPrint(1, object .. " is beverage, will move to camp chest.")
+        else
+          shouldMove = false
+          Utils.DebugPrint(1, object .. " is beverage, won't move to camp chest.")
+        end
       else
-        shouldMove = false
-        Utils.DebugPrint(1, item .. " is beverage, won't move to camp chest.")
+        if JsonConfig.FEATURES.move_food then
+          shouldMove = true
+          Utils.DebugPrint(1, object .. " is food, will move to camp chest.")
+        else
+          shouldMove = false
+          Utils.DebugPrint(1, object .. " is food, won't move to camp chest.")
+        end
+      end
+
+      if shouldMove then
+        Utils.DebugPrint(2, "Should move " .. object .. " to camp chest.")
+        FoodDelivery.MoveToCampChest(object)
       end
     else
-      if JsonConfig.FEATURES.move_food then
-        shouldMove = true
-        Utils.DebugPrint(1, item .. " is food, will move to camp chest.")
-      else
-        shouldMove = false
-        Utils.DebugPrint(1, item .. " is food, won't move to camp chest.")
-      end
-    end
-
-    if shouldMove then
-      Utils.DebugPrint(2, "Should move " .. item .. " to camp chest.")
-      FoodDelivery.MoveToCampChest(item)
+      Utils.DebugPrint(2, item .. " is not food, won't move to camp chest.")
     end
   else
-    Utils.DebugPrint(2, item .. " is not food, won't move to camp chest.")
+    Utils.DebugPrint(2, object .. " is not an item, won't process.")
   end
 end
 

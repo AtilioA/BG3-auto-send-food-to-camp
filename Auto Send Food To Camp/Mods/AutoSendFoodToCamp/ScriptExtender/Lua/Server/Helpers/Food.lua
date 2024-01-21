@@ -1,11 +1,13 @@
 Food = {}
 
-function IsFood(item)
-  return Osi.ItemGetSupplyValue(item) > 0
+function IsFood(object)
+  if IsItem(object) then
+    return Osi.ItemGetSupplyValue(object) > 0
+  end
 end
 
-function IsBeverage(item)
-  return IsFood(item) and Osi.IsConsumable(item) == 1
+function IsBeverage(object)
+  return IsFood(object) and Osi.IsConsumable(object) == 1
 end
 
 function GetFoodInInventory(character)
