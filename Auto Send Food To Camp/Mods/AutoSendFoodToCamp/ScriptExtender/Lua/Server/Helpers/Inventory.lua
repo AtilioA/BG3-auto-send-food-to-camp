@@ -1,4 +1,12 @@
--- Courtesy of FocusBG3: https://www.nexusmods.com/baldursgate3/mods/5972
+-- Adapted from FocusBG3: https://www.nexusmods.com/baldursgate3/mods/5972
+
+local CAMP_SUPPLY_SACK_TEMPLATE_ID = 'efcb70b7-868b-4214-968a-e23f6ad586bc'
+
+---@param object any
+---@return EntityHandle | nil
+function GetEntity(object)
+  return GetCharacter(object) or GetItem(object)
+end
 
 function IsCharacter(object)
   local objectType = type(object)
@@ -107,7 +115,7 @@ end
 -- -@return {Entity:EntityHandle, Guid:Guid, Name:string, TemplateId:string, TemplateName:string}[]
 function GetInventory(object, primaryOnly, shallow)
   local items = {}
-  local entity = Ext.Entity.Get(object)
+  local entity = GetEntity(object)
   if entity ~= nil then
     local inventory = entity.InventoryOwner
     if inventory ~= nil then
@@ -145,18 +153,49 @@ function GetInventory(object, primaryOnly, shallow)
   return items
 end
 
--- https://docs.larian.game/Osiris/API/ItemIsInInventory
+function GetCampChestInventory()
+  local campChest = Osi.DB_Camp_UserCampChest:Get(nil, nil)[1][2]
+  return GetInventory(campChest, false, false)
+end
 
-function PrintTable(tbl, indent)
-  if not indent then indent = 0 end
-  for k, v in pairs(tbl) do
-    local formatting = string.rep("  ", indent) .. k .. ": "
-    if type(v) == "table" then
-      print(formatting)
-      PrintTable(v, indent + 1)
-    else
-      -- Convert to string to safely handle userdata and other non-string types
-      print(formatting .. tostring(v))
+--- Checks if an inventory contains a supply sack.
+---@param inventoryItems any The first
+---@return any | nil - The first supply sack object, or nil if not found.
+function TryToGetCampChestSupplyPack(inventoryItems)
+  for _, item in ipairs(inventoryItems) do
+    -- Utils.DebugPrint(2, "Checking item: " .. item.Name)
+    -- _D(GetHostCharacter())
+    -- local playerEntity = GetPlayerEntity()
+    -- Osi.TemplateAddTo(item, GetHostCharacter().ServerCharacter.Template.Name, 1, 1)
+    if item.TemplateId == CAMP_SUPPLY_SACK_TEMPLATE_ID then
+      return item
     end
   end
+
+  return nil
 end
+
+function CheckForCampChestSupplySack()
+  return TryToGetCampChestSupplyPack(GetCampChestInventory())
+end
+
+function AddSupplySackToCampChest()
+  local campChest = Osi.DB_Camp_UserCampChest:Get(nil, nil)[1][2]
+  Utils.DebugPrint(2, "Adding supply sack to camp chest: " .. campChest)
+  Osi.TemplateAddTo(CAMP_SUPPLY_SACK_TEMPLATE_ID, campChest, 1)
+end
+
+function AddSupplySackToCampChestIfMissing()
+  if CheckForCampChestSupplySack() == nil then
+    Utils.DebugPrint(2, "Supply sack not found in camp chest. Adding.")
+    AddSupplySackToCampChest()
+  else
+    Utils.DebugPrint(2, "Supply sack found in camp chest.")
+  end
+end
+
+function GetCampChestSupplySack()
+  AddSupplySackToCampChestIfMissing()
+  return CheckForCampChestSupplySack()
+end
+
