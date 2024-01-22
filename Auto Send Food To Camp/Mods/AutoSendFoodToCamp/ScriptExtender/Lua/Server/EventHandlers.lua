@@ -35,7 +35,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   -- Don't try to move if the item is already from the camp chest
   if (fromObject == chestName) then
     Utils.DebugPrint(2, "fromObject is camp chest. Not trying to send to chest.")
-    -- TODO: check if the item is in a container in the chest
+    -- TODO: check if the item is in a container in the chest. This will also cause problems even if we don't use 'pickup'
     return
   end
 
@@ -48,7 +48,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 
   if not Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "Moved item from outside party to party member, trying to send to chest.")
-    FoodDelivery.DeliverFood(movedObject)
+    FoodDelivery.DeliverFood(movedObject, fromObject, true)
     return
   end
 
@@ -58,7 +58,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
       "isTrade: " .. isTrade .. " fromObject: " .. fromObject .. " HostCharacter: " .. Osi.GetHostCharacter())
     if isTrade == 1 and Utils.GetGUID(fromObject) ~= Osi.GetHostCharacter() then
       Utils.DebugPrint(2, "Got item from trade, trying to send to chest.")
-      FoodDelivery.DeliverFood(movedObject)
+      FoodDelivery.DeliverFood(movedObject, fromObject, true)
       return
     end
   end
@@ -84,16 +84,30 @@ function EHandlers.OnTimerFinished(timerName)
   end
 end
 
--- TODO: we might have to handle this (might be already handled by OnMovedFromTo!)
-function EHandlers.OnTradeEnds(character, trader)
-  Utils.DebugPrint(2, "OnTradeEnds: " .. character .. " " .. trader)
-  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
-    Utils.DebugPrint(2, "Character is in party with host.")
-  end
-end
+-- REVIEW: we might have to handle this (already handled by OnMovedFromTo)
+-- function EHandlers.OnTradeEnds(character, trader)
+--   Utils.DebugPrint(2, "OnTradeEnds: " .. character .. " " .. trader)
+--   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+--     Utils.DebugPrint(2, "Character is in party with host.")
+--   end
+-- end
 
 function EHandlers.OnRequestCanPickup(character, object, requestID)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+    -- TODO: do not attempt anything if player is using camp chest
+    local campChestSack = GetCampChestSupplySack()
+    if campChestSack == nil then
+      Utils.DebugPrint(1, "Camp chest supply sack not found.")
+      return
+    end
+    local objectEntity = GetItemObject(object)
+    if objectEntity ~= nil then
+      _D(objectEntity)
+    end
+    -- local campChestGuid = Utils.GetGUID(Utils.GetChestUUID())
+    -- Utils.DebugPrint(2, objectEntity.Template.Id)
+    -- Osi.TemplateAddTo(objectEntity.Template.Id, Osi.GetHostCharacter(), 50, 1)
+
     Utils.DebugPrint(2, "OnRequestCanPickup: " .. character .. " " .. object .. " " .. requestID)
     FoodDelivery.UpdateAwaitingItem(object, "RequestCanPickup")
     Osi.TimerLaunch("FoodDeliveryTimer", 500)
@@ -109,8 +123,10 @@ end
 
 function EHandlers.OnTeleportedToCamp(character)
   Utils.DebugPrint(2, "OnTeleportedToCamp: " .. character)
+
+  -- TODO: Try to create sack only once etc
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
-    Utils.DebugPrint(2, "Character is in party with host.")
+    AddSupplySackToCampChestIfMissing()
     FoodDelivery.SendInventoryFoodToChest()
   end
 end
@@ -130,17 +146,19 @@ end
 --   end
 -- end
 
--- function EHandlers.OnUseStarted(character, item)
---   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
---     Utils.DebugPrint(3, "UseStarted: " .. character .. " " .. item)
---   end
--- end
 
--- function EHandlers.OnUseEnded(character, item, result)
---   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
---     Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
---   end
--- end
+-- TODO: create flag to check if is using the camp chest
+function EHandlers.OnUseStarted(character, item)
+  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+    Utils.DebugPrint(3, "UseStarted: " .. character .. " " .. item)
+  end
+end
+
+function EHandlers.OnUseEnded(character, item, result)
+  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
+  end
+end
 
 -- function EHandlers.OnTemplateOpening(ITEMROOT, ITEM, CHARACTER)
 --   Utils.DebugPrint(2, "OnTemplateOpening: " .. ITEMROOT .. " " .. ITEM .. " " .. CHARACTER)

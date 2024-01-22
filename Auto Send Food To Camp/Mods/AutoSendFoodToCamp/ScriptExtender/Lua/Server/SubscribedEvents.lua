@@ -8,7 +8,7 @@ local function SubscribeToEvents()
     Ext.Osiris.RegisterListener("TimerFinished", 1, "before", EHandlers.OnTimerFinished)
 
     -- Trading
-    Ext.Osiris.RegisterListener("TradeEnds", 2, "before", EHandlers.OnTradeEnds)
+    -- Ext.Osiris.RegisterListener("TradeEnds", 2, "before", EHandlers.OnTradeEnds)
 
     Ext.Osiris.RegisterListener("RequestCanPickup", 3, "after", EHandlers.OnRequestCanPickup)
     Ext.Osiris.RegisterListener("PickupFailed", 2, "after", EHandlers.OnPickupFailed)
@@ -16,11 +16,11 @@ local function SubscribeToEvents()
     if JsonConfig.FEATURES.send_existing_food then
       Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", EHandlers.OnTeleportedToCamp)
     end
-    
+
     -- Ext.Osiris.RegisterListener("TemplateOpening", 3, "before", EHandlers.OnTemplateOpening)
     -- Ext.Osiris.RegisterListener("Moved", 1, "before", EHandlers.OnMoved)
-    -- Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
-    -- Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
+    Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
+    Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
 
     -- Do not use:
     -- Ext.Osiris.RegisterListener("DroppedBy", 2, "before", EHandlers.OnDroppedBy)

@@ -181,16 +181,16 @@ end
 
 function AddSupplySackToCampChest()
   local campChest = Osi.DB_Camp_UserCampChest:Get(nil, nil)[1][2]
-  Utils.DebugPrint(2, "Adding supply sack to camp chest: " .. campChest)
+  Utils.DebugPrint(1, "Adding supply sack to camp chest: " .. campChest)
   Osi.TemplateAddTo(CAMP_SUPPLY_SACK_TEMPLATE_ID, campChest, 1)
 end
 
 function AddSupplySackToCampChestIfMissing()
   if CheckForCampChestSupplySack() == nil then
-    Utils.DebugPrint(2, "Supply sack not found in camp chest. Adding.")
+    Utils.DebugPrint(3, "Supply sack not found in camp chest. Adding.")
     AddSupplySackToCampChest()
   else
-    Utils.DebugPrint(2, "Supply sack found in camp chest.")
+    Utils.DebugPrint(3, "Supply sack found in camp chest.")
   end
 end
 
