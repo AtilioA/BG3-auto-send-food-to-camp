@@ -12,7 +12,7 @@ Config.defaultConfig = {
         move_beverages = true, -- Move beverages to the camp chest
         move_bought_food = true, -- Move food bought from merchants to the camp chest
         send_existing_food = true, -- Move existing food in the inventory to the camp chest when going to the camp
-        -- stolen_items = true, -- TODO: Move stolen items (loose but owned/pickpocketed) to the camp chest. Not worth it? GetObject(item.Entity))
+        -- stolen_items = false, -- TODO: Move stolen items immediately (loose but owned/pickpocketed) to the camp chest. Not worth it? GetObject(item.Entity))
     },
     DEBUG = {
         level = 0 -- 0 = no debug, 1 = minimal, 2 = verbose logs

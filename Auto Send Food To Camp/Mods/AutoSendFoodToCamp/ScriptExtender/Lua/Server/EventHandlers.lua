@@ -23,11 +23,22 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 
   local chestName = Utils.GetChestUUID()
 
+  -- if (Osi.IsPublicDomain(movedObject) == 1) then
+  --   Utils.DebugPrint(2, "Moved item is public domain.")
+  --   return
+  -- else
+  -- if not JsonConfig.FEATURES.stolen_items then
+  --   Utils.DebugPrint(1, "Stolen items are disabled; not sending to chest.")
+  -- end
+  -- end
+
   -- Don't try to move if the item is already from the camp chest
   if (fromObject == chestName) then
     Utils.DebugPrint(2, "fromObject is camp chest. Not trying to send to chest.")
+    -- TODO: check if the item is in a container in the chest
     return
   end
+
 
   -- Don't try to move items that are being moved from the party
   if (Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and isTrade ~= 1) then

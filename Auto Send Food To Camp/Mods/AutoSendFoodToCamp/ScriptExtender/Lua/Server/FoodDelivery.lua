@@ -36,7 +36,7 @@ function FoodDelivery.SendInventoryFoodToChest()
   local partyMembers = Utils.GetPartyMembers()
 
   for _, character in ipairs(partyMembers) do
-    local food = GetFoodInInventory(character)
+    local food = GetFoodInInventory(character, false)
     if food ~= nil then
       for _, item in ipairs(food) do
         Utils.DebugPrint(2, "Sending food to chest: " .. item)
