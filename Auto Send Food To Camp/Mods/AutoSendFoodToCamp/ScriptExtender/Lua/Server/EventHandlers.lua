@@ -106,20 +106,24 @@ end
 
 function EHandlers.OnTimerFinished(timerName)
   if timerName == "FoodDeliveryTimer" then
-    -- Utils.DebugPrint(2, "OnTimerFinished: Awaiting delivery: " .. tostring(FoodDelivery.awaiting_delivery.item))
-    -- Utils.DebugPrint(2, "OnTimerFinished: Ignoring item: " .. tostring(FoodDelivery.ignore_item.item))
-    if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
-      -- Utils.DebugPrint(2, "OnTimerFinished: Delivering food: " .. FoodDelivery.awaiting_delivery.item)
-      FoodDelivery.DeliverFood(FoodDelivery.awaiting_delivery.item)
-      FoodDelivery.UpdateAwaitingItem(nil, nil)
-    end
-    -- FoodDelivery.UpdateIgnoredItem(nil, nil)
+    DeliverAwaitingFood()
   end
 
   if timerName == 'CreateSupplySackTimer' then
-    Utils.DebugPrint(2, "CreateSupplySackTimer: creating supply sack.")
-    AddSupplySackToCampChestIfMissing()
+    CreateSupplySack()
   end
+end
+
+function DeliverAwaitingFood()
+  if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
+    FoodDelivery.DeliverFood(FoodDelivery.awaiting_delivery.item)
+    FoodDelivery.UpdateAwaitingItem(nil, nil)
+  end
+end
+
+function CreateSupplySack()
+  Utils.DebugPrint(2, "CreateSupplySackTimer: creating supply sack.")
+  AddSupplySackToCampChestIfMissing()
 end
 
 -- REVIEW: we might have to handle this (already handled by OnMovedFromTo)

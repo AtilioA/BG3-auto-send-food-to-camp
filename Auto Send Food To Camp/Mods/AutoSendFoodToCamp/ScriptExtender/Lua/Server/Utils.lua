@@ -3,7 +3,7 @@ Utils = {}
 function Utils.DebugPrint(level, ...)
   if JsonConfig and JsonConfig.DEBUG and JsonConfig.DEBUG.level >= level then
     if (JsonConfig.DEBUG.level == 0) then
-      print("[Auto Send Food To Camp] " .. ...)
+      print("[Auto Send Food To Camp]: " .. ...)
     else
       print("[Auto Send Food To Camp][DEBUG LEVEL " .. level .. "]: " .. ...)
     end
@@ -37,20 +37,5 @@ end
 function Utils.GetPlayerEntity()
   return Ext.Entity.Get(Osi.GetHostCharacter())
 end
-
--- function PrintTable(tbl, indent)
---   if not indent then indent = 0 end
---   for k, v in pairs(tbl) do
---     local formatting = string.rep("  ", indent) .. k .. ": "
---     if type(v) == "table" then
---       print(formatting)
---       PrintTable(v, indent + 1)
---     else
---       -- Convert to string to safely handle userdata and other non-string types
---       print(formatting .. tostring(v))
---     end
---   end
--- end
-
 
 return Utils
