@@ -32,15 +32,16 @@ function FoodDelivery.MoveToCampChest(item)
   end
 end
 
-function FoodDelivery.SendInventoryFoodToChest()
-  local partyMembers = Utils.GetPartyMembers()
+function FoodDelivery.SendInventoryFoodToChest(character)
+  local campChestSack = GetCampChestSupplySack()
+  -- Not sure if nil is falsey in Lua, so we'll just be explicit
+  local shallow = not JsonConfig.FEATURES.send_existing_food.nested_containers or false
 
-  for _, character in ipairs(partyMembers) do
-    local food = GetFoodInInventory(character, false)
-    if food ~= nil then
-      for _, item in ipairs(food) do
-        FoodDelivery.DeliverFood(item, character, true)
-      end
+  local food = GetFoodInInventory(character, shallow)
+  if food ~= nil then
+    for _, item in ipairs(food) do
+      Utils.DebugPrint(2, "Found food in " .. character .. "'s inventory: " .. item)
+      FoodDelivery.DeliverFood(item, character, campChestSack)
     end
   end
 end
@@ -48,8 +49,8 @@ end
 --- Send food to camp chest or supply sack.
 ---@param object any The item to deliver.
 ---@param from any The inventory to deliver from.
----@param toSack boolean Whether to deliver to a supply sack or not.
-function FoodDelivery.DeliverFood(object, from, toSack)
+---@param campChestSack any The supply sack to deliver to.
+function FoodDelivery.DeliverFood(object, from, campChestSack)
   local shouldMove = false
 
   if IsItem(object) then
@@ -57,50 +58,45 @@ function FoodDelivery.DeliverFood(object, from, toSack)
       if IsBeverage(object) then
         if JsonConfig.FEATURES.move_beverages then
           shouldMove = true
-          -- Utils.DebugPrint(1, object .. " is beverage, will move to camp chest.")
+          Utils.DebugPrint(1, object .. " is beverage, will move to camp chest.")
         else
           shouldMove = false
-          -- Utils.DebugPrint(1, object .. " is beverage, won't move to camp chest.")
+          Utils.DebugPrint(1, object .. " is beverage, won't move to camp chest.")
         end
       else
         if JsonConfig.FEATURES.move_food then
           shouldMove = true
-          -- Utils.DebugPrint(1, object .. " is food, will move to camp chest.")
+          Utils.DebugPrint(1, object .. " is food, will move to camp chest.")
         else
           shouldMove = false
-          -- Utils.DebugPrint(1, object .. " is food, won't move to camp chest.")
+          Utils.DebugPrint(1, object .. " is food, won't move to camp chest.")
         end
       end
 
       if shouldMove then
+        local exactamount, totalamount = Osi.GetStackAmount(object)
         Utils.DebugPrint(2, "Should move " .. object .. " to camp chest.")
-        if toSack == false then
-          FoodDelivery.MoveToCampChest(object)
-        else
-          local campChestSack = GetCampChestSupplySack()
-          if campChestSack == nil then
-            Utils.DebugPrint(1, "Could not find or create camp chest supply sack. Sending food to chest.")
-            FoodDelivery.MoveToCampChest(object)
-            return
-          else
-            if from == nil then
-              FoodDelivery.MoveToCampChest(object)
-              return
-            else
-              local entityObject = GetItemObject(object)
-              local entityObjectTID = entityObject.Template.Id
+        local targetInventory
 
-              Utils.DebugPrint(1, "Adding " .. entityObjectTID .. " to camp chest sack: " .. campChestSack.Guid)
-              Osi.TemplateAddTo(entityObjectTID, campChestSack.Guid, 1)
-              Utils.DebugPrint(1, "Removing " .. entityObjectTID .. " from " .. from)
-              Osi.TemplateRemoveFrom(entityObjectTID, from, 1)
-              return
-            end
+        if campChestSack ~= nil then
+          targetInventory = campChestSack.Guid
+        else
+          -- Try to get the supply sack anyways if it has not been provided
+          local getCampChestSack = GetCampChestSupplySack()
+          if getCampChestSack ~= nil then
+            targetInventory = getCampChestSack.Guid
+          else
+            Utils.DebugPrint(1, "Camp chest supply sack not found.")
+            targetInventory = Utils.GetChestUUID()
           end
         end
+
+        if targetInventory and from ~= nil then
+          Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
+        end
+      else
+        Utils.DebugPrint(2, object .. " is not food, won't move to camp chest.")
       end
-    else
-      Utils.DebugPrint(2, object .. " is not food, won't move to camp chest.")
     end
   else
     Utils.DebugPrint(2, object .. " is not an item, won't process.")

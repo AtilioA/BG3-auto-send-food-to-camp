@@ -21,7 +21,6 @@ function GetFoodInInventory(character, shallow)
   for _, item in ipairs(inventory) do
     local itemObject = item.TemplateName .. item.Guid
     if IsFood(itemObject) then
-      -- Utils.DebugPrint(2, "Found food in inventory: " .. item.Name)
       table.insert(matchedItems, itemObject)
     end
   end

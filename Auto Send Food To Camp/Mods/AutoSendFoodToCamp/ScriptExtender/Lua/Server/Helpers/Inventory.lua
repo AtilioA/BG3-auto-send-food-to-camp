@@ -3,6 +3,17 @@
 local CAMP_SUPPLY_SACK_TEMPLATE_ID = 'efcb70b7-868b-4214-968a-e23f6ad586bc'
 
 ---@param object any
+---@return EntityHandle|nil
+function GetHolder(object)
+  local entity = GetEntity(object)
+  if entity ~= nil and entity.InventoryMember ~= nil then
+    return entity.InventoryMember.Inventory.InventoryIsOwned.Owner
+  end
+
+  return nil
+end
+
+---@param object any
 ---@return EntityHandle | nil
 function GetEntity(object)
   return GetCharacter(object) or GetItem(object)
@@ -155,7 +166,7 @@ end
 
 function GetCampChestInventory()
   local campChest = Osi.DB_Camp_UserCampChest:Get(nil, nil)[1][2]
-  return GetInventory(campChest, false, false)
+  return GetInventory(campChest, true, true)
 end
 
 --- Checks if an inventory contains a supply sack.
@@ -163,10 +174,6 @@ end
 ---@return any | nil - The first supply sack object, or nil if not found.
 function TryToGetCampChestSupplyPack(inventoryItems)
   for _, item in ipairs(inventoryItems) do
-    -- Utils.DebugPrint(2, "Checking item: " .. item.Name)
-    -- _D(GetHostCharacter())
-    -- local playerEntity = GetPlayerEntity()
-    -- Osi.TemplateAddTo(item, GetHostCharacter().ServerCharacter.Template.Name, 1, 1)
     if item.TemplateId == CAMP_SUPPLY_SACK_TEMPLATE_ID then
       return item
     end
@@ -186,16 +193,14 @@ function AddSupplySackToCampChest()
 end
 
 function AddSupplySackToCampChestIfMissing()
-  if CheckForCampChestSupplySack() == nil then
-    Utils.DebugPrint(3, "Supply sack not found in camp chest. Adding.")
-    AddSupplySackToCampChest()
-  else
+  if CheckForCampChestSupplySack() ~= nil then
     Utils.DebugPrint(3, "Supply sack found in camp chest.")
+  else
+    Utils.DebugPrint(3, "Supply sack not found in camp chest. Creating one.")
+    AddSupplySackToCampChest()
   end
 end
 
 function GetCampChestSupplySack()
-  AddSupplySackToCampChestIfMissing()
   return CheckForCampChestSupplySack()
 end
-

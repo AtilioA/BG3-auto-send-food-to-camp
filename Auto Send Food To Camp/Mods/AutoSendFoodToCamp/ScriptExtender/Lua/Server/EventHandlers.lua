@@ -64,6 +64,13 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   end
 end
 
+
+function EHandlers.OnLevelGameplayStarted()
+  if JsonConfig.FEATURES.send_existing_food then
+    Osi.TimerLaunch("CreateSupplySackTimer", 1500)
+  end
+end
+
 -- Used to handle loose items. NOTE: will also be called when moving items in the game world, such as when moving, throwing, dropping.
 -- function EHandlers.OnPreMovedBy(item, character)
 --   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
@@ -82,6 +89,11 @@ function EHandlers.OnTimerFinished(timerName)
     end
     -- FoodDelivery.UpdateIgnoredItem(nil, nil)
   end
+
+  if timerName == 'CreateSupplySackTimer' then
+    Utils.DebugPrint(2, "CreateSupplySackTimer: creating supply sack.")
+    AddSupplySackToCampChestIfMissing()
+  end
 end
 
 -- REVIEW: we might have to handle this (already handled by OnMovedFromTo)
@@ -97,7 +109,7 @@ function EHandlers.OnRequestCanPickup(character, object, requestID)
     -- TODO: do not attempt anything if player is using camp chest
     local campChestSack = GetCampChestSupplySack()
     if campChestSack == nil then
-      Utils.DebugPrint(1, "Camp chest supply sack not found.")
+      -- Utils.DebugPrint(1, "Camp chest supply sack not found.")
       return
     end
     local objectEntity = GetItemObject(object)
@@ -108,7 +120,7 @@ function EHandlers.OnRequestCanPickup(character, object, requestID)
     -- Utils.DebugPrint(2, objectEntity.Template.Id)
     -- Osi.TemplateAddTo(objectEntity.Template.Id, Osi.GetHostCharacter(), 50, 1)
 
-    Utils.DebugPrint(2, "OnRequestCanPickup: " .. character .. " " .. object .. " " .. requestID)
+    -- Utils.DebugPrint(2, "OnRequestCanPickup: " .. character .. " " .. object .. " " .. requestID)
     FoodDelivery.UpdateAwaitingItem(object, "RequestCanPickup")
     Osi.TimerLaunch("FoodDeliveryTimer", 500)
   end
@@ -122,12 +134,9 @@ function EHandlers.OnPickupFailed(character, object)
 end
 
 function EHandlers.OnTeleportedToCamp(character)
-  Utils.DebugPrint(2, "OnTeleportedToCamp: " .. character)
-
-  -- TODO: Try to create sack only once etc
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
-    AddSupplySackToCampChestIfMissing()
-    FoodDelivery.SendInventoryFoodToChest()
+    Utils.DebugPrint(2, "Sending existing food to chest from " .. character)
+    FoodDelivery.SendInventoryFoodToChest(character)
   end
 end
 
@@ -150,7 +159,7 @@ end
 -- TODO: create flag to check if is using the camp chest
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
-    Utils.DebugPrint(3, "UseStarted: " .. character .. " " .. item)
+    Utils.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
   end
 end
 

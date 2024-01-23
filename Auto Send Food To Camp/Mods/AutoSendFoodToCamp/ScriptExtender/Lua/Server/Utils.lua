@@ -16,7 +16,7 @@ function Utils.GetChestUUID()
   return chestName
 end
 
--- Get the last 36 characters of the UUID
+-- Get the last 36 characters of the UUID (template ID I guess)
 function Utils.GetGUID(uuid)
   return string.sub(uuid, -36)
 end
