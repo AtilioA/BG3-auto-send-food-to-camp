@@ -2,6 +2,8 @@ Ext.Require("Server/Helpers/Food.lua")
 
 EHandlers = {}
 
+local usingCampChest = false
+
 -- function EHandlers.OnDroppedBy(object, mover)
 --   if Osi.IsInPartyWith(mover, Osi.GetHostCharacter()) == 1 then
 --     if IsFood(object) then
@@ -12,6 +14,11 @@ EHandlers = {}
 -- end
 
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
+  if usingCampChest == true then
+    Utils.DebugPrint(2, "Character is using camp chest, not sending anything to chest.")
+    return
+  end
+
   -- if FoodDelivery.ignore_item.item == movedObject then
   --   Utils.DebugPrint(2, "Ignoring item: " .. movedObject)
   --   FoodDelivery.UpdateIgnoredItem(nil, nil)
@@ -106,16 +113,15 @@ end
 
 function EHandlers.OnRequestCanPickup(character, object, requestID)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
-    -- TODO: do not attempt anything if player is using camp chest
-    local campChestSack = GetCampChestSupplySack()
-    if campChestSack == nil then
-      -- Utils.DebugPrint(1, "Camp chest supply sack not found.")
+    if usingCampChest == true then
+      Utils.DebugPrint(2, "Character is using camp chest, not sending anything to chest.")
       return
     end
+
     local objectEntity = GetItemObject(object)
-    if objectEntity ~= nil then
-      _D(objectEntity)
-    end
+    -- if objectEntity ~= nil then
+    --   -- _D(objectEntity)
+    -- end
     -- local campChestGuid = Utils.GetGUID(Utils.GetChestUUID())
     -- Utils.DebugPrint(2, objectEntity.Template.Id)
     -- Osi.TemplateAddTo(objectEntity.Template.Id, Osi.GetHostCharacter(), 50, 1)
@@ -160,12 +166,18 @@ end
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
+    if item == Utils.GetChestUUID() then
+      usingCampChest = true
+    end
   end
 end
 
 function EHandlers.OnUseEnded(character, item, result)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
+    if item == Utils.GetChestUUID() then
+      usingCampChest = false
+    end
   end
 end
 
