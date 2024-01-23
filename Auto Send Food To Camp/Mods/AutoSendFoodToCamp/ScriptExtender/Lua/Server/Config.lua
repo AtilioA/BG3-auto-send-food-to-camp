@@ -8,11 +8,14 @@ Config.defaultConfig = {
         enabled = true, -- Toggle the mod on/off
     },
     FEATURES = {
-        move_food = true,  -- Move food to the camp chest
-        move_beverages = true, -- Move beverages to the camp chest
-        move_bought_food = true, -- Move food bought from merchants to the camp chest
-        send_existing_food = true, -- Move existing food in the inventory to the camp chest when going to the camp
-        -- stolen_items = false, -- TODO: Move stolen items immediately (loose but owned/pickpocketed) to the camp chest. Not worth it? GetObject(item.Entity))
+        move_food = true,             -- Move food to the camp chest
+        move_beverages = true,        -- Move beverages to the camp chest
+        move_bought_food = true,      -- Move food bought from merchants to the camp chest
+        send_existing_food = {
+            enabled = true,           -- Move existing food in the party's inventory to the camp chest
+            nested_containers = true, -- Move food in nested containers (e.g. backpacks) to the camp chest
+            -- stolen_items = false, -- TODO: Move stolen items immediately (loose but owned/pickpocketed) to the camp chest. Not worth it? GetObject(item.Entity))
+        },
     },
     DEBUG = {
         level = 0 -- 0 = no debug, 1 = minimal, 2 = verbose logs
@@ -44,18 +47,51 @@ end
 
 function Config.UpdateConfig(existingConfig, defaultConfig)
     local updated = false
-    for key, value in pairs(defaultConfig) do
-        if existingConfig[key] == nil then
-            existingConfig[key] = value
+
+    for key, newValue in pairs(defaultConfig) do
+        local oldValue = existingConfig[key]
+
+        if oldValue == nil then
+            -- Add missing keys from the default config
+            existingConfig[key] = newValue
             updated = true
             Utils.DebugPrint(1, "Added new config option:", key)
-        elseif type(value) == "table" then
+        elseif type(oldValue) ~= type(newValue) then
+            -- If the type has changed...
+            if type(newValue) == "table" then
+                -- ...and the new type is a table, place the old value in the 'enabled' key
+                existingConfig[key] = { enabled = oldValue }
+                for subKey, subValue in pairs(newValue) do
+                    if existingConfig[key][subKey] == nil then
+                        existingConfig[key][subKey] = subValue
+                    end
+                end
+                updated = true
+                Utils.DebugPrint(1, "Updated config structure for:", key)
+            else
+                -- ...otherwise, just replace with the new value
+                existingConfig[key] = newValue
+                updated = true
+                Utils.DebugPrint(1, "Updated config value for:", key)
+            end
+        elseif type(newValue) == "table" then
             -- Recursively update for nested tables
-            if Config.UpdateConfig(existingConfig[key], value) then
+            if Config.UpdateConfig(oldValue, newValue) then
                 updated = true
             end
         end
     end
+
+    -- Remove deprecated keys
+    for key, _ in pairs(existingConfig) do
+        if defaultConfig[key] == nil then
+            -- Remove keys that are not in the default config
+            existingConfig[key] = nil
+            updated = true
+            Utils.DebugPrint(1, "Removed deprecated config option:", key)
+        end
+    end
+
     return updated
 end
 
