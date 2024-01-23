@@ -15,7 +15,7 @@ local usingCampChest = false
 
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   if usingCampChest == true then
-    Utils.DebugPrint(2, "Character is using camp chest, not sending anything to chest.")
+    Utils.DebugPrint(2, "Character is using camp chest, won't send anything to chest.")
     return
   end
 
@@ -35,27 +35,41 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   --   return
   -- else
   -- if not JsonConfig.FEATURES.stolen_items then
-  --   Utils.DebugPrint(1, "Stolen items are disabled; not sending to chest.")
+  --   Utils.DebugPrint(1, "Stolen items are disabled; won't send to chest.")
   -- end
   -- end
+
+
+  local chestName = Utils.GetChestUUID()
+
+  -- Check if the moved item is already inside the camp chest or a container within it
+  if Osi.IsInInventoryOf(fromObject, chestName) == 1 or Osi.IsInInventoryOf(movedObject, chestName) == 1 then
+    Utils.DebugPrint(2, "Item is from the camp chest or a container within it. Not trying to send to chest.")
+    return
+  end
 
   -- Don't try to move if the item is already from the camp chest
   if (fromObject == chestName) then
     Utils.DebugPrint(2, "fromObject is camp chest. Not trying to send to chest.")
-    -- TODO: check if the item is in a container in the chest. This will also cause problems even if we don't use 'pickup'
     return
   end
-
 
   -- Don't try to move items that are being moved from the party
   if (Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and isTrade ~= 1) then
     Utils.DebugPrint(2, "fromObject is in party with host. Not trying to send to chest.")
-    return
-  end
 
-  if not Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
-    Utils.DebugPrint(2, "Moved item from outside party to party member, trying to send to chest.")
-    FoodDelivery.DeliverFood(movedObject, fromObject, true)
+    local fromObjectHolder = GetObject(GetHolder(fromObject))
+    if (fromObjectHolder ~= nil) then
+      Utils.DebugPrint(2, "fromObjectHolder is in party with host. Not trying to send to chest.")
+      return
+    end
+
+    local movedObjectHolder = GetObject(GetHolder(movedObject))
+    if (movedObjectHolder ~= nil) then
+      Utils.DebugPrint(2, "movedObjectHolder is in party with host. Not trying to send to chest.")
+      return
+    end
+
     return
   end
 
@@ -65,12 +79,17 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
       "isTrade: " .. isTrade .. " fromObject: " .. fromObject .. " HostCharacter: " .. Osi.GetHostCharacter())
     if isTrade == 1 and Utils.GetGUID(fromObject) ~= Osi.GetHostCharacter() then
       Utils.DebugPrint(2, "Got item from trade, trying to send to chest.")
-      FoodDelivery.DeliverFood(movedObject, fromObject, true)
+      FoodDelivery.DeliverFood(movedObject, fromObject)
       return
     end
   end
-end
 
+  if not Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "Moved item from outside party to party member, trying to send to chest.")
+    FoodDelivery.DeliverFood(movedObject, fromObject)
+    return
+  end
+end
 
 function EHandlers.OnLevelGameplayStarted()
   if JsonConfig.FEATURES.send_existing_food then
@@ -114,7 +133,7 @@ end
 function EHandlers.OnRequestCanPickup(character, object, requestID)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     if usingCampChest == true then
-      Utils.DebugPrint(2, "Character is using camp chest, not sending anything to chest.")
+      Utils.DebugPrint(2, "Character is using camp chest, won't send anything to chest.")
       return
     end
 

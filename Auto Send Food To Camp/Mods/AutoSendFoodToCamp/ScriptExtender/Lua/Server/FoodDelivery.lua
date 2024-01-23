@@ -91,8 +91,10 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
           end
         end
 
-        if targetInventory and from ~= nil then
+        if targetInventory then
           Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
+        else
+          Utils.DebugPrint(1, "Target inventory not found, not moving " .. object .. " to camp chest.")
         end
       else
         Utils.DebugPrint(2, object .. " is not food, won't move to camp chest.")
