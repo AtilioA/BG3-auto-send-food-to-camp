@@ -15,7 +15,7 @@ local function SubscribeToEvents()
     Ext.Osiris.RegisterListener("RequestCanPickup", 3, "after", EHandlers.OnRequestCanPickup)
     Ext.Osiris.RegisterListener("PickupFailed", 2, "after", EHandlers.OnPickupFailed)
 
-    if JsonConfig.FEATURES.send_existing_food then
+    if JsonConfig.FEATURES.send_existing_food.enabled then
       Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", EHandlers.OnTeleportedToCamp)
     end
 

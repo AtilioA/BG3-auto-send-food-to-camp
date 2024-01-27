@@ -14,8 +14,12 @@ Config.defaultConfig = {
         send_existing_food = {
             enabled = true,           -- Move existing food in the party's inventory to the camp chest
             nested_containers = true, -- Move food in nested containers (e.g. backpacks) to the camp chest
-            -- stolen_items = false, -- TODO: Move stolen items immediately (loose but owned/pickpocketed) to the camp chest. Not worth it? GetObject(item.Entity))
+            create_supply_sack = true, -- Move food to a supply sack inside the chest. It will be created if it doesn't exist.
         },
+        ignore = {
+            healing = true,       -- Ignore healing items (e.g. Goodberry)
+            weapons = false,           -- Ignore weapons (only Salami in the vanilla base game)
+        }
     },
     DEBUG = {
         level = 0 -- 0 = no debug, 1 = minimal, 2 = verbose logs

@@ -21,6 +21,13 @@ function Utils.GetGUID(uuid)
   return string.sub(uuid, -36)
 end
 
+function Utils.GetUID(templateuuid)
+  -- Matches the part of the string before the last underscore
+  local result = string.match(templateuuid, "(.-)_%x+-%x+-%x+-%x+-%x+$")
+  return result
+end
+
+
 function Utils.GetPartyMembers()
   local teamMembers = {}
 

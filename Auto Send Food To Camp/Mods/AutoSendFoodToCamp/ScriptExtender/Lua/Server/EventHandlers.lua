@@ -28,8 +28,6 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   Utils.DebugPrint(2,
     "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. isTrade)
 
-  local chestName = Utils.GetChestUUID()
-
   -- if (Osi.IsPublicDomain(movedObject) == 1) then
   --   Utils.DebugPrint(2, "Moved item is public domain.")
   --   return
@@ -38,7 +36,6 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   --   Utils.DebugPrint(1, "Stolen items are disabled; won't send to chest.")
   -- end
   -- end
-
 
   local chestName = Utils.GetChestUUID()
 
@@ -92,7 +89,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 end
 
 function EHandlers.OnLevelGameplayStarted()
-  if JsonConfig.FEATURES.send_existing_food then
+  if JsonConfig.FEATURES.send_existing_food.enabled and JsonConfig.FEATURES.send_existing_food.create_supply_sack then
     Osi.TimerLaunch("CreateSupplySackTimer", 1500)
   end
 end
@@ -116,6 +113,7 @@ end
 
 function DeliverAwaitingFood()
   if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
+    Utils.DebugPrint(2, "Delivering awaiting food: " .. FoodDelivery.awaiting_delivery.item)
     FoodDelivery.DeliverFood(FoodDelivery.awaiting_delivery.item)
     FoodDelivery.UpdateAwaitingItem(nil, nil)
   end
@@ -141,15 +139,7 @@ function EHandlers.OnRequestCanPickup(character, object, requestID)
       return
     end
 
-    local objectEntity = GetItemObject(object)
-    -- if objectEntity ~= nil then
-    --   -- _D(objectEntity)
-    -- end
-    -- local campChestGuid = Utils.GetGUID(Utils.GetChestUUID())
-    -- Utils.DebugPrint(2, objectEntity.Template.Id)
-    -- Osi.TemplateAddTo(objectEntity.Template.Id, Osi.GetHostCharacter(), 50, 1)
-
-    -- Utils.DebugPrint(2, "OnRequestCanPickup: " .. character .. " " .. object .. " " .. requestID)
+    Utils.DebugPrint(2, "OnRequestCanPickup: " .. character .. " " .. object .. " " .. requestID)
     FoodDelivery.UpdateAwaitingItem(object, "RequestCanPickup")
     Osi.TimerLaunch("FoodDeliveryTimer", 500)
   end

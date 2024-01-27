@@ -10,6 +10,41 @@ FoodDelivery.awaiting_delivery = {
   reason = nil
 }
 
+FoodDelivery.blacklist = {
+  quests = { ['Quest_CON_OwlBearEgg'] = '374111f7-6756-4f5f-b6e3-e45e8d25def0' },
+  healing = {
+    ['UNI_CONS_Goodberry'] = 'de6b186e-839e-41d0-87af-a1a9d9327785',
+    ['GEN_CONS_Berry'] = 'b0943b65-5766-414a-903d-28de8790370a',
+    ['QUEST_GOB_SuspiciousMeat'] = 'f57ad063-af4c-411c-9c91-9ca02cd57dd4',
+    ['CONS_FOOD_Fruit_Apple_A'] = 'e8bbe73a-e1dc-4d2e-910f-318db7aee382',
+    ['DEN_UNI_Thieflings_Gruel'] = 'f91f8f13-44d0-4fd0-8cc1-1ec08356f98a'
+  },
+  weapons = {
+    ['WPN_HUM_Salami_A'] = 'e082f373-81ec-4f4b-818b-9ee86952e2fa'
+  }
+}
+
+-- Don't move items that are in the blacklist according to settings
+function FoodDelivery.IsFoodItemBlacklisted(foodItem)
+  if FoodDelivery.blacklist.quests[Utils.GetUID(foodItem)] then
+    Utils.DebugPrint(2, "Moved item is a quest item. Not trying to send to chest.")
+    return true
+  end
+
+  if JsonConfig.FEATURES.ignore.healing and FoodDelivery.blacklist.healing[Utils.GetUID(foodItem)] then
+    Utils.DebugPrint(2, "Moved item is a healing item. Not trying to send to chest.")
+    return true
+  end
+
+  -- if JsonConfig.FEATURES.ignore.weapons and Osi.IsWeapon(foodItem) then
+  if JsonConfig.FEATURES.ignore.weapons and FoodDelivery.blacklist.weapons[Utils.GetUID(foodItem)] then
+    Utils.DebugPrint(2, "Moved item is a weapon. Not trying to send to chest.")
+    return true
+  end
+
+  return false
+end
+
 function FoodDelivery.UpdateIgnoredItem(item, reason)
   FoodDelivery.ignore_item.item = item
   FoodDelivery.ignore_item.reason = reason
@@ -27,8 +62,10 @@ function FoodDelivery.MoveToCampChest(item)
     FoodDelivery.ignore_item.item = nil
     return
   else
-    Utils.DebugPrint(1, "Moving " .. item .. " to camp chest.")
-    return Osi.SendToCampChest(item, Osi.GetHostCharacter())
+    if not FoodDelivery.IsFoodItemBlacklisted(item) then
+      Utils.DebugPrint(1, "Moving " .. item .. " to camp chest.")
+      return Osi.SendToCampChest(item, Osi.GetHostCharacter())
+    end
   end
 end
 
@@ -41,7 +78,9 @@ function FoodDelivery.SendInventoryFoodToChest(character)
   if food ~= nil then
     for _, item in ipairs(food) do
       Utils.DebugPrint(2, "Found food in " .. character .. "'s inventory: " .. item)
-      FoodDelivery.DeliverFood(item, character, campChestSack)
+      if not FoodDelivery.IsFoodItemBlacklisted(item) then
+        FoodDelivery.DeliverFood(item, character, campChestSack)
+      end
     end
   end
 end
@@ -55,6 +94,10 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
 
   if IsItem(object) then
     if IsFood(object) then
+      if FoodDelivery.IsFoodItemBlacklisted(object) then
+        return
+      end
+
       if IsBeverage(object) then
         if JsonConfig.FEATURES.move_beverages then
           shouldMove = true
@@ -76,18 +119,21 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
       if shouldMove then
         local exactamount, totalamount = Osi.GetStackAmount(object)
         Utils.DebugPrint(2, "Should move " .. object .. " to camp chest.")
-        local targetInventory
+        local targetInventory = Utils.GetChestUUID()
 
-        if campChestSack ~= nil then
-          targetInventory = campChestSack.Guid
-        else
-          -- Try to get the supply sack anyways if it has not been provided
-          local getCampChestSack = GetCampChestSupplySack()
-          if getCampChestSack ~= nil then
-            targetInventory = getCampChestSack.Guid
+        -- tfw this is all useless because the supply sack is always used anyways
+        if JsonConfig.FEATURES.send_existing_food.send_to_supply_sack then
+          if campChestSack ~= nil then
+            targetInventory = campChestSack.Guid
           else
-            Utils.DebugPrint(1, "Camp chest supply sack not found.")
-            targetInventory = Utils.GetChestUUID()
+            -- Try to get the supply sack anyways if it has not been provided
+            local getCampChestSack = GetCampChestSupplySack()
+            if getCampChestSack ~= nil then
+              targetInventory = getCampChestSack.Guid
+            else
+              Utils.DebugPrint(1, "Camp chest supply sack not found.")
+              targetInventory = Utils.GetChestUUID()
+            end
           end
         end
 
