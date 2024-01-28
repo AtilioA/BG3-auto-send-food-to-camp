@@ -10,7 +10,7 @@ FoodDelivery.awaiting_delivery = {
   reason = nil
 }
 
-FoodDelivery.blacklist = {
+FoodDelivery.retainlist = {
   quests = { ['Quest_CON_OwlBearEgg'] = '374111f7-6756-4f5f-b6e3-e45e8d25def0' },
   healing = {
     ['UNI_CONS_Goodberry'] = 'de6b186e-839e-41d0-87af-a1a9d9327785',
@@ -24,22 +24,43 @@ FoodDelivery.blacklist = {
   }
 }
 
--- Don't move items that are in the blacklist according to settings
-function FoodDelivery.IsFoodItemBlacklisted(foodItem)
-  if FoodDelivery.blacklist.quests[Utils.GetUID(foodItem)] then
+-- Don't move items that are in the retainlist according to settings
+function FoodDelivery.IsFoodItemRetainlisted(foodItem)
+  local foodItemGuid = Utils.GetUID(foodItem)
+  if foodItemGuid == nil then
+    Utils.DebugPrint(1, "[ERROR] Couldn't verify if item is retainlisted. foodItemGuid is nil.")
+    return false
+  end
+
+  local isQuestItem = FoodDelivery.retainlist.quests[foodItemGuid]
+  local isHealingItem = FoodDelivery.retainlist.healing[foodItemGuid]
+  local isWeapon = Osi.IsWeapon(foodItem)
+
+  if isQuestItem then
     Utils.DebugPrint(2, "Moved item is a quest item. Not trying to send to chest.")
     return true
+  else
+    Utils.DebugPrint(2, "Moved item is not a quest item. May try to send to chest.")
   end
 
-  if JsonConfig.FEATURES.ignore.healing and FoodDelivery.blacklist.healing[Utils.GetUID(foodItem)] then
-    Utils.DebugPrint(2, "Moved item is a healing item. Not trying to send to chest.")
-    return true
+  if isHealingItem then
+    if JsonConfig.FEATURES.ignore.healing then
+      Utils.DebugPrint(2, "Moved item is a healing item. Not trying to send to chest.")
+      return true
+    else
+      Utils.DebugPrint(2, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
+      return false
+    end
   end
 
-  -- if JsonConfig.FEATURES.ignore.weapons and Osi.IsWeapon(foodItem) then
-  if JsonConfig.FEATURES.ignore.weapons and FoodDelivery.blacklist.weapons[Utils.GetUID(foodItem)] then
-    Utils.DebugPrint(2, "Moved item is a weapon. Not trying to send to chest.")
-    return true
+  if isWeapon then
+    if JsonConfig.FEATURES.ignore.weapons then
+      Utils.DebugPrint(2, "Moved item is a weapon. Not trying to send to chest.")
+      return true
+    else
+      Utils.DebugPrint(2, "Moved item is a weapon, but ignore.weapons is set to false. Trying to send to chest.")
+      return false
+    end
   end
 
   return false
@@ -62,7 +83,7 @@ function FoodDelivery.MoveToCampChest(item)
     FoodDelivery.ignore_item.item = nil
     return
   else
-    if not FoodDelivery.IsFoodItemBlacklisted(item) then
+    if not FoodDelivery.IsFoodItemRetainlisted(item) then
       Utils.DebugPrint(1, "Moving " .. item .. " to camp chest.")
       return Osi.SendToCampChest(item, Osi.GetHostCharacter())
     end
@@ -78,7 +99,7 @@ function FoodDelivery.SendInventoryFoodToChest(character)
   if food ~= nil then
     for _, item in ipairs(food) do
       Utils.DebugPrint(2, "Found food in " .. character .. "'s inventory: " .. item)
-      if not FoodDelivery.IsFoodItemBlacklisted(item) then
+      if not FoodDelivery.IsFoodItemRetainlisted(item) then
         FoodDelivery.DeliverFood(item, character, campChestSack)
       end
     end
@@ -94,7 +115,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
 
   if IsItem(object) then
     if IsFood(object) then
-      if FoodDelivery.IsFoodItemBlacklisted(object) then
+      if FoodDelivery.IsFoodItemRetainlisted(object) then
         return
       end
 
