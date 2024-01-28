@@ -4,15 +4,6 @@ EHandlers = {}
 
 local usingCampChest = false
 
--- function EHandlers.OnDroppedBy(object, mover)
---   if Osi.IsInPartyWith(mover, Osi.GetHostCharacter()) == 1 then
---     if IsFood(object) then
---       Utils.DebugPrint(2, "OnDroppedBy: " .. object .. " " .. mover)
---       FoodDelivery.UpdateIgnoredItem(object, "DroppedBy")
---     end
---   end
--- end
-
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   if usingCampChest == true then
     Utils.DebugPrint(2, "Character is using camp chest, won't send anything to chest.")
@@ -94,13 +85,6 @@ function EHandlers.OnLevelGameplayStarted()
   end
 end
 
--- Used to handle loose items. NOTE: will also be called when moving items in the game world, such as when moving, throwing, dropping.
--- function EHandlers.OnPreMovedBy(item, character)
---   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
---     Utils.DebugPrint(2, "OnPreMovedBy: " .. item .. " " .. character)
---   end
--- end
-
 function EHandlers.OnTimerFinished(timerName)
   if timerName == "FoodDeliveryTimer" then
     DeliverAwaitingFood()
@@ -159,23 +143,6 @@ function EHandlers.OnTeleportedToCamp(character)
   end
 end
 
--- function EHandlers.OnCharacterStoleItem(character, item, itemRootTemplate, x, y, z, oldOwner, srcContainer, amount,
---                                         goldValue)
---   Utils.DebugPrint(2,
---     "OnCharacterStoleItem: " ..
---     character ..
---     " " ..
---     item ..
---     " " ..
---     itemRootTemplate ..
---     " " .. x .. " " .. y .. " " .. z .. " " .. oldOwner .. " " .. srcContainer .. " " .. amount .. " " .. goldValue)
---   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
---     Utils.DebugPrint(2, "Character is in party with host.")
---   end
--- end
-
-
--- TODO: create flag to check if is using the camp chest
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
