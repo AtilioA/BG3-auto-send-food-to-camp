@@ -21,12 +21,21 @@ function Utils.GetGUID(uuid)
   return string.sub(uuid, -36)
 end
 
+--- func desc
+---@param templateuuid string
+---@return string
 function Utils.GetUID(templateuuid)
-  -- Matches the part of the string before the last underscore
-  local result = string.match(templateuuid, "(.-)_%x+-%x+-%x+-%x+-%x+$")
+  if #templateuuid <= 36 then
+      return templateuuid -- Return the original string if it's too short
+  end
+
+  local result = string.sub(templateuuid, 1, -37) -- Remove last 36 characters
+
+  -- Remove trailing underscore if present
+  result = result:gsub("_$", "")
+
   return result
 end
-
 
 function Utils.GetPartyMembers()
   local teamMembers = {}
