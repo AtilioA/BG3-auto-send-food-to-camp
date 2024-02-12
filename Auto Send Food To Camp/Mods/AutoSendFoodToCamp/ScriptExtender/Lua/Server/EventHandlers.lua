@@ -16,6 +16,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   --   return
   -- end
 
+  -- TODO: debug when looting from corpses
   Utils.DebugPrint(2,
     "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. isTrade)
 
@@ -30,15 +31,15 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 
   local chestName = Utils.GetChestUUID()
 
-  -- Check if the moved item is already inside the camp chest or a container within it
-  if Osi.IsInInventoryOf(fromObject, chestName) == 1 or Osi.IsInInventoryOf(movedObject, chestName) == 1 then
-    Utils.DebugPrint(2, "Item is from the camp chest or a container within it. Not trying to send to chest.")
-    return
-  end
-
   -- Don't try to move if the item is already from the camp chest
   if (fromObject == chestName) then
     Utils.DebugPrint(2, "fromObject is camp chest. Not trying to send to chest.")
+    return
+  end
+
+  -- Check if the moved item is already inside the camp chest or a container within it
+  if Osi.IsInInventoryOf(movedObject, chestName) == 1 or Osi.IsInInventoryOf(fromObject, chestName) == 1 then
+    Utils.DebugPrint(2, "Item is from the camp chest or a container within it. Not trying to send to chest.")
     return
   end
 
@@ -72,7 +73,8 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
     end
   end
 
-  if not Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
+  -- First check was missing == 1 (was always true?)
+  if not Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) == 1 and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "Moved item from outside party to party member, trying to send to chest.")
     FoodDelivery.DeliverFood(movedObject, fromObject)
     return
