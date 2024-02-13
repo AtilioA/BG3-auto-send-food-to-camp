@@ -44,7 +44,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   end
 
   -- Don't try to move items that are being moved from the party
-  if (Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) and isTrade ~= 1) then
+  if (Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) == 1 and isTrade ~= 1) then
     Utils.DebugPrint(2, "fromObject is in party with host. Not trying to send to chest.")
 
     local fromObjectHolder = GetObject(GetHolder(fromObject))
@@ -74,7 +74,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   end
 
   -- First check was missing == 1 (was always true?)
-  if not Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) == 1 and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
+  if Osi.IsInPartyWith(fromObject, toObject) == 0 and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "Moved item from outside party to party member, trying to send to chest.")
     FoodDelivery.DeliverFood(movedObject, fromObject)
     return
@@ -165,16 +165,6 @@ end
 
 -- function EHandlers.OnTemplateOpening(ITEMROOT, ITEM, CHARACTER)
 --   Utils.DebugPrint(2, "OnTemplateOpening: " .. ITEMROOT .. " " .. ITEM .. " " .. CHARACTER)
--- end
-
--- function EHandlers.OnRequestCanLoot(looter, target)
---   Utils.DebugPrint(2, "OnRequestCanLoot: " .. looter .. " " .. target)
---   if Osi.IsInPartyWith(looter, Osi.GetHostCharacter()) == 1 then
---     Utils.DebugPrint(2, "Looter is in party with host.")
---     if Osi.IsInPartyWith(target, Osi.GetHostCharacter()) == 1 then
---       Utils.DebugPrint(2, "Target is in party with host.")
---     end
---   end
 -- end
 
 -- function EHandlers.OnCharacterLootedCharacter(player, lootedCharacter)

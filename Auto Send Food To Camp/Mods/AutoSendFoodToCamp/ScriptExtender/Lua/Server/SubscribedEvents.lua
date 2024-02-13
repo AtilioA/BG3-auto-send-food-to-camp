@@ -31,7 +31,6 @@ local function SubscribeToEvents()
     -- Ext.Osiris.RegisterListener("CharacterPickpocketSuccess", 10, "before", EHandlers.OnCharacterPickpocketSuccess)
 
     -- TODO:
-    -- Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", EHandlers.OnRequestCanLoot)
     -- Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.OnCharacterLootedCharacter)
     -- CharacterStoleItem
     -- CharacterPickpocketSuccess
