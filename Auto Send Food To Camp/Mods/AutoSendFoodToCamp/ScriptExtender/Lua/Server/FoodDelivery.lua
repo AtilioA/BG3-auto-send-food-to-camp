@@ -35,6 +35,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   local isQuestItem = FoodDelivery.retainlist.quests[foodItemGuid]
   local isHealingItem = FoodDelivery.retainlist.healing[foodItemGuid]
   local isWeapon = FoodDelivery.retainlist.weapons[foodItemGuid]
+  -- local isWeapon = Osi.IsWeapon(foodItemGuid) == 1
 
   if isQuestItem then
     Utils.DebugPrint(2, "Moved item is a quest item. Not trying to send to chest.")
