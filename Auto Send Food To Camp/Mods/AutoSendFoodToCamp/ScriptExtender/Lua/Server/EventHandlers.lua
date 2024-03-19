@@ -1,5 +1,3 @@
-Ext.Require("Server/Helpers/Food.lua")
-
 EHandlers = {}
 
 EHandlers.usingCampChest = false

@@ -1,4 +1,4 @@
-RequireFiles("Server/Helpers", {
+RequireFiles("Server/Helpers/", {
     "Config",
     "Printer",
     "CampChest",
