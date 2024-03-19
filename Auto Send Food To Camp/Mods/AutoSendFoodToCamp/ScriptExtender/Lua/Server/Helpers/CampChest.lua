@@ -1,14 +1,11 @@
 local CAMP_SUPPLY_SACK_TEMPLATE_ID = 'efcb70b7-868b-4214-968a-e23f6ad586bc'
 
-function GetCampChestInventory()
-  local campChest = Osi.DB_Camp_UserCampChest:Get(nil, nil)[1][2]
-  return Helpers.Inventory:GetInventory(campChest, true, true)
-end
-
 --- Checks if an inventory contains a supply sack.
 ---@param inventoryItems any The first
 ---@return any | nil - The first supply sack object, or nil if not found.
 function TryToGetCampChestSupplyPack(inventoryItems)
+  _P(Helpers.Inventory:GetItemTemplateInInventory(CAMP_SUPPLY_SACK_TEMPLATE_ID, inventoryItems))
+
   for _, item in ipairs(inventoryItems) do
     if item.TemplateId == CAMP_SUPPLY_SACK_TEMPLATE_ID then
       return item
@@ -19,7 +16,7 @@ function TryToGetCampChestSupplyPack(inventoryItems)
 end
 
 function CheckForCampChestSupplySack()
-  return TryToGetCampChestSupplyPack(GetCampChestInventory())
+  return TryToGetCampChestSupplyPack(Helpers.Inventory:GetCampChestInventory(true))
 end
 
 function AddSupplySackToCampChest()
@@ -35,8 +32,4 @@ function AddSupplySackToCampChestIfMissing()
     ASFTCPrint(3, "Supply sack not found in camp chest. Creating one.")
     AddSupplySackToCampChest()
   end
-end
-
-function GetCampChestSupplySack()
-  return CheckForCampChestSupplySack()
 end

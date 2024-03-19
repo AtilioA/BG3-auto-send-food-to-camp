@@ -2,10 +2,16 @@ Ext.Require("Server/Helpers/Food.lua")
 
 EHandlers = {}
 
-local usingCampChest = false
+EHandlers.usingCampChest = false
+
+
+function CreateSupplySack()
+  ASFTCPrint(2, "CreateSupplySackTimer: creating supply sack.")
+  AddSupplySackToCampChestIfMissing()
+end
 
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
-  if usingCampChest == true then
+  if EHandlers.usingCampChest == true then
     ASFTCPrint(2, "Character is using camp chest, won't send anything to chest.")
     return
   end
@@ -13,7 +19,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   ASFTCPrint(2,
     "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. isTrade)
 
-  local chestName = Utils.GetChestUUID()
+  local chestName = Helpers.Camp:GetChestTemplateUUID()
 
   -- Don't try to move if the item is already from the camp chest
   -- Check if the moved item is already inside the camp chest or a container within it
@@ -39,7 +45,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
     return
   end
 
-  if (Config:getCfg().FEATURES.move_bought_food and isTrade == 1 and Utils.GetGUID(fromObject) ~= Osi.GetHostCharacter()) then
+  if (Config:getCfg().FEATURES.move_bought_food and isTrade == 1 and Helpers.Format:GUID(fromObject) ~= Osi.GetHostCharacter()) then
     ASFTCPrint(2, "Got item from trade, trying to send to chest.")
     FoodDelivery.DeliverFood(movedObject, fromObject)
     return
@@ -54,7 +60,7 @@ end
 
 function EHandlers.OnTimerFinished(timerName)
   if timerName == "FoodDeliveryTimer" then
-    DeliverAwaitingFood()
+    FoodDelivery.DeliverAwaitingFood()
   end
 
   if timerName == 'CreateSupplySackTimer' then
@@ -62,30 +68,9 @@ function EHandlers.OnTimerFinished(timerName)
   end
 end
 
-function DeliverAwaitingFood()
-  if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
-    ASFTCPrint(2, "Delivering awaiting food: " .. FoodDelivery.awaiting_delivery.item)
-    FoodDelivery.DeliverFood(FoodDelivery.awaiting_delivery.item)
-    FoodDelivery.UpdateAwaitingItem(nil, nil)
-  end
-end
-
-function CreateSupplySack()
-  ASFTCPrint(2, "CreateSupplySackTimer: creating supply sack.")
-  AddSupplySackToCampChestIfMissing()
-end
-
--- REVIEW: we might have to handle this (already handled by OnMovedFromTo)
--- function EHandlers.OnTradeEnds(character, trader)
---   ASFTCPrint(2, "OnTradeEnds: " .. character .. " " .. trader)
---   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
---     ASFTCPrint(2, "Character is in party with host.")
---   end
--- end
-
 function EHandlers.OnRequestCanPickup(character, object, requestID)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
-    if usingCampChest == true then
+    if EHandlers.usingCampChest == true then
       ASFTCPrint(2, "Character is using camp chest, won't send anything to chest.")
       return
     end
@@ -113,8 +98,8 @@ end
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     ASFTCPrint(2, "UseStarted: " .. character .. " " .. item)
-    if item == Utils.GetChestUUID() then
-      usingCampChest = true
+    if item == Helpers.Camp:GetChestTemplateUUID() then
+      EHandlers.usingCampChest = true
     end
   end
 end
@@ -122,18 +107,10 @@ end
 function EHandlers.OnUseEnded(character, item, result)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     ASFTCPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-    if item == Utils.GetChestUUID() then
-      usingCampChest = false
+    if item == Helpers.Camp:GetChestTemplateUUID() then
+      EHandlers.usingCampChest = false
     end
   end
 end
-
--- function EHandlers.OnTemplateOpening(ITEMROOT, ITEM, CHARACTER)
---   ASFTCPrint(2, "OnTemplateOpening: " .. ITEMROOT .. " " .. ITEM .. " " .. CHARACTER)
--- end
-
--- function EHandlers.OnCharacterLootedCharacter(player, lootedCharacter)
---   ASFTCPrint(2, "OnCharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
--- end
 
 return EHandlers

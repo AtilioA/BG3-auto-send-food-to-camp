@@ -24,9 +24,17 @@ FoodDelivery.retainlist = {
   }
 }
 
+function FoodDelivery.DeliverAwaitingFood()
+  if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
+    ASFTCPrint(2, "Delivering awaiting food: " .. FoodDelivery.awaiting_delivery.item)
+    FoodDelivery.DeliverFood(FoodDelivery.awaiting_delivery.item)
+    FoodDelivery.UpdateAwaitingItem(nil, nil)
+  end
+end
+
 -- Don't move items that are in the retainlist according to settings
 function FoodDelivery.IsFoodItemRetainlisted(foodItem)
-  local foodItemGuid = Utils.GetUID(foodItem)
+  local foodItemGuid = Helpers.Format:GetTemplateName(foodItem)
   if foodItemGuid == nil then
     ASFTCPrint(1, "[ERROR] Couldn't verify if item is retainlisted. foodItemGuid is nil.")
     return false
@@ -92,7 +100,7 @@ function FoodDelivery.MoveToCampChest(item)
 end
 
 function FoodDelivery.SendInventoryFoodToChest(character)
-  local campChestSack = GetCampChestSupplySack()
+  local campChestSack = CheckForCampChestSupplySack()
   -- Not sure if nil is falsey in Lua, so we'll just be explicit
   local shallow = not Config:getCfg().FEATURES.send_existing_food.nested_containers or false
 
@@ -114,13 +122,13 @@ end
 function FoodDelivery.DeliverFood(object, from, campChestSack)
   local shouldMove = false
 
-  if Helpers.Inventory:IsItem(object) then
-    if IsFood(object) then
+  if Helpers.Object:IsItem(object) then
+    if Helpers.Food:IsFood(object) then
       if FoodDelivery.IsFoodItemRetainlisted(object) then
         return
       end
 
-      if IsBeverage(object) then
+      if Helpers.Food:IsBeverage(object) then
         if Config:getCfg().FEATURES.move_beverages then
           shouldMove = true
           ASFTCPrint(1, object .. " is beverage, will move to camp chest.")
@@ -141,7 +149,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
       if shouldMove then
         local exactamount, totalamount = Osi.GetStackAmount(object)
         ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
-        local targetInventory = Utils.GetChestUUID()
+        local targetInventory = Helpers.Camp:GetChestTemplateUUID()
 
         -- tfw this is all useless because the supply sack is always used anyways
         if Config:getCfg().FEATURES.send_existing_food.send_to_supply_sack then
@@ -149,12 +157,12 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
             targetInventory = campChestSack.Guid
           else
             -- Try to get the supply sack anyways if it has not been provided
-            local getCampChestSack = GetCampChestSupplySack()
+            local getCampChestSack = CheckForCampChestSupplySack()
             if getCampChestSack ~= nil then
               targetInventory = getCampChestSack.Guid
             else
               ASFTCPrint(1, "Camp chest supply sack not found.")
-              targetInventory = Utils.GetChestUUID()
+              targetInventory = Helpers.Camp:GetChestTemplateUUID()
             end
           end
         end

@@ -11,6 +11,7 @@ end
 
 RequireFiles("Server/", {
     "Helpers/_Init",
+    "FoodDelivery",
     "EventHandlers",
     "SubscribedEvents",
 })
