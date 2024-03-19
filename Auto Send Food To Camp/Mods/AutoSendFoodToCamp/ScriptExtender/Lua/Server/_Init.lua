@@ -8,13 +8,13 @@ MOD_UUID = "1c132ec4-4cd2-4c40-aeb9-ff6ee0467da8"
 local MODVERSION = Ext.Mod.GetMod(MOD_UUID).Info.ModVersion
 
 if MODVERSION == nil then
-    Utils.DebugPrint(0, "loaded (version unknown)")
+    ASFTCPrint(0, "loaded (version unknown)")
 else
     -- Remove the last element (build/revision number) from the MODVERSION table
     table.remove(MODVERSION)
 
     local versionNumber = table.concat(MODVERSION, ".")
-    Utils.DebugPrint(0, "version " .. versionNumber .. " loaded")
+    ASFTCPrint(0, "version " .. versionNumber .. " loaded")
 end
 
 local EventSubscription = Ext.Require("Server/SubscribedEvents.lua")

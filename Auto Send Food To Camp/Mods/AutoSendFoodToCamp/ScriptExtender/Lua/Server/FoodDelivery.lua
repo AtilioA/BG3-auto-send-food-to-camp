@@ -28,7 +28,7 @@ FoodDelivery.retainlist = {
 function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   local foodItemGuid = Utils.GetUID(foodItem)
   if foodItemGuid == nil then
-    Utils.DebugPrint(1, "[ERROR] Couldn't verify if item is retainlisted. foodItemGuid is nil.")
+    ASFTCPrint(1, "[ERROR] Couldn't verify if item is retainlisted. foodItemGuid is nil.")
     return false
   end
 
@@ -38,28 +38,28 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   -- local isWeapon = Osi.IsWeapon(foodItemGuid) == 1
 
   if isQuestItem then
-    Utils.DebugPrint(2, "Moved item is a quest item. Not trying to send to chest.")
+    ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
     return true
   else
-    Utils.DebugPrint(2, "Moved item is not a quest item. May try to send to chest.")
+    ASFTCPrint(2, "Moved item is not a quest item. May try to send to chest.")
   end
 
   if isHealingItem then
     if JsonConfig.FEATURES.ignore.healing then
-      Utils.DebugPrint(2, "Moved item is a healing item. Not trying to send to chest.")
+      ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
       return true
     else
-      Utils.DebugPrint(2, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
+      ASFTCPrint(2, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
       return false
     end
   end
 
   if isWeapon then
     if JsonConfig.FEATURES.ignore.weapons then
-      Utils.DebugPrint(2, "Moved item is a weapon. Not trying to send to chest.")
+      ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
       return true
     else
-      Utils.DebugPrint(2, "Moved item is a weapon, but ignore.weapons is set to false. Trying to send to chest.")
+      ASFTCPrint(2, "Moved item is a weapon, but ignore.weapons is set to false. Trying to send to chest.")
       return false
     end
   end
@@ -78,14 +78,14 @@ function FoodDelivery.UpdateAwaitingItem(item, reason)
 end
 
 function FoodDelivery.MoveToCampChest(item)
-  Utils.DebugPrint(2, tostring(FoodDelivery.ignore_item.item) .. " " .. tostring(FoodDelivery.ignore_item.reason))
+  ASFTCPrint(2, tostring(FoodDelivery.ignore_item.item) .. " " .. tostring(FoodDelivery.ignore_item.reason))
   if (FoodDelivery.ignore_item.item == item) then
-    Utils.DebugPrint(2, "Ignoring item: " .. item .. "reason: " .. FoodDelivery.ignore_item.reason)
+    ASFTCPrint(2, "Ignoring item: " .. item .. "reason: " .. FoodDelivery.ignore_item.reason)
     FoodDelivery.ignore_item.item = nil
     return
   else
     if not FoodDelivery.IsFoodItemRetainlisted(item) then
-      Utils.DebugPrint(1, "Moving " .. item .. " to camp chest.")
+      ASFTCPrint(1, "Moving " .. item .. " to camp chest.")
       return Osi.SendToCampChest(item, Osi.GetHostCharacter())
     end
   end
@@ -99,7 +99,7 @@ function FoodDelivery.SendInventoryFoodToChest(character)
   local food = GetFoodInInventory(character, shallow)
   if food ~= nil then
     for _, item in ipairs(food) do
-      Utils.DebugPrint(2, "Found food in " .. character .. "'s inventory: " .. item)
+      ASFTCPrint(2, "Found food in " .. character .. "'s inventory: " .. item)
       if not FoodDelivery.IsFoodItemRetainlisted(item) then
         FoodDelivery.DeliverFood(item, character, campChestSack)
       end
@@ -123,24 +123,24 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
       if IsBeverage(object) then
         if JsonConfig.FEATURES.move_beverages then
           shouldMove = true
-          Utils.DebugPrint(1, object .. " is beverage, will move to camp chest.")
+          ASFTCPrint(1, object .. " is beverage, will move to camp chest.")
         else
           shouldMove = false
-          Utils.DebugPrint(1, object .. " is beverage, won't move to camp chest.")
+          ASFTCPrint(1, object .. " is beverage, won't move to camp chest.")
         end
       else
         if JsonConfig.FEATURES.move_food then
           shouldMove = true
-          Utils.DebugPrint(1, object .. " is food, will move to camp chest.")
+          ASFTCPrint(1, object .. " is food, will move to camp chest.")
         else
           shouldMove = false
-          Utils.DebugPrint(1, object .. " is food, won't move to camp chest.")
+          ASFTCPrint(1, object .. " is food, won't move to camp chest.")
         end
       end
 
       if shouldMove then
         local exactamount, totalamount = Osi.GetStackAmount(object)
-        Utils.DebugPrint(2, "Should move " .. object .. " to camp chest.")
+        ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
         local targetInventory = Utils.GetChestUUID()
 
         -- tfw this is all useless because the supply sack is always used anyways
@@ -153,7 +153,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
             if getCampChestSack ~= nil then
               targetInventory = getCampChestSack.Guid
             else
-              Utils.DebugPrint(1, "Camp chest supply sack not found.")
+              ASFTCPrint(1, "Camp chest supply sack not found.")
               targetInventory = Utils.GetChestUUID()
             end
           end
@@ -162,14 +162,14 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
         if targetInventory then
           Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
         else
-          Utils.DebugPrint(1, "Target inventory not found, not moving " .. object .. " to camp chest.")
+          ASFTCPrint(1, "Target inventory not found, not moving " .. object .. " to camp chest.")
         end
       else
-        Utils.DebugPrint(2, object .. " is not food, won't move to camp chest.")
+        ASFTCPrint(2, object .. " is not food, won't move to camp chest.")
       end
     end
   else
-    Utils.DebugPrint(2, object .. " is not an item, won't process.")
+    ASFTCPrint(2, object .. " is not an item, won't process.")
   end
 end
 
