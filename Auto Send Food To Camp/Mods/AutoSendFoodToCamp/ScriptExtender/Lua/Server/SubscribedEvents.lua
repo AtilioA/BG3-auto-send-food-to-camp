@@ -1,4 +1,6 @@
-local function SubscribeToEvents()
+SubscribedEvents = {}
+
+function SubscribedEvents.SubscribeToEvents()
   if Config:getCfg().GENERAL.enabled == true then
     ASFTCPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(Config:getCfg(), { Beautify = true }))
 
@@ -37,10 +39,7 @@ local function SubscribeToEvents()
     -- Ext.Osiris.RegisterListener("PreMovedBy", 2, "after", EHandlers.OnPreMovedBy)
     -- Ext.Osiris.RegisterListener("CharacterStoleItem", 10, "before", EHandlers.OnCharacterStoleItem)
     -- Ext.Osiris.RegisterListener("CharacterPickpocketSuccess", 10, "before", EHandlers.OnCharacterPickpocketSuccess)
-
   end
 end
 
-return {
-  SubscribeToEvents = SubscribeToEvents
-}
+return SubscribedEvents

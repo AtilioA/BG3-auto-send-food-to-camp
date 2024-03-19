@@ -3,24 +3,25 @@ Config = Helpers.Config:New({
   configFilePath = "auto_send_food_to_camp_config.json",
   defaultConfig = {
     GENERAL = {
-      enabled = true,     -- Toggle the mod on/off
+      enabled = true, -- Toggle the mod on/off
     },
     FEATURES = {
-      move_food = true,                  -- Move food to the camp chest
-      move_beverages = true,             -- Move beverages to the camp chest
-      move_bought_food = true,           -- Move food bought from merchants to the camp chest
+      move_food = true,            -- Move food to the camp chest
+      move_beverages = true,       -- Move beverages to the camp chest
+      move_bought_food = true,     -- Move food bought from merchants to the camp chest
+      -- move_stolen_food = false,    -- Move stolen food (right after stealing) to the camp chest
       send_existing_food = {
-        enabled = true,                  -- Move existing food in the party's inventory to the camp chest
-        nested_containers = true,        -- Move food in nested containers (e.g. backpacks) to the camp chest
-        create_supply_sack = true,       -- Move food to a supply sack inside the chest. It will be created if it doesn't exist.
+        enabled = true,            -- Move existing food in the party's inventory to the camp chest
+        nested_containers = true,  -- Move food in nested containers (e.g. backpacks) to the camp chest
+        create_supply_sack = true, -- Move food to a supply sack inside the chest. It will be created if it doesn't exist.
       },
       ignore = {
-        healing = true,        -- Ignore healing items (e.g. Goodberry)
-        weapons = false,       -- Ignore weapons (only Salami in the vanilla base game)
+        healing = true,  -- Ignore healing items (e.g. Goodberry)
+        weapons = false, -- Ignore weapons (only Salami in the vanilla base game)
       }
     },
     DEBUG = {
-      level = 0     -- 0 = no debug, 1 = minimal, 2 = verbose logs
+      level = 0 -- 0 = no debug, 1 = minimal, 2 = verbose debug logs
     }
   },
 })
