@@ -114,7 +114,7 @@ end
 function FoodDelivery.DeliverFood(object, from, campChestSack)
   local shouldMove = false
 
-  if IsItem(object) then
+  if Helpers.Inventory:IsItem(object) then
     if IsFood(object) then
       if FoodDelivery.IsFoodItemRetainlisted(object) then
         return

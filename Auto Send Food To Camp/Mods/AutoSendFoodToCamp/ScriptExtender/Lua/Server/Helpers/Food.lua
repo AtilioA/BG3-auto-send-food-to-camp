@@ -1,7 +1,7 @@
 Food = {}
 
 function IsFood(object)
-  if IsItem(object) then
+  if Helpers.Inventory:IsItem(object) then
     return Osi.ItemGetSupplyValue(object) > 0
   end
 end
@@ -15,7 +15,7 @@ end
 ---@param shallow boolean If true, recursively checks inside bags and containers.
 ---@return table | nil - table of food items in the character's inventory, or nil if none found.
 function GetFoodInInventory(character, shallow)
-  local inventory = GetInventory(character, false, shallow)
+  local inventory = Helpers.Inventory:GetInventory(character, false, shallow)
   local matchedItems = {}
 
   for _, item in ipairs(inventory) do
