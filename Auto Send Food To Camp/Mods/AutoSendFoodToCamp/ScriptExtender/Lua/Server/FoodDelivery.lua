@@ -22,17 +22,9 @@ FoodDelivery.retainlist = {
   weapons = ItemList:New("weapons_foods_list.json", {
     ['WPN_HUM_Salami_A'] = true,
   }),
-  quests = { ['Quest_CON_OwlBearEgg'] = '374111f7-6756-4f5f-b6e3-e45e8d25def0' },
-  healing = {
-    ['UNI_CONS_Goodberry'] = 'de6b186e-839e-41d0-87af-a1a9d9327785',
-    ['GEN_CONS_Berry'] = 'b0943b65-5766-414a-903d-28de8790370a',
-    ['QUEST_GOB_SuspiciousMeat'] = 'f57ad063-af4c-411c-9c91-9ca02cd57dd4',
-    ['DEN_UNI_Thieflings_Gruel'] = 'f91f8f13-44d0-4fd0-8cc1-1ec08356f98a'
-    -- ['CONS_FOOD_Fruit_Apple_A'] = 'e8bbe73a-e1dc-4d2e-910f-318db7aee382',
-  },
-  weapons = {
-    ['WPN_HUM_Salami_A'] = 'e082f373-81ec-4f4b-818b-9ee86952e2fa'
-  }
+  user_defined = ItemList:New("user_ignored_food_list.json",
+    {
+      ["ADD_ITEM_TEMPLATES_NAMES_HERE. CHECK OTHER FILES FOR EXAMPLES (you don't need to add the GUID, just the template name/UID)"] = true }),
 }
 
 function FoodDelivery.DeliverAwaitingFood()
@@ -54,7 +46,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   local isQuestItem = FoodDelivery.retainlist.quests:Contains(foodItemGuid)
   local isHealingItem = FoodDelivery.retainlist.healing:Contains(foodItemGuid)
   local isWeapon = FoodDelivery.retainlist.weapons:Contains(foodItemGuid)
-  -- local isWeapon = Osi.IsWeapon(foodItemGuid) == 1
+  local isUserDefined = FoodDelivery.retainlist.user_defined:Contains(foodItemGuid)
 
   if isQuestItem then
     ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
@@ -79,7 +71,17 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
       ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
       return true
     else
-      ASFTCPrint(2, "Moved item is a weapon, but ignore.weapons is set to false. Trying to send to chest.")
+      ASFTCPrint(1, "Moved item is a weapon, but ignore.weapons is set to false. Trying to send to chest.")
+      return false
+    end
+  end
+
+  if isUserDefined then
+    if Config:getCfg().FEATURES.ignore.user_defined then
+      ASFTCPrint(2, "Moved item is user defined. Not trying to send to chest.")
+      return true
+    else
+      ASFTCPrint(1, "Moved item is user defined, but ignore.user_defined is set to false. Trying to send to chest.")
       return false
     end
   end
