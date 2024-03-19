@@ -11,6 +11,17 @@ FoodDelivery.awaiting_delivery = {
 }
 
 FoodDelivery.retainlist = {
+  quests = ItemList:New("quest_foods_list.json", { ['Quest_CON_OwlBearEgg'] = true }),
+  healing = ItemList:New("healing_foods_list.json", {
+    ['UNI_CONS_Goodberry'] = true,
+    ['GEN_CONS_Berry'] = true,
+    ['QUEST_GOB_SuspiciousMeat'] = true,
+    ['DEN_UNI_Thieflings_Gruel'] = true,
+    ['CONS_FOOD_Fruit_Apple_A'] = false,
+  }),
+  weapons = ItemList:New("weapons_foods_list.json", {
+    ['WPN_HUM_Salami_A'] = true,
+  }),
   quests = { ['Quest_CON_OwlBearEgg'] = '374111f7-6756-4f5f-b6e3-e45e8d25def0' },
   healing = {
     ['UNI_CONS_Goodberry'] = 'de6b186e-839e-41d0-87af-a1a9d9327785',
@@ -36,20 +47,20 @@ end
 function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   local foodItemGuid = Helpers.Format:GetTemplateName(foodItem)
   if foodItemGuid == nil then
-    ASFTCPrint(1, "[ERROR] Couldn't verify if item is retainlisted. foodItemGuid is nil.")
+    ASFTCWarn(1, "Couldn't verify if item is retainlisted. foodItemGuid is nil.")
     return false
   end
 
-  local isQuestItem = FoodDelivery.retainlist.quests[foodItemGuid]
-  local isHealingItem = FoodDelivery.retainlist.healing[foodItemGuid]
-  local isWeapon = FoodDelivery.retainlist.weapons[foodItemGuid]
+  local isQuestItem = FoodDelivery.retainlist.quests:Contains(foodItemGuid)
+  local isHealingItem = FoodDelivery.retainlist.healing:Contains(foodItemGuid)
+  local isWeapon = FoodDelivery.retainlist.weapons:Contains(foodItemGuid)
   -- local isWeapon = Osi.IsWeapon(foodItemGuid) == 1
 
   if isQuestItem then
     ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
     return true
   else
-    ASFTCPrint(2, "Moved item is not a quest item. May try to send to chest.")
+    ASFTCPrint(1, "Moved item is not a quest item. May try to send to chest.")
   end
 
   if isHealingItem then
@@ -57,11 +68,12 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
       ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
       return true
     else
-      ASFTCPrint(2, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
+      ASFTCPrint(1, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
       return false
     end
   end
 
+  -- Osi.IsWeapon doesn't work for some reason
   if isWeapon then
     if Config:getCfg().FEATURES.ignore.weapons then
       ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
