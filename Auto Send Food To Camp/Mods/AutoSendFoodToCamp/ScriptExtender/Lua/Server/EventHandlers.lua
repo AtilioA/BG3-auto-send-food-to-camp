@@ -39,7 +39,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
     return
   end
 
-  if (JsonConfig.FEATURES.move_bought_food and isTrade == 1 and Utils.GetGUID(fromObject) ~= Osi.GetHostCharacter()) then
+  if (Config:getCfg().FEATURES.move_bought_food and isTrade == 1 and Utils.GetGUID(fromObject) ~= Osi.GetHostCharacter()) then
     ASFTCPrint(2, "Got item from trade, trying to send to chest.")
     FoodDelivery.DeliverFood(movedObject, fromObject)
     return
@@ -47,7 +47,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 end
 
 function EHandlers.OnLevelGameplayStarted()
-  if JsonConfig.FEATURES.send_existing_food.enabled and JsonConfig.FEATURES.send_existing_food.create_supply_sack then
+  if Config:getCfg().FEATURES.send_existing_food.enabled and Config:getCfg().FEATURES.send_existing_food.create_supply_sack then
     Osi.TimerLaunch("CreateSupplySackTimer", 1500)
   end
 end

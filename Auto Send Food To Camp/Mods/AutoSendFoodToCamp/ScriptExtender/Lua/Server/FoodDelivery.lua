@@ -45,7 +45,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   end
 
   if isHealingItem then
-    if JsonConfig.FEATURES.ignore.healing then
+    if Config:getCfg().FEATURES.ignore.healing then
       ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
       return true
     else
@@ -55,7 +55,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   end
 
   if isWeapon then
-    if JsonConfig.FEATURES.ignore.weapons then
+    if Config:getCfg().FEATURES.ignore.weapons then
       ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
       return true
     else
@@ -94,7 +94,7 @@ end
 function FoodDelivery.SendInventoryFoodToChest(character)
   local campChestSack = GetCampChestSupplySack()
   -- Not sure if nil is falsey in Lua, so we'll just be explicit
-  local shallow = not JsonConfig.FEATURES.send_existing_food.nested_containers or false
+  local shallow = not Config:getCfg().FEATURES.send_existing_food.nested_containers or false
 
   local food = GetFoodInInventory(character, shallow)
   if food ~= nil then
@@ -121,7 +121,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
       end
 
       if IsBeverage(object) then
-        if JsonConfig.FEATURES.move_beverages then
+        if Config:getCfg().FEATURES.move_beverages then
           shouldMove = true
           ASFTCPrint(1, object .. " is beverage, will move to camp chest.")
         else
@@ -129,7 +129,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
           ASFTCPrint(1, object .. " is beverage, won't move to camp chest.")
         end
       else
-        if JsonConfig.FEATURES.move_food then
+        if Config:getCfg().FEATURES.move_food then
           shouldMove = true
           ASFTCPrint(1, object .. " is food, will move to camp chest.")
         else
@@ -144,7 +144,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
         local targetInventory = Utils.GetChestUUID()
 
         -- tfw this is all useless because the supply sack is always used anyways
-        if JsonConfig.FEATURES.send_existing_food.send_to_supply_sack then
+        if Config:getCfg().FEATURES.send_existing_food.send_to_supply_sack then
           if campChestSack ~= nil then
             targetInventory = campChestSack.Guid
           else
