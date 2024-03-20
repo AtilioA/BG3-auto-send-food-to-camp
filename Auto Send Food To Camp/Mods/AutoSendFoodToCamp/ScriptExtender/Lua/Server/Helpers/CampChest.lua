@@ -4,7 +4,7 @@ local CAMP_SUPPLY_SACK_TEMPLATE_ID = 'efcb70b7-868b-4214-968a-e23f6ad586bc'
 ---@param inventoryItems any The first
 ---@return any | nil - The first supply sack object, or nil if not found.
 function TryToGetCampChestSupplyPack(inventoryItems)
-  _P(Helpers.Inventory:GetItemTemplateInInventory(CAMP_SUPPLY_SACK_TEMPLATE_ID, inventoryItems))
+  -- _P(VCHelpers.Inventory:GetItemTemplateInInventory(CAMP_SUPPLY_SACK_TEMPLATE_ID, inventoryItems))
 
   for _, item in ipairs(inventoryItems) do
     if item.TemplateId == CAMP_SUPPLY_SACK_TEMPLATE_ID then
@@ -16,7 +16,7 @@ function TryToGetCampChestSupplyPack(inventoryItems)
 end
 
 function CheckForCampChestSupplySack()
-  return TryToGetCampChestSupplyPack(Helpers.Inventory:GetCampChestInventory(true))
+  return TryToGetCampChestSupplyPack(VCHelpers.Inventory:GetCampChestInventory(true))
 end
 
 function AddSupplySackToCampChest()

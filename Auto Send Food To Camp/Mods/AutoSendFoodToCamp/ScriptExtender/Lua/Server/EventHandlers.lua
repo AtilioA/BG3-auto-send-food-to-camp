@@ -17,7 +17,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
   ASFTCPrint(2,
     "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. isTrade)
 
-  local chestName = Helpers.Camp:GetChestTemplateUUID()
+  local chestName = VCHelpers.Camp:GetChestTemplateUUID()
 
   -- Don't try to move if the item is already from the camp chest
   -- Check if the moved item is already inside the camp chest or a container within it
@@ -43,7 +43,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
     return
   end
 
-  if (Config:getCfg().FEATURES.move_bought_food and isTrade == 1 and Helpers.Format:GUID(fromObject) ~= Osi.GetHostCharacter()) then
+  if (Config:getCfg().FEATURES.move_bought_food and isTrade == 1 and VCHelpers.Format:GUID(fromObject) ~= Osi.GetHostCharacter()) then
     ASFTCPrint(2, "Got item from trade, trying to send to chest.")
     FoodDelivery.DeliverFood(movedObject, fromObject)
     return
@@ -96,7 +96,7 @@ end
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     ASFTCPrint(2, "UseStarted: " .. character .. " " .. item)
-    if item == Helpers.Camp:GetChestTemplateUUID() then
+    if item == VCHelpers.Camp:GetChestTemplateUUID() then
       EHandlers.usingCampChest = true
     end
   end
@@ -105,7 +105,7 @@ end
 function EHandlers.OnUseEnded(character, item, result)
   if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
     ASFTCPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-    if item == Helpers.Camp:GetChestTemplateUUID() then
+    if item == VCHelpers.Camp:GetChestTemplateUUID() then
       EHandlers.usingCampChest = false
     end
   end

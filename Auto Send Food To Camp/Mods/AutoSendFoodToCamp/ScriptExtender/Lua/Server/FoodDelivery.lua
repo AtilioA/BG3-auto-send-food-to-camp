@@ -37,7 +37,7 @@ end
 
 -- Don't move items that are in the retainlist according to settings
 function FoodDelivery.IsFoodItemRetainlisted(foodItem)
-  local foodItemGuid = Helpers.Format:GetTemplateName(foodItem)
+  local foodItemGuid = VCHelpers.Format:GetTemplateName(foodItem)
   if foodItemGuid == nil then
     ASFTCWarn(1, "Couldn't verify if item is retainlisted. foodItemGuid is nil.")
     return false
@@ -136,13 +136,13 @@ end
 function FoodDelivery.DeliverFood(object, from, campChestSack)
   local shouldMove = false
 
-  if Helpers.Object:IsItem(object) then
-    if Helpers.Food:IsFood(object) then
+  if VCHelpers.Object:IsItem(object) then
+    if VCHelpers.Food:IsFood(object) then
       if FoodDelivery.IsFoodItemRetainlisted(object) then
         return
       end
 
-      if Helpers.Food:IsBeverage(object) then
+      if VCHelpers.Food:IsBeverage(object) then
         if Config:getCfg().FEATURES.move_beverages then
           shouldMove = true
           ASFTCPrint(1, object .. " is beverage, will move to camp chest.")
@@ -163,7 +163,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
       if shouldMove then
         local exactamount, totalamount = Osi.GetStackAmount(object)
         ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
-        local targetInventory = Helpers.Camp:GetChestTemplateUUID()
+        local targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
 
         -- tfw this is all useless because the supply sack is always used anyways
         if Config:getCfg().FEATURES.send_existing_food.send_to_supply_sack then
@@ -176,7 +176,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
               targetInventory = getCampChestSack.Guid
             else
               ASFTCPrint(1, "Camp chest supply sack not found.")
-              targetInventory = Helpers.Camp:GetChestTemplateUUID()
+              targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
             end
           end
         end
