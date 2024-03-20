@@ -11,20 +11,20 @@ FoodDelivery.awaiting_delivery = {
 }
 
 FoodDelivery.retainlist = {
-  quests = ItemList:New("quest_foods_list.json", { ['Quest_CON_OwlBearEgg'] = true }),
-  healing = ItemList:New("healing_foods_list.json", {
+  quests = ItemList:New(Config:GetModFolderPath("quest_foods_list.json"), { ['Quest_CON_OwlBearEgg'] = true }),
+  healing = ItemList:New(Config:GetModFolderPath("healing_foods_list.json"), {
     ['UNI_CONS_Goodberry'] = true,
     ['GEN_CONS_Berry'] = true,
     ['QUEST_GOB_SuspiciousMeat'] = true,
     ['DEN_UNI_Thieflings_Gruel'] = true,
     ['CONS_FOOD_Fruit_Apple_A'] = false,
   }),
-  weapons = ItemList:New("weapons_foods_list.json", {
+  weapons = ItemList:New(Config:GetModFolderPath("weapons_foods_list.json"), {
     ['WPN_HUM_Salami_A'] = true,
   }),
-  user_defined = ItemList:New("user_ignored_food_list.json",
+  user_defined = ItemList:New(Config:GetModFolderPath("user_ignored_food_list.json"),
     {
-      ["ADD_ITEM_TEMPLATES_NAMES_HERE. CHECK OTHER FILES FOR EXAMPLES (you don't need to add the GUID, just the template name/UID)"] = true }),
+      ["ADD_ITEM_TEMPLATES_NAMES_HERE. CHECK OTHER FILES FOR EXAMPLES"] = true }),
 }
 
 function FoodDelivery.DeliverAwaitingFood()
