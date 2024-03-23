@@ -24,7 +24,7 @@ FoodDelivery.retainlist = {
   }),
   user_defined = ItemList:New(Config:GetModFolderPath("user_ignored_food_list.json"),
     {
-      ["ADD_ITEM_TEMPLATES_NAMES_HERE. CHECK OTHER FILES FOR EXAMPLES"] = true }),
+      ["ADD_ITEMS_TEMPLATES_NAMES_HERE. CHECK OTHER FILES FOR EXAMPLES"] = true }),
 }
 
 function FoodDelivery.DeliverAwaitingFood()
