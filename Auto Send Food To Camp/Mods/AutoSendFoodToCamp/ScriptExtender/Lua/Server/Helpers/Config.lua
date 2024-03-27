@@ -19,6 +19,7 @@ Config = VCHelpers.Config:New({
         healing = true,      -- Ignore healing items (e.g. Goodberry)
         weapons = false,     -- Ignore weapons (only Salami in the vanilla base game)
         user_defined = true, -- Ignore items defined by the user (in the user_ignored_food_list.json file)
+        wares = true,
       }
     },
     DEBUG = {

@@ -47,6 +47,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
   local isHealingItem = FoodDelivery.retainlist.healing:Contains(foodItemGuid)
   local isWeapon = FoodDelivery.retainlist.weapons:Contains(foodItemGuid)
   local isUserDefined = FoodDelivery.retainlist.user_defined:Contains(foodItemGuid)
+  local isWare = VCHelpers.Ware:IsWare(foodItem)
 
   if isQuestItem then
     ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
@@ -61,7 +62,6 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
       return true
     else
       ASFTCPrint(1, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
-      return false
     end
   end
 
@@ -72,7 +72,6 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
       return true
     else
       ASFTCPrint(1, "Moved item is a weapon, but ignore.weapons is set to false. Trying to send to chest.")
-      return false
     end
   end
 
@@ -82,7 +81,15 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
       return true
     else
       ASFTCPrint(1, "Moved item is user defined, but ignore.user_defined is set to false. Trying to send to chest.")
-      return false
+    end
+  end
+
+  if isWare then
+    if Config:getCfg().FEATURES.ignore.wares then
+      ASFTCPrint(2, "Moved item is a ware. Not trying to send to chest.")
+      return true
+    else
+      ASFTCPrint(1, "Moved item is a ware, but ignore.wares is set to false. Trying to send to chest.")
     end
   end
 
