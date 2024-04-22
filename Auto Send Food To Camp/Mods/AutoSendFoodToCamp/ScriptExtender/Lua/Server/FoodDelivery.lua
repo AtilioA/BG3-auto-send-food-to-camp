@@ -117,17 +117,20 @@ function FoodDelivery.UpdateAwaitingItem(item, reason)
     FoodDelivery.awaiting_delivery.reason = reason
 end
 
+--- Move an item to the camp chest if it's not ignored.
+---@param item GUIDSTRING The item to move.
 function FoodDelivery.MoveToCampChest(item)
     ASFTCPrint(2, tostring(FoodDelivery.ignore_item.item) .. " " .. tostring(FoodDelivery.ignore_item.reason))
-    if (FoodDelivery.ignore_item.item == item) then
+
+    if FoodDelivery.ignore_item.item == item then
         ASFTCPrint(2, "Ignoring item: " .. item .. "reason: " .. FoodDelivery.ignore_item.reason)
         FoodDelivery.ignore_item.item = nil
         return
-    else
-        if not FoodDelivery.IsFoodItemRetainlisted(item) then
-            ASFTCPrint(1, "Moving " .. item .. " to camp chest.")
-            return Osi.SendToCampChest(item, Osi.GetHostCharacter())
-        end
+    end
+
+    if not FoodDelivery.IsFoodItemRetainlisted(item) then
+        ASFTCPrint(1, "Moving " .. item .. " to camp chest.")
+        return Osi.SendToCampChest(item, Osi.GetHostCharacter())
     end
 end
 
@@ -135,16 +138,34 @@ end
 ---@param character GUIDSTRING The character to send food from.
 function FoodDelivery.SendInventoryFoodToChest(character)
     local campChestSack = CheckForCampChestSupplySack()
-    -- Not sure if nil is falsey in Lua, so we'll just be explicit
     local shallow = not Config:getCfg().FEATURES.send_existing_food.nested_containers or false
+    local minFoodToKeep = Config:getCfg().FEATURES.minimum_food_to_keep or 0
 
-    local food = GetFoodInInventory(character, shallow)
-    if food ~= nil then
-        for _, item in ipairs(food) do
-            ASFTCPrint(2, "Found food in " .. character .. "'s inventory: " .. item)
-            if not FoodDelivery.IsFoodItemRetainlisted(item) then
-                FoodDelivery.DeliverFood(item, character, campChestSack)
-            end
+    local inventoryFood = VCHelpers.Food:GetFoodInInventory(character, shallow)
+    if inventoryFood == nil then
+        ASFTCPrint(2, "No food items found in " .. character .. "'s inventory.")
+        return
+    end
+
+    local foodCount = #inventoryFood
+    local foodToKeep = math.max(foodCount - minFoodToKeep, 0)
+    local foodToSend = foodCount - foodToKeep
+
+    ASFTCPrint(2, "Found " .. foodCount .. " food items in " .. character .. "'s inventory.")
+    ASFTCPrint(2, "Keeping " .. foodToKeep .. " food items in the inventory.")
+    ASFTCPrint(2, "Sending " .. foodToSend .. " food items to the camp chest.")
+
+    -- Sort the food items by rarity, keeping the rarest ones in the inventory
+    table.sort(inventoryFood, function(a, b)
+        local rarityA = VCHelpers.Object:GetItemRarity(a)
+        local rarityB = VCHelpers.Object:GetItemRarity(b)
+        return rarityA > rarityB
+    end)
+
+    for i = foodToKeep + 1, foodCount do
+        local item = inventoryFood[i]
+        if not FoodDelivery.IsFoodItemRetainlisted(item) then
+            FoodDelivery.DeliverFood(item, character, campChestSack)
         end
     end
 end
@@ -152,7 +173,7 @@ end
 --- Send food to camp chest or supply sack.
 ---@param object GUIDSTRING The item to deliver.
 ---@param from GUIDSTRING The inventory to deliver from.
----@param campChestSack GUIDSTRING The supply sack to deliver to.
+---@param campChestSack? GUIDSTRING The supply sack to deliver to.
 function FoodDelivery.DeliverFood(object, from, campChestSack)
     local shouldMove = FoodDelivery.ShouldMoveItem(object)
     if shouldMove then
