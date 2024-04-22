@@ -6,20 +6,20 @@ Config = VCHelpers.Config:New({
             enabled = true, -- Toggle the mod on/off
         },
         FEATURES = {
-            move_food = true,    -- Move food to the camp chest
-            move_beverages = true, -- Move beverages to the camp chest
-            move_bought_food = true, -- Move food bought from merchants to the camp chest
-            minimum_food_to_keep = 0, -- Minimum amount of food to keep in the party's inventory, 0 = send all food to the camp chest
-            minimum_rarity = "Common", -- Minimum rarity of food to keep in the party's inventory ("Common", "Uncommon", "Rare", "Epic", "Legendary")
+            move_food = true,          -- Move food to the camp chest
+            move_beverages = true,     -- Move beverages to the camp chest
+            move_bought_food = true,   -- Move food bought from merchants to the camp chest
+            minimum_food_to_keep = 0,  -- Minimum amount of food to keep in the party's inventory, 0 = send all food to the camp chest
+            maximum_rarity = "Common", -- Maximum rarity of food to send to camp chest ("Common", "Uncommon", "Rare", "Epic", "Legendary")
             -- move_stolen_food = false,    -- Move stolen food (right after stealing) to the camp chest
             send_existing_food = {
-                enabled = true,    -- Move existing food in the party's inventory to the camp chest
-                nested_containers = true, -- Move food in nested containers (e.g. backpacks, supply sacks) to the camp chest
+                enabled = true,            -- Move existing food in the party's inventory to the camp chest
+                nested_containers = true,  -- Move food in nested containers (e.g. backpacks, supply sacks) to the camp chest
                 create_supply_sack = true, -- Move food to a supply sack inside the chest. It will be created if it doesn't exist.
             },
             ignore = {
-                healing = true, -- Ignore healing items (e.g. Goodberry)
-                weapons = false, -- Ignore weapons (only Salami in the vanilla base game)
+                healing = true,      -- Ignore healing items (e.g. Goodberry)
+                weapons = false,     -- Ignore weapons (only Salami in the vanilla base game)
                 user_defined = true, -- Ignore items defined by the user (in the user_ignored_food_list.json file)
                 wares = true,
             }
