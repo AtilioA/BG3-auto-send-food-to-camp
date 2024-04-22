@@ -42,8 +42,6 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
         return
     end
 
-    _D(VCHelpers.Format:Guid(fromObject))
-    _D(GetHostCharacter())
     if (Config:getCfg().FEATURES.move_bought_food and isTrade == 1 and VCHelpers.Format:Guid(fromObject) ~= Osi.GetHostCharacter() and not isItemInHostContainer) then
         ASFTCPrint(2, "Got item from trade, trying to send to chest.")
         FoodDelivery.DeliverFood(movedObject, fromObject)

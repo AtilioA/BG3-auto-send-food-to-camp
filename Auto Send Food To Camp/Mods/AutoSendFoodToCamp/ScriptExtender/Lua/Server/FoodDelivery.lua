@@ -147,25 +147,36 @@ function FoodDelivery.SendInventoryFoodToChest(character)
         return
     end
 
-    local foodCount = #inventoryFood
-    local foodToKeep = math.max(foodCount - minFoodToKeep, 0)
-    local foodToSend = foodCount - foodToKeep
-
-    ASFTCPrint(2, "Found " .. foodCount .. " food items in " .. character .. "'s inventory.")
-    ASFTCPrint(2, "Keeping " .. foodToKeep .. " food items in the inventory.")
-    ASFTCPrint(2, "Sending " .. foodToSend .. " food items to the camp chest.")
-
-    -- Sort the food items by rarity, keeping the rarest ones in the inventory
-    table.sort(inventoryFood, function(a, b)
-        local rarityA = VCHelpers.Object:GetItemRarity(a)
-        local rarityB = VCHelpers.Object:GetItemRarity(b)
-        return rarityA > rarityB
-    end)
-
-    for i = foodToKeep + 1, foodCount do
-        local item = inventoryFood[i]
+    -- Filter out items that are on the retain list and calculate total food count
+    local foodToSend = {}
+    local totalFoodCount = 0
+    for _, item in ipairs(inventoryFood) do
         if not FoodDelivery.IsFoodItemRetainlisted(item) then
+            local _, itemQuantity = Osi.GetStackAmount(item)
+            totalFoodCount = totalFoodCount + itemQuantity
+            table.insert(foodToSend, item)
+        end
+    end
+
+    local foodToKeepCount = math.min(totalFoodCount, minFoodToKeep)
+    local nFoodToSend = totalFoodCount - foodToKeepCount
+
+    ASFTCPrint(2, "Found " .. totalFoodCount .. " food items in " .. character .. "'s inventory.")
+    ASFTCPrint(2, "Keeping " .. foodToKeepCount .. " food items in the inventory.")
+    ASFTCPrint(2, "Sending " .. nFoodToSend .. " food items to the camp chest.")
+
+    -- Deliver the food items, keeping the specified number in the inventory
+    -- NOTE: Due to how DeliverFood works, it will not account stacks correctly, but this is good enough
+    local foodSentCount = 0
+    for _, item in ipairs(foodToSend) do
+        local _, itemQuantity = Osi.GetStackAmount(item)
+        if foodSentCount < nFoodToSend then
+            local sendQuantity = math.min(itemQuantity, nFoodToSend - foodSentCount)
             FoodDelivery.DeliverFood(item, character, campChestSack)
+            foodSentCount = foodSentCount + sendQuantity
+        end
+        if foodSentCount >= nFoodToSend then
+            break
         end
     end
 end
