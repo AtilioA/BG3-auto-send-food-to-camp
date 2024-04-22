@@ -194,21 +194,21 @@ end
 --- Move an item to the camp chest.
 ---@param object GUIDSTRING The item to move.
 ---@param from GUIDSTRING The inventory to move from.
----@param campChestSack GUIDSTRING The supply sack to move to.
+---@param campChestSack? GUIDSTRING The optional supply sack/inventory to move to.
 function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     local exactamount, totalamount = Osi.GetStackAmount(object)
     ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
     local targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
-    targetInventory = FoodDelivery.GetTargetInventory(campChestSack)
+    targetInventory = FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     if targetInventory then
         Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
     end
 end
 
 --- Get the target inventory for food delivery.
----@param campChestSack GUIDSTRING The supply sack to deliver to.
----@return GUIDSTRING|nil - The target inventory.
-function FoodDelivery.GetTargetInventory(campChestSack)
+---@param campChestSack? GUIDSTRING The optional supply sack to deliver to.
+---@return GUIDSTRING|nil - The target inventory. Supply sack if provided or camp chest otherwise.
+function FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     -- tfw this is all useless because the supply sack is always used anyways
     if not Config:getCfg().FEATURES.send_existing_food.send_to_supply_sack then
         return nil
