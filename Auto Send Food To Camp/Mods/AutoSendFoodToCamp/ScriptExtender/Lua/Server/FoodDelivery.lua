@@ -48,7 +48,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     local isWeapon = FoodDelivery.retainlist.weapons:Contains(foodItemGuid)
     local isUserDefined = FoodDelivery.retainlist.user_defined:Contains(foodItemGuid)
     local isWare = VCHelpers.Ware:IsWare(foodItem)
-    local isRare = VCHelpers.Object:IsItemRarityEqualOrLower(foodItemGuid, Config:getCfg().FEATURES.minimum_rarity)
+    local isRare = not VCHelpers.Rarity:IsItemRarityEqualOrLower(foodItem, Config:getCfg().FEATURES.minimum_rarity)
 
     if isQuestItem then
         ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
