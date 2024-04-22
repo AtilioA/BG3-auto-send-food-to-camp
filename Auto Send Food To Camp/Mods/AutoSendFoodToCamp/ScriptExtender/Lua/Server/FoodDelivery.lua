@@ -219,11 +219,14 @@ end
 function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     local exactamount, totalamount = Osi.GetStackAmount(object)
     ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
-    local targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
-    targetInventory = FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
-    if targetInventory then
-        Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
+
+    local targetInventory = FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
+    if targetInventory == nil then
+        ASFTCPrint(1, "No target inventory found for food delivery, defaulting to camp chest.")
+        targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
     end
+
+    Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
 end
 
 --- Get the target inventory for food delivery.
