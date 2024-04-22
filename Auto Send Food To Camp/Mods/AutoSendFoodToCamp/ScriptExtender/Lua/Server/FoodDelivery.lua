@@ -131,6 +131,8 @@ function FoodDelivery.MoveToCampChest(item)
     end
 end
 
+--- Send food from a character's inventory to the camp chest.
+---@param character GUIDSTRING The character to send food from.
 function FoodDelivery.SendInventoryFoodToChest(character)
     local campChestSack = CheckForCampChestSupplySack()
     -- Not sure if nil is falsey in Lua, so we'll just be explicit
@@ -148,69 +150,86 @@ function FoodDelivery.SendInventoryFoodToChest(character)
 end
 
 --- Send food to camp chest or supply sack.
----@param object any The item to deliver.
----@param from any The inventory to deliver from.
----@param campChestSack any The supply sack to deliver to.
+---@param object GUIDSTRING The item to deliver.
+---@param from GUIDSTRING The inventory to deliver from.
+---@param campChestSack GUIDSTRING The supply sack to deliver to.
 function FoodDelivery.DeliverFood(object, from, campChestSack)
-    local shouldMove = false
-
-    if VCHelpers.Object:IsItem(object) then
-        if VCHelpers.Food:IsFood(object) then
-            if FoodDelivery.IsFoodItemRetainlisted(object) then
-                return
-            end
-
-            if VCHelpers.Food:IsBeverage(object) then
-                if Config:getCfg().FEATURES.move_beverages then
-                    shouldMove = true
-                    ASFTCPrint(1, object .. " is beverage, will move to camp chest.")
-                else
-                    shouldMove = false
-                    ASFTCPrint(1, object .. " is beverage, won't move to camp chest.")
-                end
-            else
-                if Config:getCfg().FEATURES.move_food then
-                    shouldMove = true
-                    ASFTCPrint(1, object .. " is food, will move to camp chest.")
-                else
-                    shouldMove = false
-                    ASFTCPrint(1, object .. " is food, won't move to camp chest.")
-                end
-            end
-
-            if shouldMove then
-                local exactamount, totalamount = Osi.GetStackAmount(object)
-                ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
-                local targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
-
-                -- tfw this is all useless because the supply sack is always used anyways
-                if Config:getCfg().FEATURES.send_existing_food.send_to_supply_sack then
-                    if campChestSack ~= nil then
-                        targetInventory = campChestSack.Guid
-                    else
-                        -- Try to get the supply sack anyways if it has not been provided
-                        local getCampChestSack = CheckForCampChestSupplySack()
-                        if getCampChestSack ~= nil then
-                            targetInventory = getCampChestSack.Guid
-                        else
-                            ASFTCPrint(1, "Camp chest supply sack not found.")
-                            targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
-                        end
-                    end
-                end
-
-                if targetInventory then
-                    Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
-                else
-                    ASFTCPrint(1, "Target inventory not found, not moving " .. object .. " to camp chest.")
-                end
-            else
-                ASFTCPrint(2, object .. " is not food, won't move to camp chest.")
-            end
-        end
+    local shouldMove = FoodDelivery.ShouldMoveItem(object)
+    if shouldMove then
+        FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     else
-        ASFTCPrint(2, object .. " is not an item, won't process.")
+        ASFTCPrint(2, object .. " is not food, won't move to camp chest.")
     end
+end
+
+--- Check if an item should be moved to the camp chest.
+---@param object GUIDSTRING The item to check.
+function FoodDelivery.ShouldMoveItem(object)
+    ASFTCPrint(2, "Checking if item should be moved: " .. object)
+
+    if not VCHelpers.Object:IsItem(object) then
+        ASFTCPrint(2, object .. " is not an item, won't move")
+        return false
+    end
+
+    if not VCHelpers.Food:IsFood(object) then
+        ASFTCPrint(2, object .. " is not food, won't move")
+        return false
+    end
+
+    if FoodDelivery.IsFoodItemRetainlisted(object) then
+        ASFTCPrint(2, object .. " is on the retainlist, won't move")
+        return false
+    end
+
+    if VCHelpers.Food:IsBeverage(object) then
+        ASFTCPrint(2, object .. " is a beverage")
+        return Config:getCfg().FEATURES.move_beverages
+    else
+        ASFTCPrint(2, object .. " is food")
+        return Config:getCfg().FEATURES.move_food
+    end
+end
+
+--- Move an item to the camp chest.
+---@param object GUIDSTRING The item to move.
+---@param from GUIDSTRING The inventory to move from.
+---@param campChestSack GUIDSTRING The supply sack to move to.
+function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
+    local exactamount, totalamount = Osi.GetStackAmount(object)
+    ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
+    local targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
+    targetInventory = FoodDelivery.GetTargetInventory(campChestSack)
+    if targetInventory then
+        Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
+    end
+end
+
+--- Get the target inventory for food delivery.
+---@param campChestSack GUIDSTRING The supply sack to deliver to.
+---@return GUIDSTRING|nil - The target inventory.
+function FoodDelivery.GetTargetInventory(campChestSack)
+    -- tfw this is all useless because the supply sack is always used anyways
+    if not Config:getCfg().FEATURES.send_existing_food.send_to_supply_sack then
+        return nil
+    end
+
+    ASFTCPrint(2, "Sending food to supply sack")
+    if campChestSack ~= nil then
+        ASFTCPrint(2, "Using provided supply sack")
+        return campChestSack
+    end
+
+    ASFTCPrint(2, "Supply sack not provided, trying to find one")
+    local getCampChestSack = CheckForCampChestSupplySack()
+    if getCampChestSack ~= nil then
+        ASFTCPrint(2, "Found supply sack")
+        return getCampChestSack
+    end
+
+    ASFTCPrint(1, "Camp chest supply sack not found.")
+    ASFTCPrint(2, "Sending food to camp chest instead")
+    return VCHelpers.Camp:GetChestTemplateUUID()
 end
 
 return FoodDelivery
