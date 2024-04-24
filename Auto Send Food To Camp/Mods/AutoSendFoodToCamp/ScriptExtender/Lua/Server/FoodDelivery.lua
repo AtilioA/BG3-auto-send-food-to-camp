@@ -190,7 +190,7 @@ function FoodDelivery.DeliverFood(object, from, campChestSack)
     if shouldMove then
         FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     else
-        ASFTCPrint(2, object .. " is not food, won't move to camp chest.")
+        ASFTCPrint(2, object .. " should not be moved to camp chest.")
     end
 end
 
@@ -199,7 +199,7 @@ end
 function FoodDelivery.ShouldMoveItem(object)
     ASFTCPrint(2, "Checking if item should be moved: " .. object)
 
-    if not VCHelpers.Object:IsItem(object) then
+    if not VCHelpers.Object:IsItem(VCHelpers.Format:Guid(object)) then
         ASFTCPrint(2, object .. " is not an item, won't move")
         return false
     end
