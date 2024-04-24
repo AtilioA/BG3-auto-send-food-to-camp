@@ -1,0 +1,147 @@
+{
+    "SchemaVersion": 1,
+    "Tabs": [
+        {
+            "TabName": "General",
+            "TabId": "general",
+            "Settings": [
+                {
+                    "Id": "enabled",
+                    "Name": "Enable mod",
+                    "Type": "checkbox",
+                    "Default": true,
+                    "Description": "Toggle the mod on/off without uninstalling it.",
+                    "Tooltip": "Toggle the mod on/off"
+                }
+            ]
+        },
+        {
+            "TabName": "Features",
+            "TabId": "features",
+            "Sections": [
+                {
+                    "SectionId": "food_management",
+                    "SectionName": "Food management",
+                    "Settings": [
+                        {
+                            "Id": "move_food",
+                            "Name": "Move food to camp chest",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether food items to the camp chest"
+                        },
+                        {
+                            "Id": "move_beverages",
+                            "Name": "Move beverages to camp chest",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to move beverages to the camp chest"
+                        },
+                        {
+                            "Id": "move_bought_food",
+                            "Name": "Move purchased food to camp chest",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to move purchased food to the camp chest"
+                        },
+                        {
+                            "Id": "minimum_food_to_keep",
+                            "Name": "Minimum food to keep",
+                            "Type": "int",
+                            "Default": 0,
+                            "Tooltip": "Minimum number of food items to keep in inventory after moving to camp chest"
+                        },
+                        {
+                            "Id": "maximum_rarity",
+                            "Name": "Maximum rarity to send food",
+                            "Type": "enum",
+                            "Default": "Comamon",
+                            "Options": {
+                                "Choices": [
+                                    "Common",
+                                    "Uncommon",
+                                    "Rare",
+                                    "Epic",
+                                    "Legendary"
+                                ]
+                            },
+                            "Tooltip": "Maximum rarity of the food item to send to camp chest"
+                        },
+                        {
+                            "Id": "send_existing_food",
+                            "Name": "Manage existing food",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to send existing food items in inventory"
+                        },
+                        {
+                            "Id": "nested_containers",
+                            "Name": "Search in nested containers",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to search for food in nested containers inside player inventories"
+                        },
+                        {
+                            "Id": "create_supply_sack",
+                            "Name": "Create supply sack in chest",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to create a single supply sack in the camp chest if it doesn't exist"
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "ignore_settings",
+                    "SectionName": "Ignore settings",
+                    "Settings": [
+                        {
+                            "Id": "ignore_healing",
+                            "Name": "Ignore healing items",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to ignore healing food items"
+                        },
+                        {
+                            "Id": "ignore_weapons",
+                            "Name": "Ignore weapons",
+                            "Type": "checkbox",
+                            "Default": false,
+                            "Tooltip": "Whether to ignore food items that are weapons"
+                        },
+                        {
+                            "Id": "ignore_user_defined",
+                            "Name": "Ignore user defined items",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to ignore items from a user-defined item list"
+                        },
+                        {
+                            "Id": "ignore_wares",
+                            "Name": "Ignore wares",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to ignore food items marked as wares"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "TabName": "Debug",
+            "TabId": "debug",
+            "Settings": [
+                {
+                    "Id": "debug_level",
+                    "Name": "Debug level",
+                    "Type": "slider",
+                    "Default": 0,
+                    "Description": "Debug level for the mod, used mainly for determining which messages to print",
+                    "Options": {
+                        "Min": 0,
+                        "Max": 2
+                    }
+                }
+            ]
+        }
+    ]
+}
