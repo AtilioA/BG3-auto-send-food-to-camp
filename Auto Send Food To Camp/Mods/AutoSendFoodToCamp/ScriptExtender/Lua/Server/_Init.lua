@@ -1,4 +1,6 @@
-setmetatable(Mods.AutoSendFoodToCamp, { __index = Mods.VolitionCabinet })
+setmetatable(Mods[Ext.Mod.GetMod(ModuleUUID).Info.Directory], { __index = Mods.VolitionCabinet })
+setmetatable(Mods[Ext.Mod.GetMod(ModuleUUID).Info.Directory], { __index = Mods.BG3MCM })
+
 
 ---Ext.Require files at the path
 ---@param path string
