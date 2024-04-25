@@ -87,6 +87,13 @@
                             "Type": "checkbox",
                             "Default": true,
                             "Tooltip": "Whether to create a single supply sack in the camp chest if it doesn't exist"
+                        },
+                        {
+                            "Id": "send_to_supply_sack",
+                            "Name": "Send food to supply sack",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to send food items to the supply sack in the camp chest"
                         }
                     ]
                 },
