@@ -1,5 +1,4 @@
-setmetatable(Mods[Ext.Mod.GetMod(ModuleUUID).Info.Directory], { __index = Mods.VolitionCabinet })
-setmetatable(Mods[Ext.Mod.GetMod(ModuleUUID).Info.Directory], { __index = Mods.BG3MCM })
+setmetatable(Mods[Ext.Mod.GetMod(ModuleUUID).Info.Directory], { __index = Mods.VolitionCabinet, Mods.BG3MCM })
 
 
 ---Ext.Require files at the path
@@ -18,9 +17,15 @@ RequireFiles("Server/", {
     "SubscribedEvents",
 })
 
-local VCModuleUUID = "f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca"
-if (not Ext.Mod.IsModLoaded(VCModuleUUID)) then
-    Ext.Utils.Print("VOLITION CABINET HAS NOT BEEN LOADED. PLEASE MAKE SURE IT IS ENABLED IN YOUR MOD MANAGER.")
+local deps = {
+    VCModuleUUID = "f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca",
+    MCMModuleUUID = "755a8a72-407f-4f0d-9a33-274ac0f0b53d"
+}
+for _, depUUID in pairs(deps) do
+    if not Ext.Mod.IsModLoaded(depUUID) == false then
+        local depName = Ext.Mod.GetMod(depUUID).Info.Name
+        ASFTCWarn(0, "Dependency " .. depName .. " is missing. Please make sure it is enabled in your mod manager.")
+    end
 end
 
 local MODVERSION = Ext.Mod.GetMod(ModuleUUID).Info.ModVersion
@@ -32,7 +37,6 @@ else
 
     local versionNumber = table.concat(MODVERSION, ".")
     ASFTCPrint(0, "Volitio's Auto Send Food To Camp version " .. versionNumber .. " loaded")
-    ASFTCPrint(2, "Config loaded: " .. Ext.Json.Stringify(Config:getCfg(), { Beautify = true }))
 end
 
 SubscribedEvents.SubscribeToEvents()
