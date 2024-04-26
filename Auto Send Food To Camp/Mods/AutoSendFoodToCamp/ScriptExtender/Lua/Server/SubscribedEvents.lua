@@ -1,9 +1,10 @@
 SubscribedEvents = {}
 
 function SubscribedEvents.SubscribeToEvents()
-    if BG3MCM:GetConfigValue('enabled', ModuleUUID) == true then
+    if true then
         ASFTCPrint(2,
-            "Subscribing to events with JSON config: " .. Ext.Json.Stringify(BG3MCM:GetModSettings(ModuleUUID), { Beautify = true }))
+            "Subscribing to events with JSON config: " ..
+            Ext.Json.Stringify(Mods.BG3MCM.MCMAPI:GetModSettings(ModuleUUID), { Beautify = true }))
 
         Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
         Ext.Osiris.RegisterListener("TimerFinished", 1, "before", EHandlers.OnTimerFinished)
@@ -16,7 +17,7 @@ function SubscribedEvents.SubscribeToEvents()
         Ext.Osiris.RegisterListener("RequestCanPickup", 3, "after", EHandlers.OnRequestCanPickup)
         Ext.Osiris.RegisterListener("PickupFailed", 2, "after", EHandlers.OnPickupFailed)
 
-        if BG3MCM:GetConfigValue('send_existing_food', ModuleUUID) then
+        if Mods.BG3MCM.MCMAPI:GetConfigValue('send_existing_food', ModuleUUID) then
             Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", EHandlers.OnTeleportedToCamp)
         end
 

@@ -1,6 +1,5 @@
 setmetatable(Mods[Ext.Mod.GetMod(ModuleUUID).Info.Directory], { __index = Mods.VolitionCabinet, Mods.BG3MCM })
 
-
 ---Ext.Require files at the path
 ---@param path string
 ---@param files string[]
@@ -10,23 +9,23 @@ function RequireFiles(path, files)
     end
 end
 
+local deps = {
+    VCModuleUUID = "f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca",
+    MCMModuleUUID = "755a8a72-407f-4f0d-9a33-274ac0f0b53d"
+}
+for _, depUUID in pairs(deps) do
+    if Ext.Mod.IsModLoaded(depUUID) == false then
+        local depName = Ext.Mod.GetMod(depUUID).Info.Name
+        ASFTCWarn(0, "Requirement '" .. depName .. "' is missing. Please make sure it is enabled in your mod manager.")
+    end
+end
+
 RequireFiles("Server/", {
     "Helpers/_Init",
     "FoodDelivery",
     "EventHandlers",
     "SubscribedEvents",
 })
-
-local deps = {
-    VCModuleUUID = "f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca",
-    MCMModuleUUID = "755a8a72-407f-4f0d-9a33-274ac0f0b53d"
-}
-for _, depUUID in pairs(deps) do
-    if not Ext.Mod.IsModLoaded(depUUID) == false then
-        local depName = Ext.Mod.GetMod(depUUID).Info.Name
-        ASFTCWarn(0, "Dependency " .. depName .. " is missing. Please make sure it is enabled in your mod manager.")
-    end
-end
 
 local MODVERSION = Ext.Mod.GetMod(ModuleUUID).Info.ModVersion
 if MODVERSION == nil then

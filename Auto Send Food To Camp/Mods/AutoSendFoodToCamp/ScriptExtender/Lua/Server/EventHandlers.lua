@@ -42,7 +42,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
         return
     end
 
-    if (BG3MCM:GetConfigValue('move_bought_food', ModuleUUID) and isTrade == 1 and VCHelpers.Format:Guid(fromObject) ~= Osi.GetHostCharacter() and not isItemInHostContainer) then
+    if (MCMAPI:GetConfigValue('move_bought_food', ModuleUUID) and isTrade == 1 and VCHelpers.Format:Guid(fromObject) ~= Osi.GetHostCharacter() and not isItemInHostContainer) then
         ASFTCPrint(2, "Got item from trade, trying to send to chest.")
         FoodDelivery.DeliverFood(movedObject, fromObject)
         return
@@ -52,7 +52,7 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 end
 
 function EHandlers.OnLevelGameplayStarted()
-    if BG3MCM:GetConfigValue('send_existing_food', ModuleUUID) and BG3MCM:GetConfigValue('create_supply_sack', ModuleUUID) then
+    if MCMAPI:GetConfigValue('send_existing_food', ModuleUUID) and MCMAPI:GetConfigValue('create_supply_sack', ModuleUUID) then
         Osi.TimerLaunch("CreateSupplySackTimer", 1500)
     end
 end
