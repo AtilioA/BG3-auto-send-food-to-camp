@@ -49,7 +49,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     local isUserDefined = FoodDelivery.retainlist.user_defined:Contains(foodItemGuid)
     local isWare = VCHelpers.Ware:IsWare(foodItem)
     local isRare = not VCHelpers.Rarity:IsItemRarityEqualOrLower(foodItem,
-        MCMAPI:GetConfigValue('maximum_rarity', ModuleUUID))
+        Mods.BG3MCM.MCMAPI:GetConfigValue('maximum_rarity', ModuleUUID))
 
     if isQuestItem then
         ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
@@ -59,7 +59,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     end
 
     if isHealingItem then
-        if MCMAPI:GetConfigValue('ignore_healing', ModuleUUID) then
+        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_healing', ModuleUUID) then
             ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
             return true
         else
@@ -69,7 +69,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
 
     -- Osi.IsWeapon doesn't work for some reason
     if isWeapon then
-        if MCMAPI:GetConfigValue('ignore_weapons', ModuleUUID) then
+        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_weapons', ModuleUUID) then
             ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
             return true
         else
@@ -78,7 +78,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     end
 
     if isUserDefined then
-        if MCMAPI:GetConfigValue('ignore_user_defined', ModuleUUID) then
+        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_user_defined', ModuleUUID) then
             ASFTCPrint(2, "Moved item is user defined. Not trying to send to chest.")
             return true
         else
@@ -92,12 +92,12 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     else
         ASFTCPrint(1,
             "Moved item is more rare than " ..
-            MCMAPI:GetConfigValue('maximum_rarity', ModuleUUID) .. ". Not trying to send to chest.")
+            Mods.BG3MCM.MCMAPI:GetConfigValue('maximum_rarity', ModuleUUID) .. ". Not trying to send to chest.")
         return true
     end
 
     if isWare then
-        if MCMAPI:GetConfigValue('ignore_wares', ModuleUUID) then
+        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_wares', ModuleUUID) then
             ASFTCPrint(2, "Moved item is a ware. Not trying to send to chest.")
             return true
         else
@@ -139,8 +139,8 @@ end
 ---@param character GUIDSTRING The character to send food from.
 function FoodDelivery.SendInventoryFoodToChest(character)
     local campChestSack = CheckForCampChestSupplySack()
-    local shallow = not MCMAPI:GetConfigValue('nested_containers', ModuleUUID) or false
-    local minFoodToKeep = MCMAPI:GetConfigValue('minimum_food_to_keep', ModuleUUID) or 0
+    local shallow = not Mods.BG3MCM.MCMAPI:GetConfigValue('nested_containers', ModuleUUID) or false
+    local minFoodToKeep = Mods.BG3MCM.MCMAPI:GetConfigValue('minimum_food_to_keep', ModuleUUID) or 0
 
     local inventoryFood = VCHelpers.Food:GetFoodInInventory(character, shallow)
     if inventoryFood == nil then
@@ -216,12 +216,12 @@ function FoodDelivery.ShouldMoveItem(object)
     end
 
     if VCHelpers.Food:IsBeverage(object) then
-        local shouldMoveBeverages = MCMAPI:GetConfigValue('move_beverages', ModuleUUID)
+        local shouldMoveBeverages = Mods.BG3MCM.MCMAPI:GetConfigValue('move_beverages', ModuleUUID)
         ASFTCPrint(2,
             object .. " is a food item (beverage). Config value 'move_beverages' is " .. tostring(shouldMoveBeverages))
         return shouldMoveBeverages
     else
-        local shouldMoveFood = MCMAPI:GetConfigValue('move_food', ModuleUUID)
+        local shouldMoveFood = Mods.BG3MCM.MCMAPI:GetConfigValue('move_food', ModuleUUID)
         ASFTCPrint(2, object .. " is a food item. Config value 'move_food' is " .. tostring(shouldMoveFood))
         return shouldMoveFood
     end
@@ -239,6 +239,8 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     if targetInventory == nil then
         ASFTCPrint(1, "No target inventory found for food delivery, defaulting to camp chest.")
         targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
+    else
+        targetInventory = targetInventory.Guid
     end
 
     Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
@@ -249,7 +251,7 @@ end
 ---@return GUIDSTRING|nil - The target inventory. Supply sack if provided or camp chest otherwise.
 function FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     -- tfw this is all useless because the supply sack is always used anyways
-    if not MCMAPI:GetConfigValue('send_to_supply_sack', ModuleUUID) then
+    if not Mods.BG3MCM.MCMAPI:GetConfigValue('send_to_supply_sack', ModuleUUID) then
         return nil
     end
 
