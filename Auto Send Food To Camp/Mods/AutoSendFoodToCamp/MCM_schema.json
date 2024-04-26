@@ -55,7 +55,7 @@
                             "Id": "maximum_rarity",
                             "Name": "Maximum rarity to send food",
                             "Type": "enum",
-                            "Default": "Comamon",
+                            "Default": "Common",
                             "Options": {
                                 "Choices": [
                                     "Common",
