@@ -1,4 +1,4 @@
-ASFTCPrinter = VolitionCabinetPrinter:New { Prefix = "Auto Send Food To Camp", ApplyColor = true, DebugLevel = Mods.BG3MCM.MCMAPI:GetConfigValue("debug_level") }
+ASFTCPrinter = VolitionCabinetPrinter:New { Prefix = "Auto Send Food To Camp", ApplyColor = true, DebugLevel = Mods.BG3MCM.MCMAPI:GetConfigValue("debug_level", ModuleUUID) }
 
 function ASFTCPrint(debugLevel, ...)
     ASFTCPrinter:SetFontColor(0, 255, 255)
