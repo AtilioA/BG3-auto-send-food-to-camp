@@ -4,14 +4,37 @@
         {
             "TabName": "General",
             "TabId": "general",
-            "Settings": [
+            "Sections": [
                 {
-                    "Id": "enabled",
-                    "Name": "Enable mod",
-                    "Type": "checkbox",
-                    "Default": true,
-                    "Description": "Toggle the mod on/off without uninstalling it.",
-                    "Tooltip": "Toggle the mod on/off"
+                    "SectionId": "general_settings",
+                    "SectionName": "General settings",
+                    "Settings": [
+                        {
+                            "Id": "enabled",
+                            "Name": "Enable mod",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Toggle the mod on/off without uninstalling it.",
+                            "Tooltip": "Toggle the mod on/off"
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "debugging_settings",
+                    "SectionName": "Debugging",
+                    "Settings": [
+                        {
+                            "Id": "debug_level",
+                            "Name": "Debug level",
+                            "Type": "slider_int",
+                            "Default": 0,
+                            "Description": "Debug level for the mod, used mainly for determining which messages to print",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 2
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -130,23 +153,6 @@
                             "Tooltip": "Whether to ignore food items marked as wares"
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "TabName": "Debug",
-            "TabId": "debug",
-            "Settings": [
-                {
-                    "Id": "debug_level",
-                    "Name": "Debug level",
-                    "Type": "slider",
-                    "Default": 0,
-                    "Description": "Debug level for the mod, used mainly for determining which messages to print",
-                    "Options": {
-                        "Min": 0,
-                        "Max": 2
-                    }
                 }
             ]
         }
