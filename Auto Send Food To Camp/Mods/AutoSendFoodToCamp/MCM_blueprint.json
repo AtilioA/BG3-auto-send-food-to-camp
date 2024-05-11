@@ -15,7 +15,10 @@
                             "Type": "checkbox",
                             "Default": true,
                             "Description": "Toggle the mod on/off without uninstalling it.",
-                            "Tooltip": "Toggle the mod on/off"
+                            "Handles": {
+                                "DescriptionHandle": "h012f6360970348a09ec00cfbae32d13a078e",
+                                "NameHandle": "h7c305c96ae4445159f959dcc0e0af6d1eef6"
+                            }
                         }
                     ]
                 },
@@ -28,7 +31,11 @@
                             "Name": "Debug level",
                             "Type": "slider_int",
                             "Default": 0,
-                            "Description": "Debug level for the mod, used mainly for determining which messages to print",
+                            "Description": "0 = no debug, 1 = minimal, 2 = verbose debug logs.",
+                            "Handles": {
+                                "DescriptionHandle": "h8257844bae184efaaaddc8f3ba98075df2ed",
+                                "NameHandle": "h25e1d32503d64b7987d351eab068c307cb3d"
+                            },
                             "Options": {
                                 "Min": 0,
                                 "Max": 2
@@ -51,28 +58,44 @@
                             "Name": "Move food to camp chest",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether food items to the camp chest"
+                            "Description": "Whether to move food items to the camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "hb7119872bea14191a895d0c016abdfadee30",
+                                "NameHandle": "ha585cfeb8a724ba28e1c9976fc0ddf7fabga"
+                            }
                         },
                         {
                             "Id": "move_beverages",
                             "Name": "Move beverages to camp chest",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to move beverages to the camp chest"
+                            "Description": "Whether to move beverages to the camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "hf81ec564928e439aac227e9a81aa013f1386",
+                                "NameHandle": "he4962d23a0564e129f48fa170c22e92306b1"
+                            }
                         },
                         {
                             "Id": "move_bought_food",
                             "Name": "Move purchased food to camp chest",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to move purchased food to the camp chest"
+                            "Description": "Whether to move purchased food to the camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "h64a08b6d5d2848ad84a647cca75a8435c2c7",
+                                "NameHandle": "h313091db60ed400e90cf9d1de48e5f473fcb"
+                            }
                         },
                         {
                             "Id": "minimum_food_to_keep",
                             "Name": "Minimum food to keep",
                             "Type": "int",
                             "Default": 0,
-                            "Tooltip": "Minimum number of food items to keep in inventory after moving to camp chest"
+                            "Description": "Minimum number of food items to keep in inventory after moving to camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "hb19a7b8c19d44f139fe3ccb7e8eda721eff1",
+                                "NameHandle": "ha5846d4d1b33490aa96d435eb9e253272dba"
+                            }
                         },
                         {
                             "Id": "maximum_rarity",
@@ -88,37 +111,67 @@
                                     "Legendary"
                                 ]
                             },
-                            "Tooltip": "Maximum rarity of the food item to send to camp chest"
+                            "Description": "Maximum rarity of the food item to send to camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "h84078ae048044c98a370fc62e2bfc4c2dg47",
+                                "NameHandle": "h86180208a91e4eca8b73fa4f42ee83a16432",
+                                "ChoicesHandles": [
+                                    "h977af483ga6d9g4334g9ee0g3b85b94c67db_128",
+                                    "h7682e16bg7c69g4a72g8f1fg1b32519665f3",
+                                    "heb7ba0d5g7f4cg49e9g9ce2g86cf5e5bd277",
+                                    "hd75b2771g8abag49b5g9b8egb608d51b9ddf",
+                                    "h97227897g1345g4046gbb62g842dcc292db1"
+                                ]
+                            }
                         },
                         {
                             "Id": "send_existing_food",
                             "Name": "Manage existing food",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to send existing food items in inventory"
+                            "Description": "Whether to send existing food items in inventory.",
+                            "Handles": {
+                                "DescriptionHandle": "he278aedc21aa49eb85846b43b7ddd587f8e9",
+                                "NameHandle": "h7e4755324e834b1e870296a6afe2ac73g8c3"
+                            }
                         },
                         {
                             "Id": "nested_containers",
                             "Name": "Search in nested containers",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to search for food in nested containers inside player inventories"
+                            "Description": "Whether to search for food in nested containers inside player inventories.",
+                            "Handles": {
+                                "DescriptionHandle": "ha4ec57269e684676b5602eefbede67e500f7",
+                                "NameHandle": "ha0bab8090cec47a2b11da1c2cb45ba5afg97"
+                            }
                         },
                         {
                             "Id": "create_supply_sack",
                             "Name": "Create supply sack in chest",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to create a single supply sack in the camp chest if it doesn't exist"
+                            "Description": "Whether to create a single supply sack in the camp chest if it doesn't exist.",
+                            "Handles": {
+                                "DescriptionHandle": "h43d5605c6ce84aafb23f0029e41fb2508gbe",
+                                "NameHandle": "h3276a3ad6c354dc2961353a404f3e471faac"
+                            }
                         },
                         {
                             "Id": "send_to_supply_sack",
                             "Name": "Send food to supply sack",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to send food items to the supply sack in the camp chest"
+                            "Description": "Whether to send food items to the supply sack in the camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "h8e09c02ed6734e96a06289e656ae6693ca20",
+                                "NameHandle": "hd34e4b4513304181b7d2bbf1de9a8821475a"
+                            }
                         }
-                    ]
+                    ],
+                    "Handles": {
+                        "NameHandle": "h15ef2787ae46409fac462f8bb1e790c3f208"
+                    }
                 },
                 {
                     "SectionId": "ignore_settings",
@@ -129,30 +182,49 @@
                             "Name": "Ignore healing items",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to ignore healing food items"
+                            "Description": "Whether to ignore healing food items.",
+                            "Handles": {
+                                "DescriptionHandle": "he384cca37bb44f4bbd2ceb6730550a8aa332",
+                                "NameHandle": "hff9c6038f11f4c0cb5618b2cf3e76a377318"
+                            }
                         },
                         {
                             "Id": "ignore_weapons",
                             "Name": "Ignore weapons",
                             "Type": "checkbox",
                             "Default": false,
-                            "Tooltip": "Whether to ignore food items that are weapons"
-                        },
-                        {
-                            "Id": "ignore_user_defined",
-                            "Name": "Ignore user defined items",
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Tooltip": "Whether to ignore items from a user-defined item list"
+                            "Description": "Whether to ignore food items that are weapons.",
+                            "Handles": {
+                                "DescriptionHandle": "h721dc4e72b244c4b97ba3ff2194325342be2",
+                                "NameHandle": "h8cfeed0782fe4798bcfb7c6b4e6987c599af"
+                            }
                         },
                         {
                             "Id": "ignore_wares",
                             "Name": "Ignore wares",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to ignore food items marked as wares"
+                            "Description": "Whether to ignore food items marked as wares.",
+                            "Handles": {
+                                "DescriptionHandle": "hbaf72fe47ce74f33a129c302b821fa5ccgc3",
+                                "NameHandle": "h4195fb01a04a4c5796268aa8366f3ed2d763"
+                            }
+                        },
+                        {
+                            "Id": "ignore_user_defined",
+                            "Name": "Ignore user defined items",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to ignore items from a user-defined item list.",
+                            "Handles": {
+                                "DescriptionHandle": "h628fed1196a8449eb2a74b8be9900766da6e",
+                                "NameHandle": "h8efc988cea644fe7a2d460f3919b06de2c89"
+                            }
                         }
-                    ]
+                    ],
+                    "Handles": {
+                        "NameHandle": "h26d03a04438e44c88aee3555f7a6c877cd4f"
+                    }
                 }
             ]
         }
