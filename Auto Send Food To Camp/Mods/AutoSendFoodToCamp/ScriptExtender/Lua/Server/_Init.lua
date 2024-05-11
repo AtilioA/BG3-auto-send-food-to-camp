@@ -13,11 +13,14 @@ local deps = {
     VCModuleUUID = "f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca",
     MCMModuleUUID = "755a8a72-407f-4f0d-9a33-274ac0f0b53d"
 }
-for _, depUUID in pairs(deps) do
-    if Ext.Mod.IsModLoaded(depUUID) == false then
-        local depName = Ext.Mod.GetMod(depUUID).Info.Name
-        ASFTCWarn(0, "Requirement '" .. depName .. "' is missing. Please make sure it is enabled in your mod manager.")
-    end
+if not Ext.Mod.IsModLoaded(deps.VCModuleUUID) then
+    Ext.Utils.Print(
+        "Volition Cabinet is missing and is a hard requirement. PLEASE MAKE SURE IT IS ENABLED IN YOUR MOD MANAGER.")
+end
+
+if not Ext.Mod.IsModLoaded(deps.MCMModuleUUID) then
+    Ext.Utils.Print(
+        "BG3 Mod Configuration Menu is missing and is a hard requirement. PLEASE MAKE SURE IT IS ENABLED IN YOUR MOD MANAGER.")
 end
 
 RequireFiles("Server/", {
@@ -26,6 +29,10 @@ RequireFiles("Server/", {
     "EventHandlers",
     "SubscribedEvents",
 })
+
+function MCMGet(settingID)
+    return Mods.BG3MCM.MCMAPI:GetSettingValue(settingID, ModuleUUID)
+end
 
 local MODVERSION = Ext.Mod.GetMod(ModuleUUID).Info.ModVersion
 if MODVERSION == nil then
