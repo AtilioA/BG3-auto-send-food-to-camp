@@ -49,7 +49,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     local isUserDefined = FoodDelivery.retainlist.user_defined:Contains(foodItemGuid)
     local isWare = VCHelpers.Ware:IsWare(foodItem)
     local isRare = not VCHelpers.Rarity:IsItemRarityEqualOrLower(foodItem,
-        Mods.BG3MCM.MCMAPI:GetConfigValue('maximum_rarity', ModuleUUID))
+        MCMGet('maximum_rarity'))
 
     if isQuestItem then
         ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
@@ -59,7 +59,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     end
 
     if isHealingItem then
-        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_healing', ModuleUUID) then
+        if MCMGet('ignore_healing') then
             ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
             return true
         else
@@ -69,7 +69,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
 
     -- Osi.IsWeapon doesn't work for some reason
     if isWeapon then
-        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_weapons', ModuleUUID) then
+        if MCMGet('ignore_weapons') then
             ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
             return true
         else
@@ -78,7 +78,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     end
 
     if isUserDefined then
-        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_user_defined', ModuleUUID) then
+        if MCMGet('ignore_user_defined') then
             ASFTCPrint(2, "Moved item is user defined. Not trying to send to chest.")
             return true
         else
@@ -92,12 +92,12 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     else
         ASFTCPrint(1,
             "Moved item is more rare than " ..
-            Mods.BG3MCM.MCMAPI:GetConfigValue('maximum_rarity', ModuleUUID) .. ". Not trying to send to chest.")
+            MCMGet('maximum_rarity') .. ". Not trying to send to chest.")
         return true
     end
 
     if isWare then
-        if Mods.BG3MCM.MCMAPI:GetConfigValue('ignore_wares', ModuleUUID) then
+        if MCMGet('ignore_wares') then
             ASFTCPrint(2, "Moved item is a ware. Not trying to send to chest.")
             return true
         else
@@ -139,8 +139,8 @@ end
 ---@param character GUIDSTRING The character to send food from.
 function FoodDelivery.SendInventoryFoodToChest(character)
     local campChestSack = CheckForCampChestSupplySack()
-    local shallow = not Mods.BG3MCM.MCMAPI:GetConfigValue('nested_containers', ModuleUUID) or false
-    local minFoodToKeep = Mods.BG3MCM.MCMAPI:GetConfigValue('minimum_food_to_keep', ModuleUUID) or 0
+    local shallow = not MCMGet('nested_containers') or false
+    local minFoodToKeep = MCMGet('minimum_food_to_keep') or 0
 
     local inventoryFood = VCHelpers.Food:GetFoodInInventory(character, shallow)
     if inventoryFood == nil then
@@ -216,12 +216,12 @@ function FoodDelivery.ShouldMoveItem(object)
     end
 
     if VCHelpers.Food:IsBeverage(object) then
-        local shouldMoveBeverages = Mods.BG3MCM.MCMAPI:GetConfigValue('move_beverages', ModuleUUID)
+        local shouldMoveBeverages = MCMGet('move_beverages')
         ASFTCPrint(2,
             object .. " is a food item (beverage). Config value 'move_beverages' is " .. tostring(shouldMoveBeverages))
         return shouldMoveBeverages
     else
-        local shouldMoveFood = Mods.BG3MCM.MCMAPI:GetConfigValue('move_food', ModuleUUID)
+        local shouldMoveFood = MCMGet('move_food')
         ASFTCPrint(2, object .. " is a food item. Config value 'move_food' is " .. tostring(shouldMoveFood))
         return shouldMoveFood
     end
@@ -251,7 +251,7 @@ end
 ---@return GUIDSTRING|nil - The target inventory. Supply sack if provided or camp chest otherwise.
 function FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     -- tfw this is all useless because the supply sack is always used anyways
-    if not Mods.BG3MCM.MCMAPI:GetConfigValue('send_to_supply_sack', ModuleUUID) then
+    if not MCMGet('send_to_supply_sack') then
         return nil
     end
 
