@@ -10,7 +10,7 @@
                     "SectionName": "General settings",
                     "Settings": [
                         {
-                            "Id": "enabled",
+                            "Id": "mod_enabled",
                             "Name": "Enable mod",
                             "Type": "checkbox",
                             "Default": true,
