@@ -43,15 +43,19 @@
                         }
                     ]
                 }
-            ]
+            ],
+            "Handles": {
+                "NameHandle": "hcdef10e54c4847f9856799b94c8c57006e11"
+            }
         },
         {
-            "TabName": "Features",
-            "TabId": "features",
+            "TabName": "Items to send to camp",
+            "TabId": "items_to_send_to_camp",
             "Sections": [
                 {
                     "SectionId": "food_management",
                     "SectionName": "Food management",
+                    "SectionDescription": "The following settings allow you to customize which food items are sent to the camp chest.",
                     "Settings": [
                         {
                             "Id": "move_food",
@@ -87,17 +91,6 @@
                             }
                         },
                         {
-                            "Id": "minimum_food_to_keep",
-                            "Name": "Minimum food to keep",
-                            "Type": "int",
-                            "Default": 0,
-                            "Description": "Minimum number of food items to keep in inventory after moving to camp chest.",
-                            "Handles": {
-                                "DescriptionHandle": "hb19a7b8c19d44f139fe3ccb7e8eda721eff1",
-                                "NameHandle": "ha5846d4d1b33490aa96d435eb9e253272dba"
-                            }
-                        },
-                        {
                             "Id": "maximum_rarity",
                             "Name": "Maximum rarity to send food",
                             "Type": "enum",
@@ -123,13 +116,31 @@
                                     "h97227897g1345g4046gbb62g842dcc292db1"
                                 ]
                             }
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "inventory_management",
+                    "SectionName": "Inventory management",
+                    "SectionDescription": "Food items are usually moved to the camp chest when picked up or when entering the camp.\nThe following settings allow you to further customize this behavior.",
+                    "Settings": [
+                        {
+                            "Id": "minimum_food_to_keep",
+                            "Name": "Minimum food to keep",
+                            "Type": "int",
+                            "Default": 0,
+                            "Description": "Minimum number of food items to keep in inventory after moving to camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "hb19a7b8c19d44f139fe3ccb7e8eda721eff1",
+                                "NameHandle": "ha5846d4d1b33490aa96d435eb9e253272dba"
+                            }
                         },
                         {
                             "Id": "send_existing_food",
                             "Name": "Manage existing food",
                             "Type": "checkbox",
                             "Default": true,
-                            "Description": "Whether to send existing food items in inventory.",
+                            "Description": "Whether to send existing food items in inventory upon entering camp.",
                             "Handles": {
                                 "DescriptionHandle": "he278aedc21aa49eb85846b43b7ddd587f8e9",
                                 "NameHandle": "h7e4755324e834b1e870296a6afe2ac73g8c3"
@@ -172,10 +183,20 @@
                     "Handles": {
                         "NameHandle": "h15ef2787ae46409fac462f8bb1e790c3f208"
                     }
-                },
+                }
+            ],
+            "Handles": {
+                "NameHandle": "he2a45d4c16e244b7a4fef832b26e0f5f8d56"
+            }
+        },
+        {
+            "TabName": "Ignore",
+            "TabId": "ignore_settings",
+            "Sections": [
                 {
                     "SectionId": "ignore_settings",
                     "SectionName": "Ignore settings",
+                    "SectionDescription": "The following settings allow you to customize which food items are ignored by the mod.",
                     "Settings": [
                         {
                             "Id": "ignore_healing",
@@ -226,7 +247,10 @@
                         "NameHandle": "h26d03a04438e44c88aee3555f7a6c877cd4f"
                     }
                 }
-            ]
+            ],
+            "Handles": {
+                "NameHandle": "hb46cd9625d9d4ceb99f401154f75d2b8434a"
+            }
         }
     ]
 }

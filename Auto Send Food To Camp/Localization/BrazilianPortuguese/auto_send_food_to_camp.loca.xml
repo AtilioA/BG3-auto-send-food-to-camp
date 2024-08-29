@@ -7,7 +7,7 @@
     <content contentuid="h64a08b6d5d2848ad84a647cca75a8435c2c7" version="1">Se deve mover comida comprada para o baú do acampamento.</content>
     <content contentuid="h84078ae048044c98a370fc62e2bfc4c2dg47" version="1">Raridade máxima do item de comida para enviar ao baú do acampamento.</content>
     <content contentuid="hb19a7b8c19d44f139fe3ccb7e8eda721eff1" version="1">Número mínimo de itens de comida para manter no inventário quando estiver movendo para o baú do acampamento.</content>
-    <content contentuid="he278aedc21aa49eb85846b43b7ddd587f8e9" version="1">Se deve enviar itens de comida existentes no inventário.</content>
+    <content contentuid="he278aedc21aa49eb85846b43b7ddd587f8e9" version="1">Se deve enviar itens de comida existentes no inventário ao entrar no acampamento.</content>
     <content contentuid="ha4ec57269e684676b5602eefbede67e500f7" version="1">Se deve procurar por comida em containers aninhados dentro dos inventários do jogador.</content>
     <content contentuid="h43d5605c6ce84aafb23f0029e41fb2508gbe" version="1">Se deve criar um único saco de suprimentos no baú do acampamento, caso não exista.</content>
     <content contentuid="h8e09c02ed6734e96a06289e656ae6693ca20" version="1">Se deve enviar itens de comida para o saco de suprimentos no baú do acampamento.</content>
@@ -31,5 +31,8 @@
     <content contentuid="h8efc988cea644fe7a2d460f3919b06de2c89" version="1">Ignorar itens definidos pelo usuário</content>
     <content contentuid="h4195fb01a04a4c5796268aa8366f3ed2d763" version="1">Ignorar itens marcados como supérfluos</content>
     <content contentuid="h15ef2787ae46409fac462f8bb1e790c3f208" version="1">Gerenciamento de comida</content>
-    <content contentuid="h26d03a04438e44c88aee3555f7a6c877cd4f" version="1">Configurações de ignoramento</content>
+    <content contentuid="h26d03a04438e44c88aee3555f7a6c877cd4f" version="1">Configurações gerais de ignoramento</content>
+    <content contentuid="hb46cd9625d9d4ceb99f401154f75d2b8434a" version="1">Ignorar</content>
+    <content contentuid="he2a45d4c16e244b7a4fef832b26e0f5f8d56" version="1">Enviar ao acampamento</content>
+    <content contentuid="hcdef10e54c4847f9856799b94c8c57006e11" version="1">Geral</content>
 </contentList>
