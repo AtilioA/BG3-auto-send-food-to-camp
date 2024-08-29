@@ -9,10 +9,20 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
         return
     end
 
+    if not movedObject or not fromObject or not toObject then
+        ASFTCWarn(1, "One or more parameters are nil, won't handle MovedFromTo.")
+        return
+    end
+
     ASFTCPrint(2,
-        "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. isTrade)
+        "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. tostring(isTrade))
 
     local chestName = VCHelpers.Camp:GetChestTemplateUUID()
+
+    if not chestName then
+        ASFTCWarn(1, "Chest name is nil, won't handle MovedFromTo.")
+        return
+    end
 
     local isItemFromCampChest = fromObject == chestName
     local isItemInCampChest = Osi.IsInInventoryOf(movedObject, chestName) == 1
