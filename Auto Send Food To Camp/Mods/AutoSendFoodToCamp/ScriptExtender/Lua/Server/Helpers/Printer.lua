@@ -1,14 +1,13 @@
 ASFTCPrinter = VolitionCabinetPrinter:New { Prefix = "Auto Send Food To Camp", ApplyColor = true, DebugLevel = MCMGet("debug_level") }
 
 -- Update the Printer debug level when the setting is changed, since the value is only used during the object's creation
-Ext.RegisterNetListener("MCM_Saved_Setting", function(call, payload)
-    local data = Ext.Json.Parse(payload)
-    if not data or data.modGUID ~= ModuleUUID or not data.settingId then
+Ext.ModEvents["BG3MCM"]["MCM_Setting_Saved"]:Subscribe(function(payload)
+    if not payload or payload.modUUID ~= ModuleUUID or not payload.settingId then
         return
     end
 
-    if data.settingId == "debug_level" then
-        _D("Setting debug level to " .. data.value)
+    if payload.settingId == "debug_level" then
+        ASFTCPrint(0, "Setting debug level to " .. payload.value)
         ASFTCPrinter.DebugLevel = MCMGet("debug_level")
     end
 end)
