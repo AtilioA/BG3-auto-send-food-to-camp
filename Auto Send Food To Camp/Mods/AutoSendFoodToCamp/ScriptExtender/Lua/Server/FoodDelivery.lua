@@ -11,7 +11,13 @@ FoodDelivery.awaiting_delivery = {
 }
 
 FoodDelivery.retainlist = {
-    quests = ItemList:New("AutoSendFoodToCamp/quest_food_list.json", { ['Quest_CON_OwlBearEgg'] = true }),
+    quests = ItemList:New("AutoSendFoodToCamp/quest_food_list.json",
+        {
+            ['Quest_CON_OwlBearEgg'] = true,
+            ['S_FOR_OwlBear_Egg'] = true,
+            ['S_GLO_DevilishOx_AppleForm'] = true,
+            ['GLO_DevilishOx_Fruit_Apple'] = true,
+        }),
     healing = ItemList:New("AutoSendFoodToCamp/healing_food_list.json", {
         ['UNI_CONS_Goodberry'] = true,
         ['GEN_CONS_Berry'] = true,
