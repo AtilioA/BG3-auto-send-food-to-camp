@@ -20,7 +20,10 @@
                                 "NameHandle": "h7c305c96ae4445159f959dcc0e0af6d1eef6"
                             }
                         }
-                    ]
+                    ],
+                    "Handles": {
+                        "NameHandle": "h4a218e50a0ea475ab423c6943c84c65cfbf0"
+                    }
                 },
                 {
                     "SectionId": "debugging_settings",
@@ -117,7 +120,11 @@
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "Handles": {
+                        "NameHandle": "hdb47080176eb4034bb0f0429f4d8a8e8f3ae",
+                        "DescriptionHandle": "h6f697ad763644cb384c939ff2ad67cc1f2b5"
+                    }
                 },
                 {
                     "SectionId": "inventory_management",
@@ -181,7 +188,8 @@
                         }
                     ],
                     "Handles": {
-                        "NameHandle": "h15ef2787ae46409fac462f8bb1e790c3f208"
+                        "NameHandle": "h15ef2787ae46409fac462f8bb1e790c3f208",
+                        "DescriptionHandle": "he69ad39886a24e4eb696ce6870aa89c985gd"
                     }
                 }
             ],
@@ -244,7 +252,8 @@
                         }
                     ],
                     "Handles": {
-                        "NameHandle": "h26d03a04438e44c88aee3555f7a6c877cd4f"
+                        "NameHandle": "h26d03a04438e44c88aee3555f7a6c877cd4f",
+                        "DescriptionHandle": "ha467cad406584338bd515fe2d8d40e164b6c"
                     }
                 }
             ],

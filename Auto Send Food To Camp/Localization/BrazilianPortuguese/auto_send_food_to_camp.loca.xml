@@ -35,4 +35,9 @@
     <content contentuid="hb46cd9625d9d4ceb99f401154f75d2b8434a" version="1">Ignorar</content>
     <content contentuid="he2a45d4c16e244b7a4fef832b26e0f5f8d56" version="1">Enviar ao acampamento</content>
     <content contentuid="hcdef10e54c4847f9856799b94c8c57006e11" version="1">Geral</content>
+    <content contentuid="h4a218e50a0ea475ab423c6943c84c65cfbf0" version="1">Configurações gerais</content>
+    <content contentuid="he69ad39886a24e4eb696ce6870aa89c985gd" version="1">Os itens de comida geralmente são movidos para o baú do acampamento quando coletados ou ao entrar no acampamento.&lt;br&gt;As configurações a seguir permitem que você personalize ainda mais esse comportamento.</content>
+    <content contentuid="ha467cad406584338bd515fe2d8d40e164b6c" version="1">As configurações a seguir permitem que você personalize quais itens de comida são ignorados pelo mod.</content>
+    <content contentuid="h6f697ad763644cb384c939ff2ad67cc1f2b5" version="1">As configurações a seguir permitem que você personalize quais itens de comida são enviados para o baú do acampamento.</content>
+    <content contentuid="hdb47080176eb4034bb0f0429f4d8a8e8f3ae" version="1">Gerenciamento de comida</content>
 </contentList>
