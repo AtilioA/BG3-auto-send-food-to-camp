@@ -190,7 +190,7 @@ end
 
 --- Send food to camp chest or supply sack.
 ---@param object GUIDSTRING The item to deliver.
----@param from GUIDSTRING The inventory to deliver from.
+---@param from? GUIDSTRING The inventory to deliver from.
 ---@param campChestSack? GUIDSTRING The supply sack to deliver to.
 function FoodDelivery.DeliverFood(object, from, campChestSack)
     local shouldMove = FoodDelivery.ShouldMoveItem(object)
@@ -235,11 +235,19 @@ end
 
 --- Move an item to the camp chest.
 ---@param object GUIDSTRING The item to move.
----@param from GUIDSTRING The inventory to move from.
+---@param from? GUIDSTRING The inventory to move from.
 ---@param campChestSack? GUIDSTRING The optional supply sack/inventory to move to.
 function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
+    if object == nil then
+        return
+    end
+
     local exactamount, totalamount = Osi.GetStackAmount(object)
     ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
+
+    if totalamount == nil then
+        totalamount = 1
+    end
 
     local targetInventory = FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     if targetInventory == nil then
@@ -249,7 +257,13 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
         targetInventory = targetInventory.Guid
     end
 
-    Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
+    -- Osi can't be trusted
+    xpcall(function()
+            Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
+        end,
+        function(err)
+            ASFTCWarn(0, "Error moving item to inventory: " .. tostring(err))
+        end)
 end
 
 --- Get the target inventory for food delivery.
