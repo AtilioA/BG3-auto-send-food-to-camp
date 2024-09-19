@@ -15,7 +15,8 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
     end
 
     ASFTCPrint(2,
-        "OnMovedFromTo called: " .. movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. tostring(isTrade))
+        "OnMovedFromTo called: " ..
+        movedObject .. " from " .. fromObject .. " to " .. toObject .. " isTrade " .. tostring(isTrade))
 
     local chestName = VCHelpers.Camp:GetChestTemplateUUID()
 
@@ -36,12 +37,19 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 
     local isFromObjectInParty = Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) == 1
     local isToObjectInParty = Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1
+    local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(fromObject)
+    local isToObjectInCamp = VCHelpers.Character:IsCharacterInCamp(toObject)
     local isMovingFromPartyToNotTrade = isFromObjectInParty and isTrade ~= 1
     local isFromObjectCharacter = Osi.IsCharacter(fromObject) == 1
     local isItemBeingMovedFromOtherCharacter = (not isFromObjectInParty and isToObjectInParty) or
         (isFromObjectCharacter and not isFromObjectInParty)
 
-    if (isMovingFromPartyToNotTrade) then
+    if (isFromObjectInParty and isFromObjectInCamp) or (isToObjectInParty and isToObjectInCamp) then
+        ASFTCPrint(2, "Item is from party and in camp, not trying to send to chest.")
+        return
+    end
+
+    if isMovingFromPartyToNotTrade then
         ASFTCPrint(2, "Item is being moved from party and not in trade, not trying to send to chest.")
         return
     end
@@ -112,8 +120,13 @@ end
 function EHandlers.OnUseStarted(character, item)
     if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
         ASFTCPrint(2, "UseStarted: " .. character .. " " .. item)
-        if item == VCHelpers.Camp:GetChestTemplateUUID() then
-            EHandlers.usingCampChest = true
+        local activeCampChests = VCHelpers.Camp:GetAllCampChestUUIDs()
+        for _,
+        chestUUID in pairs(activeCampChests) do
+            if VCHelpers.Format:Guid(item) == chestUUID then
+                EHandlers.usingCampChest = true
+                break
+            end
         end
     end
 end
@@ -121,8 +134,12 @@ end
 function EHandlers.OnUseEnded(character, item, result)
     if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
         ASFTCPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-        if item == VCHelpers.Camp:GetChestTemplateUUID() then
-            EHandlers.usingCampChest = false
+        local activeCampChests = VCHelpers.Camp:GetAllCampChestUUIDs()
+        for _, chestUUID in pairs(activeCampChests) do
+            if VCHelpers.Format:Guid(item) == chestUUID then
+                EHandlers.usingCampChest = false
+                break
+            end
         end
     end
 end
