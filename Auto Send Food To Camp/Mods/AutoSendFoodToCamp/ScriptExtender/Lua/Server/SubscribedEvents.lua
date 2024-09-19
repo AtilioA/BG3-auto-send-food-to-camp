@@ -29,10 +29,6 @@ function SubscribedEvents.SubscribeToEvents()
         Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", conditionalWrapper(EHandlers.OnTeleportedToCamp))
     end
 
-    -- Used to detect camp chest usage
-    Ext.Osiris.RegisterListener("UseStarted", 2, "before", conditionalWrapper(EHandlers.OnUseStarted))
-    Ext.Osiris.RegisterListener("UseFinished", 3, "before", conditionalWrapper(EHandlers.OnUseEnded))
-
     -- TODO:
     -- CharacterStoleItem
     -- CharacterPickpocketSuccess
