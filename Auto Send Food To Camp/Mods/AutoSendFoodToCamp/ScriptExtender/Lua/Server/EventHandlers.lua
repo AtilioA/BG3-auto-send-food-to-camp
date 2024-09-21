@@ -22,14 +22,26 @@ function EHandlers.OnTimerFinished(timerName)
 end
 
 -- Common helper function for handling logic
-function EHandlers.HandleItemMovement(character, movedObject, fromObject, toObject, isTrade)
+function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject, toObject, isTrade)
+    local function ShouldProcessTradedItem(isFromObjectInParty)
+        if isTrade == 1 then
+            if isFromObjectInParty then
+                ASFTCPrint(2, "Item is being traded from party, not trying to send to chest.")
+                return false
+            elseif MCM.Get("move_bought_food") then
+                ASFTCPrint(2, "Item is being traded to party, trying to send to chest.")
+                return true
+            end
+        end
+    end
+
     if not movedObject or not fromObject then
         ASFTCWarn(1, "One or more parameters are nil, won't handle movement.")
         return false
     end
 
     ASFTCPrint(2,
-        "HandleItemMovement called: " ..
+        "ShouldProcessItemMovement called: " ..
         character .. " moved " .. movedObject .. " from " .. (fromObject or "nil") .. " to " .. (toObject or "nil"))
 
     local chestName = VCHelpers.Camp:GetChestTemplateUUID()
@@ -40,27 +52,23 @@ function EHandlers.HandleItemMovement(character, movedObject, fromObject, toObje
     end
 
     local isFromObjectInParty = Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) == 1
-    local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(fromObject)
     local isToObjectInParty = toObject and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 or false
+    local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(fromObject)
     local isToObjectInCamp = VCHelpers.Character:IsCharacterInCamp(toObject)
-    local isMovingFromPartyToNotTrade = isFromObjectInParty and isTrade ~= 1
-    local isFromObjectCharacter = Osi.IsCharacter(fromObject) == 1
-    local isItemBeingMovedFromOtherCharacter = (not isFromObjectInParty and isToObjectInParty) or
-        (isFromObjectCharacter and not isFromObjectInParty)
 
     if isFromObjectInCamp or isToObjectInCamp then
         ASFTCPrint(2, "Item is being moved from or to camp, not trying to send to chest.")
         return false
     end
 
-    if isMovingFromPartyToNotTrade then
-        ASFTCPrint(2, "Item is being moved from party and not in trade, not trying to send to chest.")
+    if not ShouldProcessTradedItem(isFromObjectInParty)
+    then
         return false
     end
 
-    if isItemBeingMovedFromOtherCharacter then
-        ASFTCPrint(2, "Item is being moved from character, trying to send to chest.")
-        return true
+    if isFromObjectInParty and not isToObjectInParty then
+        ASFTCPrint(2, "Item is being moved from party, not trying to send to chest.")
+        return false
     end
 
     return true
@@ -68,16 +76,9 @@ end
 
 -- Refactored OnMovedFromTo function
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
-    local shouldSendToChest = EHandlers.HandleItemMovement(fromObject, movedObject, fromObject, toObject,
-        isTrade)
+    local shouldSendToChest = EHandlers.ShouldProcessItemMovement(fromObject, movedObject, fromObject, toObject, isTrade)
     if shouldSendToChest then
-        if (MCMGet('move_bought_food') and isTrade == 1 and VCHelpers.Format:Guid(fromObject) ~= Osi.GetHostCharacter() and not Osi.IsInInventoryOf(fromObject, GetHostCharacter()) == 1) then
-            ASFTCPrint(2, "Got item from trade, trying to send to chest.")
-            FoodDelivery.DeliverFood(movedObject, fromObject)
-            return
-        else
-            ASFTCPrint(2, "Host is selling item, not trying to send to chest.")
-        end
+        FoodDelivery.DeliverFood(movedObject, fromObject)
     end
 end
 
