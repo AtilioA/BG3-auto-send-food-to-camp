@@ -204,50 +204,113 @@
                 {
                     "SectionId": "ignore_settings",
                     "SectionName": "Ignore settings",
-                    "SectionDescription": "The following settings allow you to customize which food items are ignored by the mod.",
+                    "SectionDescription": "Customize which food items are ignored by the mod with modular lists.",
                     "Settings": [
+                        {
+                            "Id": "ignore_quests",
+                            "Name": "Ignore quest items",
+                            "Type": "list_v2",
+                            "Description": "Manages the list of quest-related food items to ignore.",
+                            "Default": {
+                                "enabled": true,
+                                "elements": [
+                                    {
+                                        "name": "Quest_CON_OwlBearEgg",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "S_FOR_OwlBear_Egg",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "S_GLO_DevilishOx_AppleForm",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "GLO_DevilishOx_Fruit_Apple",
+                                        "enabled": true
+                                    }
+                                ]
+                            },
+                            "Options": {
+                                "PageSize": 5,
+                                "ShowSearchBar": true,
+                                "ReadOnly": true
+                            }
+                        },
                         {
                             "Id": "ignore_healing",
                             "Name": "Ignore healing items",
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to ignore healing food items.",
-                            "Handles": {
-                                "DescriptionHandle": "he384cca37bb44f4bbd2ceb6730550a8aa332",
-                                "NameHandle": "hff9c6038f11f4c0cb5618b2cf3e76a377318"
+                            "Type": "list_v2",
+                            "Description": "Manages the list of healing food items to ignore.",
+                            "Default": {
+                                "enabled": true,
+                                "elements": [
+                                    {
+                                        "name": "UNI_CONS_Goodberry",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "GEN_CONS_Berry",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "QUEST_GOB_SuspiciousMeat",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "DEN_UNI_Thieflings_Gruel",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "CONS_FOOD_Fruit_Apple_A",
+                                        "enabled": false
+                                    }
+                                ]
+                            },
+                            "Options": {
+                                "PageSize": 5,
+                                "ShowSearchBar": true,
+                                "ReadOnly": true
                             }
                         },
                         {
                             "Id": "ignore_weapons",
-                            "Name": "Ignore weapons",
-                            "Type": "checkbox",
-                            "Default": false,
-                            "Description": "Whether to ignore food items that are weapons.",
-                            "Handles": {
-                                "DescriptionHandle": "h721dc4e72b244c4b97ba3ff2194325342be2",
-                                "NameHandle": "h8cfeed0782fe4798bcfb7c6b4e6987c599af"
-                            }
-                        },
-                        {
-                            "Id": "ignore_wares",
-                            "Name": "Ignore wares",
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to ignore food items marked as wares.",
-                            "Handles": {
-                                "DescriptionHandle": "hbaf72fe47ce74f33a129c302b821fa5ccgc3",
-                                "NameHandle": "h4195fb01a04a4c5796268aa8366f3ed2d763"
+                            "Name": "Ignore weapon items",
+                            "Type": "list_v2",
+                            "Description": "Manages the list of weapon-related food items to ignore.",
+                            "Default": {
+                                "enabled": false,
+                                "elements": [
+                                    {
+                                        "name": "WPN_HUM_Salami_A",
+                                        "enabled": true
+                                    }
+                                ]
+                            },
+                            "Options": {
+                                "PageSize": 5,
+                                "ShowSearchBar": true,
+                                "ReadOnly": true
                             }
                         },
                         {
                             "Id": "ignore_user_defined",
-                            "Name": "Ignore user defined items",
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to ignore items from a user-defined item list.",
-                            "Handles": {
-                                "DescriptionHandle": "h628fed1196a8449eb2a74b8be9900766da6e",
-                                "NameHandle": "h8efc988cea644fe7a2d460f3919b06de2c89"
+                            "Name": "Ignore user-defined items",
+                            "Type": "list_v2",
+                            "Description": "Manages the list of user-defined food items to ignore.",
+                            "Default": {
+                                "enabled": true,
+                                "elements": [
+                                    {
+                                        "name": "ADD_ITEMS_TEMPLATES_NAMES_HERE",
+                                        "enabled": true
+                                    }
+                                ]
+                            },
+                            "Options": {
+                                "PageSize": 10,
+                                "ShowSearchBar": true
                             }
                         }
                     ],

@@ -11,27 +11,28 @@ FoodDelivery.awaiting_delivery = {
 }
 
 FoodDelivery.retainlist = {
-    quests = ItemList:New("AutoSendFoodToCamp/quest_food_list.json",
-        {
-            ['Quest_CON_OwlBearEgg'] = true,
-            ['S_FOR_OwlBear_Egg'] = true,
-            ['S_GLO_DevilishOx_AppleForm'] = true,
-            ['GLO_DevilishOx_Fruit_Apple'] = true,
-        }),
-    healing = ItemList:New("AutoSendFoodToCamp/healing_food_list.json", {
-        ['UNI_CONS_Goodberry'] = true,
-        ['GEN_CONS_Berry'] = true,
-        ['QUEST_GOB_SuspiciousMeat'] = true,
-        ['DEN_UNI_Thieflings_Gruel'] = true,
-        ['CONS_FOOD_Fruit_Apple_A'] = false,
-    }),
-    weapons = ItemList:New("AutoSendFoodToCamp/weapons_food_list.json", {
-        ['WPN_HUM_Salami_A'] = true,
-    }),
-    user_defined = ItemList:New("AutoSendFoodToCamp/user_ignored_food_list.json",
-        {
-            ["ADD_ITEMS_TEMPLATES_NAMES_HERE. CHECK OTHER FILES FOR EXAMPLES"] = true }),
+    quests = MCM.GetList('ignore_quests'),
+    healing = MCM.GetList('ignore_healing'),
+    weapons = MCM.GetList('ignore_weapons'),
+    user_defined = MCM.GetList('ignore_user_defined'),
 }
+
+Ext.ModEvents["BG3MCM"]["MCM_Setting_Saved"]:Subscribe(function(payload)
+    if not payload or payload.modUUID ~= ModuleUUID or not payload.settingId then
+        return
+    end
+
+    if payload.settingId == "ignore_quests" then
+        FoodDelivery.retainlist.quests = MCM.GetList('ignore_quests')
+    elseif payload.settingId == "ignore_healing" then
+        FoodDelivery.retainlist.healing = MCM.GetList('ignore_healing')
+    elseif payload.settingId == "ignore_weapons" then
+        FoodDelivery.retainlist.weapons = MCM.GetList('ignore_weapons')
+    elseif payload.settingId == "ignore_user_defined" then
+        FoodDelivery.retainlist.user_defined = MCM.GetList('ignore_user_defined')
+    end
+end)
+
 
 function FoodDelivery.DeliverAwaitingFood()
     if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
@@ -49,10 +50,10 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
         return false
     end
 
-    local isQuestItem = FoodDelivery.retainlist.quests:Contains(foodItemGuid)
-    local isHealingItem = FoodDelivery.retainlist.healing:Contains(foodItemGuid)
-    local isWeapon = FoodDelivery.retainlist.weapons:Contains(foodItemGuid)
-    local isUserDefined = FoodDelivery.retainlist.user_defined:Contains(foodItemGuid)
+    local isQuestItem = FoodDelivery.retainlist.quests[foodItemGuid]
+    local isHealingItem = FoodDelivery.retainlist.healing[foodItemGuid]
+    local isWeapon = FoodDelivery.retainlist.weapons[foodItemGuid]
+    local isUserDefined = FoodDelivery.retainlist.user_defined[foodItemGuid]
     local isWare = VCHelpers.Ware:IsWare(foodItem)
     local isRare = not VCHelpers.Rarity:IsItemRarityEqualOrLower(foodItem,
         MCM.Get('maximum_rarity'))
@@ -65,32 +66,25 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     end
 
     if isHealingItem then
-        if MCMGet('ignore_healing') then
-            ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
-            return true
-        else
-            ASFTCPrint(1, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
-        end
+        ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
+        return true
+    else
+        ASFTCPrint(1, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
     end
 
-    -- Osi.IsWeapon doesn't work for some reason
     if isWeapon then
-        if MCMGet('ignore_weapons') then
-            ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
-            return true
-        else
-            ASFTCPrint(1, "Moved item is a weapon, but ignore.weapons is set to false. May try to send to chest.")
-        end
+        ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
+        return true
+    else
+        ASFTCPrint(1, "Moved item is a weapon, but ignore.weapons is set to false. May try to send to chest.")
     end
 
     if isUserDefined then
-        if MCMGet('ignore_user_defined') then
-            ASFTCPrint(2, "Moved item is user defined. Not trying to send to chest.")
-            return true
-        else
-            ASFTCPrint(1,
-                "Moved item is user defined, but ignore.user_defined is set to false. May try to send to chest.")
-        end
+        ASFTCPrint(2, "Moved item is user defined. Not trying to send to chest.")
+        return true
+    else
+        ASFTCPrint(1,
+            "Moved item is user defined, but ignore.user_defined is set to false. May try to send to chest.")
     end
 
     if not isRare then
