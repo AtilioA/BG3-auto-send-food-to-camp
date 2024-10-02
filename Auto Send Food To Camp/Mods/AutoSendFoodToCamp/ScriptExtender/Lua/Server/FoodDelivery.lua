@@ -55,7 +55,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     local isUserDefined = FoodDelivery.retainlist.user_defined:Contains(foodItemGuid)
     local isWare = VCHelpers.Ware:IsWare(foodItem)
     local isRare = not VCHelpers.Rarity:IsItemRarityEqualOrLower(foodItem,
-        MCMGet('maximum_rarity'))
+        MCM.Get('maximum_rarity'))
 
     if isQuestItem then
         ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
@@ -98,12 +98,12 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     else
         ASFTCPrint(1,
             "Moved item is more rare than " ..
-            MCMGet('maximum_rarity') .. ". Not trying to send to chest.")
+            MCM.Get('maximum_rarity') .. ". Not trying to send to chest.")
         return true
     end
 
     if isWare then
-        if MCMGet('ignore_wares') then
+        if MCM.Get('ignore_wares') then
             ASFTCPrint(2, "Moved item is a ware. Not trying to send to chest.")
             return true
         else
@@ -145,8 +145,8 @@ end
 ---@param character GUIDSTRING The character to send food from.
 function FoodDelivery.SendInventoryFoodToChest(character)
     local campChestSack = CheckForCampChestSupplySack()
-    local shallow = not MCMGet('nested_containers') or false
-    local minFoodToKeep = MCMGet('minimum_food_to_keep') or 0
+    local shallow = not MCM.Get('nested_containers') or false
+    local minFoodToKeep = MCM.Get('minimum_food_to_keep') or 0
 
     local inventoryFood = VCHelpers.Food:GetFoodInInventory(character, shallow)
     if inventoryFood == nil then
@@ -222,12 +222,12 @@ function FoodDelivery.ShouldMoveItem(object)
     end
 
     if VCHelpers.Food:IsBeverage(object) then
-        local shouldMoveBeverages = MCMGet('move_beverages')
+        local shouldMoveBeverages = MCM.Get('move_beverages')
         ASFTCPrint(2,
             object .. " is a food item (beverage). Config value 'move_beverages' is " .. tostring(shouldMoveBeverages))
         return shouldMoveBeverages
     else
-        local shouldMoveFood = MCMGet('move_food')
+        local shouldMoveFood = MCM.Get('move_food')
         ASFTCPrint(2, object .. " is a food item. Config value 'move_food' is " .. tostring(shouldMoveFood))
         return shouldMoveFood
     end
@@ -271,7 +271,7 @@ end
 ---@return GUIDSTRING|nil - The target inventory. Supply sack if provided or camp chest otherwise.
 function FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     -- tfw this is all useless because the supply sack is always used anyways
-    if not MCMGet('send_to_supply_sack') then
+    if not MCM.Get('send_to_supply_sack') then
         return nil
     end
 

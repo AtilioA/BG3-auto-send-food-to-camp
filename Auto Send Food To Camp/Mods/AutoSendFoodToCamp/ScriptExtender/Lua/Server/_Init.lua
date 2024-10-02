@@ -14,10 +14,6 @@ if not Ext.Mod.IsModLoaded(deps.MCMModuleUUID) then
         "BG3 Mod Configuration Menu is missing and is a hard requirement. PLEASE MAKE SURE IT IS ENABLED IN YOUR MOD MANAGER.")
 end
 
-function MCMGet(settingID)
-    return Mods.BG3MCM.MCMAPI:GetSettingValue(settingID, ModuleUUID)
-end
-
 ---Ext.Require files at the path
 ---@param path string
 ---@param files string[]

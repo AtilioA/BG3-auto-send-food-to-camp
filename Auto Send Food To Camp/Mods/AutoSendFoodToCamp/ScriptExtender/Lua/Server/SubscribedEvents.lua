@@ -3,7 +3,7 @@ SubscribedEvents = {}
 function SubscribedEvents.SubscribeToEvents()
     local function conditionalWrapper(handler)
         return function(...)
-            if MCMGet("mod_enabled") then
+            if MCM.Get("mod_enabled") then
                 handler(...)
             else
                 ASFTCDebug(1, "Event handling is disabled.")
@@ -25,7 +25,7 @@ function SubscribedEvents.SubscribeToEvents()
     Ext.Osiris.RegisterListener("RequestCanPickup", 3, "after", conditionalWrapper(EHandlers.OnRequestCanPickup))
     Ext.Osiris.RegisterListener("PickupFailed", 2, "after", conditionalWrapper(EHandlers.OnPickupFailed))
 
-    if MCMGet('send_existing_food') then
+    if MCM.Get('send_existing_food') then
         Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", conditionalWrapper(EHandlers.OnTeleportedToCamp))
     end
 

@@ -1,7 +1,7 @@
 EHandlers = {}
 
 function EHandlers.OnLevelGameplayStarted()
-    if MCMGet('send_existing_food') and MCMGet('create_supply_sack') then
+    if MCM.Get('send_existing_food') and MCM.Get('create_supply_sack') then
         Osi.TimerLaunch("CreateSupplySackTimer", 1500)
     end
 end
