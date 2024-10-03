@@ -233,9 +233,10 @@
                                 ]
                             },
                             "Options": {
+                                "AllowReordering": false,
                                 "PageSize": 5,
-                                "ShowSearchBar": true,
-                                "ReadOnly": true
+                                "ReadOnly": true,
+                                "ShowSearchBar": false
                             }
                         },
                         {
@@ -270,8 +271,9 @@
                             },
                             "Options": {
                                 "PageSize": 5,
-                                "ShowSearchBar": true,
-                                "ReadOnly": true
+                                "ShowSearchBar": false,
+                                "ReadOnly": true,
+                                "AllowReordering": false
                             }
                         },
                         {
@@ -291,7 +293,8 @@
                             "Options": {
                                 "PageSize": 5,
                                 "ShowSearchBar": true,
-                                "ReadOnly": true
+                                "ReadOnly": false,
+                                "AllowReordering": false
                             }
                         },
                         {
@@ -309,8 +312,9 @@
                                 ]
                             },
                             "Options": {
-                                "PageSize": 10,
-                                "ShowSearchBar": true
+                                "PageSize": 5,
+                                "ShowSearchBar": true,
+                                "AllowReordering": true
                             }
                         }
                     ],
