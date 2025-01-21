@@ -32,6 +32,8 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
                 ASFTCPrint(2, "Item is being traded to party, trying to send to chest.")
                 return true
             end
+        else
+            return true
         end
     end
 
@@ -61,8 +63,8 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
         return false
     end
 
-    if not ShouldProcessTradedItem(isFromObjectInParty)
-    then
+    if not ShouldProcessTradedItem(isFromObjectInParty) then
+        ASFTCDebug(2, "Not processing trade item.")
         return false
     end
 
