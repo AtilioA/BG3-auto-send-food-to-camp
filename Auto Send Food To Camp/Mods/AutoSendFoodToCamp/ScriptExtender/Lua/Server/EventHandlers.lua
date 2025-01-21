@@ -58,6 +58,11 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
     local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(fromObject)
     local isToObjectInCamp = VCHelpers.Character:IsCharacterInCamp(toObject)
 
+    if isFromObjectInParty and isToObjectInParty then
+        ASFTCPrint(2, "Item is being moved between party members, not trying to send to chest.")
+        return false
+    end
+
     if isFromObjectInCamp or isToObjectInCamp then
         ASFTCPrint(2, "Item is being moved from or to camp, not trying to send to chest.")
         return false
