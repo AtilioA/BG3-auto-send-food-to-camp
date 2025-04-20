@@ -43,6 +43,21 @@
                                 "Min": 0,
                                 "Max": 2
                             }
+                        },
+                        {
+                            "Id": "ticks_to_wait_for_delivery",
+                            "Name": "Ticks to wait before delivery",
+                            "Type": "slider_int",
+                            "Default": 1,
+                            "Description": "If items aren't getting sent to camp, try increasing this.\nIf you have to change this, please report it on the Nexus page.",
+                            "Options": {
+                                "Min": 1,
+                                "Max": 10
+                            },
+                            "Handles": {
+                                "NameHandle": "h77d29f6bfe76492c940e9270bb6269aec3eb",
+                                "DescriptionHandle": "h69b46a2f013b4da3a7421e071183f54a981b"
+                            }
                         }
                     ]
                 }

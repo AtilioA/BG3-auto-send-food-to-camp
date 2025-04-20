@@ -40,4 +40,6 @@
     <content contentuid="ha467cad406584338bd515fe2d8d40e164b6c" version="1">As configurações a seguir permitem que você personalize quais itens de comida são ignorados pelo mod.</content>
     <content contentuid="h6f697ad763644cb384c939ff2ad67cc1f2b5" version="1">As configurações a seguir permitem que você personalize quais itens de comida são enviados para o baú do acampamento.</content>
     <content contentuid="hdb47080176eb4034bb0f0429f4d8a8e8f3ae" version="1">Gerenciamento de comida</content>
+    <content contentuid="h69b46a2f013b4da3a7421e071183f54a981b" version="1">Se os itens não estiverem sendo enviados ao acampamento, tente aumentar este valor.&lt;br&gt;Se precisar alterá-lo, por favor, avise na página do Nexus.</content>
+    <content contentuid="h77d29f6bfe76492c940e9270bb6269aec3eb" version="1">'Ticks' para aguardar antes de mover itens</content>
 </contentList>

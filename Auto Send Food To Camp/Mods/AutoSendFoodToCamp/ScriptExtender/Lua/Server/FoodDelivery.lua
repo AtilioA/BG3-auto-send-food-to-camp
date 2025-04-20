@@ -236,11 +236,14 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
         return
     end
 
-    local exactamount, totalamount = Osi.GetStackAmount(object)
-    ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
-
+    local _exactamount, totalamount = Osi.GetStackAmount(object)
     if totalamount == nil then
         totalamount = 1
+    end
+
+    ASFTCPrint(2, "Should move " .. object .. " to camp chest.")    local ticksToWait = MCM.Get('ticks_to_wait_for_delivery')
+    if ticksToWait == nil then
+        ticksToWait = 1
     end
 
     local targetInventory = FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
@@ -251,13 +254,15 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
         targetInventory = targetInventory.Guid
     end
 
-    -- Osi can't be trusted
-    xpcall(function()
-            Osi.ToInventory(object, targetInventory, totalamount, 1, 1)
-        end,
-        function(err)
-            ASFTCWarn(0, "Error moving item to inventory: " .. tostring(err))
-        end)
+    VCHelpers.Timer:OnTicks(ticksToWait, function()
+        -- Osi can't be trusted
+        xpcall(function()
+                Osi.ToInventory(object, targetInventory, totalamount, 0, 0)
+            end,
+            function(err)
+                ASFTCWarn(0, "Error moving item to inventory: " .. tostring(err))
+            end)
+    end)
 end
 
 --- Get the target inventory for food delivery.
