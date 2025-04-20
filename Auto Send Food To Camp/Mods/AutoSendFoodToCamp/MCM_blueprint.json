@@ -1,4 +1,9 @@
 {
+    "ModName": "Auto Send Food To Camp",
+    "Handles": {
+        "NameHandle": "h138dd985aefd4caa83755f1391c40a26b143",
+        "DescriptionHandle": "h83ddb7650cc743c3a36758d824e290999e66"
+    },
     "SchemaVersion": 1,
     "Tabs": [
         {

@@ -42,4 +42,6 @@
     <content contentuid="hdb47080176eb4034bb0f0429f4d8a8e8f3ae" version="1">Gerenciamento de comida</content>
     <content contentuid="h69b46a2f013b4da3a7421e071183f54a981b" version="1">Se os itens não estiverem sendo enviados ao acampamento, tente aumentar este valor.&lt;br&gt;Se precisar alterá-lo, por favor, avise na página do Nexus.</content>
     <content contentuid="h77d29f6bfe76492c940e9270bb6269aec3eb" version="1">'Ticks' para aguardar antes de mover itens</content>
+    <content contentuid="h83ddb7650cc743c3a36758d824e290999e66" version="1">Envia automaticamente itens de comida para o baú do acampamento. Configurável via MCM.</content>
+    <content contentuid="h138dd985aefd4caa83755f1391c40a26b143" version="1">Auto Send Food To Camp</content>
 </contentList>
