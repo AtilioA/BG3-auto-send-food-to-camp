@@ -3,7 +3,7 @@
     <content contentuid="h012f6360970348a09ec00cfbae32d13a078e" version="1">Ativar/desativar o mod sem desinstalá-lo.</content>
     <content contentuid="h8257844bae184efaaaddc8f3ba98075df2ed" version="1">Usado principalmente para determinar quais mensagens imprimir.&lt;br&gt;0 = sem debug, 1 = mínimo, 2 = logs verbosos</content>
     <content contentuid="hb7119872bea14191a895d0c016abdfadee30" version="1">Se deve enviar itens de comida para o baú do acampamento.</content>
-    <content contentuid="hf81ec564928e439aac227e9a81aa013f1386" version="1">Se deve mover bebidas para o baú do acampamento.</content>
+    <content contentuid="hf81ec564928e439aac227e9a81aa013f1386" version="1">Se deve mover itens consumíveis (e.g. raspberry, álcool) para o baú do acampamento.</content>
     <content contentuid="h64a08b6d5d2848ad84a647cca75a8435c2c7" version="1">Se deve mover comida comprada para o baú do acampamento.</content>
     <content contentuid="h84078ae048044c98a370fc62e2bfc4c2dg47" version="1">Raridade máxima do item de comida para enviar ao baú do acampamento.</content>
     <content contentuid="hb19a7b8c19d44f139fe3ccb7e8eda721eff1" version="1">Número mínimo de itens de comida para manter no inventário quando estiver movendo para o baú do acampamento.</content>
@@ -20,7 +20,7 @@
     <content contentuid="hb488d46a12c94e0685aaf402bf64a2f75df9" version="1">Debugging</content>
     <content contentuid="h25e1d32503d64b7987d351eab068c307cb3d" version="1">Nível de depuração</content>
     <content contentuid="ha585cfeb8a724ba28e1c9976fc0ddf7fabga" version="1">Mover comida para o baú do acampamento</content>
-    <content contentuid="he4962d23a0564e129f48fa170c22e92306b1" version="1">Mover bebidas para o baú do acampamento</content>
+    <content contentuid="he4962d23a0564e129f48fa170c22e92306b1" version="1">Mover itens consumíveis para o baú do acampamento</content>
     <content contentuid="h313091db60ed400e90cf9d1de48e5f473fcb" version="1">Mover comida comprada para o baú do acampamento</content>
     <content contentuid="ha5846d4d1b33490aa96d435eb9e253272dba" version="1">Comida mínima para manter</content>
     <content contentuid="h86180208a91e4eca8b73fa4f42ee83a16432" version="1">Raridade máxima para enviar comida</content>

@@ -95,17 +95,6 @@
                             }
                         },
                         {
-                            "Id": "move_beverages",
-                            "Name": "Move beverages to camp chest",
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to move beverages to the camp chest.",
-                            "Handles": {
-                                "DescriptionHandle": "hf81ec564928e439aac227e9a81aa013f1386",
-                                "NameHandle": "he4962d23a0564e129f48fa170c22e92306b1"
-                            }
-                        },
-                        {
                             "Id": "move_alcohol",
                             "Name": "Move alcoholic items to camp chest",
                             "Type": "checkbox",
@@ -114,6 +103,17 @@
                             "Handles": {
                                 "NameHandle": "ha481444953724934a8f1e9b26c8688af6c0c",
                                 "DescriptionHandle": "hd71576de4e704865bb74b6c2cd9df88fa61a"
+                            }
+                        },
+                        {
+                            "Id": "move_consumable",
+                            "Name": "Move consumable to camp chest",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to move consumable items (e.g. raspberry, alcohol) to the camp chest.",
+                            "Handles": {
+                                "DescriptionHandle": "hf81ec564928e439aac227e9a81aa013f1386",
+                                "NameHandle": "he4962d23a0564e129f48fa170c22e92306b1"
                             }
                         },
                         {
