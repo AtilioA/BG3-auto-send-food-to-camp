@@ -17,7 +17,7 @@
     <content contentuid="h628fed1196a8449eb2a74b8be9900766da6e" version="1">Se deve ignorar itens de uma lista de itens definida pelo usuário.</content>
     <content contentuid="hbaf72fe47ce74f33a129c302b821fa5ccgc3" version="1">Se deve ignorar itens de comida marcados como supérfluos.</content>
     <content contentuid="h7c305c96ae4445159f959dcc0e0af6d1eef6" version="1">Ativar mod</content>
-	<content contentuid="hb488d46a12c94e0685aaf402bf64a2f75df9" version="1">Debugging</content>
+    <content contentuid="hb488d46a12c94e0685aaf402bf64a2f75df9" version="1">Debugging</content>
     <content contentuid="h25e1d32503d64b7987d351eab068c307cb3d" version="1">Nível de depuração</content>
     <content contentuid="ha585cfeb8a724ba28e1c9976fc0ddf7fabga" version="1">Mover comida para o baú do acampamento</content>
     <content contentuid="he4962d23a0564e129f48fa170c22e92306b1" version="1">Mover bebidas para o baú do acampamento</content>
@@ -47,4 +47,6 @@
     <content contentuid="h77d29f6bfe76492c940e9270bb6269aec3eb" version="1">'Ticks' para aguardar antes de mover itens</content>
     <content contentuid="h83ddb7650cc743c3a36758d824e290999e66" version="1">Envia automaticamente itens de comida para o baú do acampamento. Configurável via MCM.</content>
     <content contentuid="h138dd985aefd4caa83755f1391c40a26b143" version="1">Auto Send Food To Camp</content>
+    <content contentuid="ha481444953724934a8f1e9b26c8688af6c0c" version="1">Mover itens alcoólicos para o baú do acampamento</content>
+    <content contentuid="hd71576de4e704865bb74b6c2cd9df88fa61a" version="1">Se deve mover itens alcoólicos para o baú do acampamento.</content>
 </contentList>

@@ -106,6 +106,17 @@
                             }
                         },
                         {
+                            "Id": "move_alcohol",
+                            "Name": "Move alcoholic items to camp chest",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to move alcoholic items to the camp chest.",
+                            "Handles": {
+                                "NameHandle": "ha481444953724934a8f1e9b26c8688af6c0c",
+                                "DescriptionHandle": "hd71576de4e704865bb74b6c2cd9df88fa61a"
+                            }
+                        },
+                        {
                             "Id": "move_bought_food",
                             "Name": "Move purchased food to camp chest",
                             "Type": "checkbox",
