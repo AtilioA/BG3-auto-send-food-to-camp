@@ -215,11 +215,21 @@ function FoodDelivery.ShouldMoveItem(object)
         return false
     end
 
-    if VCHelpers.Food:IsBeverage(object) then
-        local shouldMoveBeverages = MCM.Get('move_beverages')
-        ASFTCPrint(2,
-            object .. " is a food item (beverage). Config value 'move_beverages' is " .. tostring(shouldMoveBeverages))
-        return shouldMoveBeverages
+    if VCHelpers.Food:IsConsumableFood(object) then
+        local moveAlcohol = MCM.Get('move_alcohol')
+        local moveConsumables = MCM.Get('move_consumable')
+
+        ASFTCPrint(2, object .. " is a consumable item. " ..
+            "move_consumable=" .. tostring(moveConsumables) .. ", " ..
+            "move_alcohol=" .. tostring(moveAlcohol))
+
+        -- Check if item is alcoholic and gate on the appropriate setting
+        local isAlcoholic = VCHelpers.Food:IsAlcoholicItem(object)
+        if isAlcoholic then
+            return moveAlcohol
+        else
+            return moveConsumables
+        end
     else
         local shouldMoveFood = MCM.Get('move_food')
         ASFTCPrint(2, object .. " is a food item. Config value 'move_food' is " .. tostring(shouldMoveFood))
@@ -241,7 +251,8 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
         totalamount = 1
     end
 
-    ASFTCPrint(2, "Should move " .. object .. " to camp chest.")    local ticksToWait = MCM.Get('ticks_to_wait_for_delivery')
+    ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
+    local ticksToWait = MCM.Get('ticks_to_wait_for_delivery')
     if ticksToWait == nil then
         ticksToWait = 1
     end
