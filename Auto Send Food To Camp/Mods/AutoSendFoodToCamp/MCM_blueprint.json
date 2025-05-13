@@ -33,6 +33,9 @@
                 {
                     "SectionId": "debugging_settings",
                     "SectionName": "Debugging",
+                    "Handles": {
+                        "NameHandle": "hb488d46a12c94e0685aaf402bf64a2f75df9"
+                    },
                     "Settings": [
                         {
                             "Id": "debug_level",
@@ -231,6 +234,10 @@
                             "Name": "Ignore quest items",
                             "Type": "list_v2",
                             "Description": "Manages the list of quest-related food items to ignore.",
+                            "Handles": {
+                                "NameHandle": "h85cddebe1a3f42b2b976642e196a01b56cgf",
+                                "DescriptionHandle": "h040ff2160b084515adace51163414ce8e332"
+                            },
                             "Default": {
                                 "enabled": true,
                                 "elements": [
@@ -264,6 +271,10 @@
                             "Name": "Ignore healing items",
                             "Type": "list_v2",
                             "Description": "Manages the list of healing food items to ignore.",
+                            "Handles": {
+                                "NameHandle": "hff9c6038f11f4c0cb5618b2cf3e76a377318",
+                                "DescriptionHandle": "he384cca37bb44f4bbd2ceb6730550a8aa332"
+                            },
                             "Default": {
                                 "enabled": true,
                                 "elements": [
@@ -301,6 +312,10 @@
                             "Name": "Ignore weapon items",
                             "Type": "list_v2",
                             "Description": "Manages the list of weapon-related food items to ignore.",
+                            "Handles": {
+                                "NameHandle": "h8cfeed0782fe4798bcfb7c6b4e6987c599af",
+                                "DescriptionHandle": "h721dc4e72b244c4b97ba3ff2194325342be2"
+                            },
                             "Default": {
                                 "enabled": false,
                                 "elements": [
@@ -322,6 +337,10 @@
                             "Name": "Ignore user-defined items",
                             "Type": "list_v2",
                             "Description": "Manages the list of user-defined food items to ignore.",
+                            "Handles": {
+                                "NameHandle": "h8efc988cea644fe7a2d460f3919b06de2c89",
+                                "DescriptionHandle": "h628fed1196a8449eb2a74b8be9900766da6e"
+                            },
                             "Default": {
                                 "enabled": true,
                                 "elements": [

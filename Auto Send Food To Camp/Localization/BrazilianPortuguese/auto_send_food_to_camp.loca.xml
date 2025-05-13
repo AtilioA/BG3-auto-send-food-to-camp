@@ -11,11 +11,13 @@
     <content contentuid="ha4ec57269e684676b5602eefbede67e500f7" version="1">Se deve procurar por comida em containers aninhados dentro dos inventários do jogador.</content>
     <content contentuid="h43d5605c6ce84aafb23f0029e41fb2508gbe" version="1">Se deve criar um único saco de suprimentos no baú do acampamento, caso não exista.</content>
     <content contentuid="h8e09c02ed6734e96a06289e656ae6693ca20" version="1">Se deve enviar itens de comida para o saco de suprimentos no baú do acampamento.</content>
+    <content contentuid="h040ff2160b084515adace51163414ce8e332" version="1">Manages the list of quest-related food items to ignore.</content>
     <content contentuid="he384cca37bb44f4bbd2ceb6730550a8aa332" version="1">Se deve ignorar itens de comida curativos.</content>
     <content contentuid="h721dc4e72b244c4b97ba3ff2194325342be2" version="1">Se deve ignorar itens de comida que sejam armas.</content>
     <content contentuid="h628fed1196a8449eb2a74b8be9900766da6e" version="1">Se deve ignorar itens de uma lista de itens definida pelo usuário.</content>
     <content contentuid="hbaf72fe47ce74f33a129c302b821fa5ccgc3" version="1">Se deve ignorar itens de comida marcados como supérfluos.</content>
     <content contentuid="h7c305c96ae4445159f959dcc0e0af6d1eef6" version="1">Ativar mod</content>
+	<content contentuid="hb488d46a12c94e0685aaf402bf64a2f75df9" version="1">Debugging</content>
     <content contentuid="h25e1d32503d64b7987d351eab068c307cb3d" version="1">Nível de depuração</content>
     <content contentuid="ha585cfeb8a724ba28e1c9976fc0ddf7fabga" version="1">Mover comida para o baú do acampamento</content>
     <content contentuid="he4962d23a0564e129f48fa170c22e92306b1" version="1">Mover bebidas para o baú do acampamento</content>
@@ -26,6 +28,7 @@
     <content contentuid="ha0bab8090cec47a2b11da1c2cb45ba5afg97" version="1">Procurar em containers aninhados</content>
     <content contentuid="h3276a3ad6c354dc2961353a404f3e471faac" version="1">Criar saco de suprimentos no baú</content>
     <content contentuid="hd34e4b4513304181b7d2bbf1de9a8821475a" version="1">Enviar comida para o saco de suprimentos</content>
+    <content contentuid="h85cddebe1a3f42b2b976642e196a01b56cgf" version="1">Ignore quest items</content>
     <content contentuid="hff9c6038f11f4c0cb5618b2cf3e76a377318" version="1">Ignorar itens curativos</content>
     <content contentuid="h8cfeed0782fe4798bcfb7c6b4e6987c599af" version="1">Ignorar armas</content>
     <content contentuid="h8efc988cea644fe7a2d460f3919b06de2c89" version="1">Ignorar itens definidos pelo usuário</content>
