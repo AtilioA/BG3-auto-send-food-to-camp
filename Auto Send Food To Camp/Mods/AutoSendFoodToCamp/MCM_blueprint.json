@@ -107,7 +107,7 @@
                         },
                         {
                             "Id": "move_consumable",
-                            "Name": "Move consumable to camp chest",
+                            "Name": "Move consumables to camp chest",
                             "Type": "checkbox",
                             "Default": true,
                             "Description": "Whether to move consumable items (e.g. raspberry, alcohol) to the camp chest.",
