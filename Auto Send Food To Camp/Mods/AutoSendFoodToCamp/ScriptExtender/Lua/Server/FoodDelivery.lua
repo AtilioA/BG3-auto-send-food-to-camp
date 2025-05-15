@@ -10,6 +10,9 @@ FoodDelivery.awaiting_delivery = {
     reason = nil
 }
 
+-- Add a flag to track moves initiated by this mod
+FoodDelivery.is_mod_moving_item = false
+
 FoodDelivery.retainlist = {
     quests = MCM.GetList('ignore_quests'),
     healing = MCM.GetList('ignore_healing'),
@@ -116,23 +119,6 @@ end
 function FoodDelivery.UpdateAwaitingItem(item, reason)
     FoodDelivery.awaiting_delivery.item = item
     FoodDelivery.awaiting_delivery.reason = reason
-end
-
---- Move an item to the camp chest if it's not ignored.
----@param item GUIDSTRING The item to move.
-function FoodDelivery.MoveToCampChest(item)
-    ASFTCPrint(2, tostring(FoodDelivery.ignore_item.item) .. " " .. tostring(FoodDelivery.ignore_item.reason))
-
-    if FoodDelivery.ignore_item.item == item then
-        ASFTCPrint(2, "Ignoring item: " .. item .. "reason: " .. FoodDelivery.ignore_item.reason)
-        FoodDelivery.ignore_item.item = nil
-        return
-    end
-
-    if not FoodDelivery.IsFoodItemRetainlisted(item) then
-        ASFTCPrint(1, "Moving " .. item .. " to camp chest.")
-        return Osi.SendToCampChest(item, Osi.GetHostCharacter())
-    end
 end
 
 --- Send food from a character's inventory to the camp chest.
@@ -266,6 +252,8 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     end
 
     VCHelpers.Timer:OnTicks(ticksToWait, function()
+        FoodDelivery.is_mod_moving_item = true
+
         -- Osi can't be trusted
         xpcall(function()
                 Osi.ToInventory(object, targetInventory, totalamount, 0, 0)
@@ -273,6 +261,8 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
             function(err)
                 ASFTCWarn(0, "Error moving item to inventory: " .. tostring(err))
             end)
+
+        FoodDelivery.is_mod_moving_item = false
     end)
 end
 

@@ -27,6 +27,8 @@ function SubscribedEvents.SubscribeToEvents()
 
     Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", conditionalWrapper(EHandlers.OnTeleportedToCamp))
 
+    Ext.Osiris.RegisterListener("ToInventory", 5, "after", EHandlers.OnToInventory)
+
     -- TODO:
     -- CharacterStoleItem
     -- CharacterPickpocketSuccess

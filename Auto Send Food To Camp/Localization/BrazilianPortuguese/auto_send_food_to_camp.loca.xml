@@ -49,4 +49,6 @@
     <content contentuid="h138dd985aefd4caa83755f1391c40a26b143" version="1">Auto Send Food To Camp</content>
     <content contentuid="ha481444953724934a8f1e9b26c8688af6c0c" version="1">Mover itens alcoólicos para o baú do acampamento</content>
     <content contentuid="hd71576de4e704865bb74b6c2cd9df88fa61a" version="1">Se deve mover itens alcoólicos para o baú do acampamento.</content>
+    <content contentuid="hd06d9120149a47c1aa0744c056e5a9afe8f5" version="1">[Compatibilidade] Enviar itens movidos automaticamente</content>
+    <content contentuid="hb091a7f797ca42c49e2b9024021eb2617a5f" version="1">Configuração de compatibilidade para mods de auto-loot.&lt;br&gt;Se ativado, itens movidos para seu inventário por scripts ou outros mods também serão processados para serem enviados automaticamente ao baú do acampamento.</content>
 </contentList>

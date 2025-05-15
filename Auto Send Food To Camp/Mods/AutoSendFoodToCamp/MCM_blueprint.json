@@ -153,6 +153,17 @@
                                     "h97227897g1345g4046gbb62g842dcc292db1"
                                 ]
                             }
+                        },
+                        {
+                            "Id": "send_items_moved_automatically",
+                            "Name": "[Compatibility] Send items moved automatically",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Compatibility setting for auto-loot mods.\nIf enabled, items moved to your inventory by scripts or other mods will also be processed to be sent to the camp chest automatically.",
+                            "Handles": {
+                                "DescriptionHandle": "hb091a7f797ca42c49e2b9024021eb2617a5f",
+                                "NameHandle": "hd06d9120149a47c1aa0744c056e5a9afe8f5"
+                            }
                         }
                     ],
                     "Handles": {

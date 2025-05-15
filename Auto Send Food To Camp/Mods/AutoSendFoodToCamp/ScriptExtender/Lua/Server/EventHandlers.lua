@@ -81,15 +81,17 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
     return true
 end
 
--- Refactored OnMovedFromTo function
-function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
+local function processMovedItem(movedObject, fromObject, toObject, isTrade)
     local shouldSendToChest = EHandlers.ShouldProcessItemMovement(fromObject, movedObject, fromObject, toObject, isTrade)
     if shouldSendToChest then
         FoodDelivery.DeliverFood(movedObject, fromObject)
     end
 end
 
--- Refactored OnRequestCanPickup function
+function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
+    processMovedItem(movedObject, fromObject, toObject, isTrade)
+end
+
 function EHandlers.OnRequestCanPickup(character, object, requestID)
     if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
         local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(character)
@@ -116,6 +118,23 @@ function EHandlers.OnTeleportedToCamp(character)
     if MCM.Get('send_existing_food') and Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
         ASFTCPrint(2, "Sending existing food to chest from " .. character)
         FoodDelivery.SendInventoryFoodToChest(character)
+    end
+end
+
+function EHandlers.OnToInventory(object, targetObject, _amount, _showNotification, _clearOriginalOwner)
+    -- Check if this move was initiated by this mod - if so, skip processing
+    if FoodDelivery.is_mod_moving_item then
+        ASFTCPrint(2, "Ignoring ToInventory event for item moved by this mod: " .. object)
+        return
+    end
+
+    if Osi.IsInPartyWith(targetObject, Osi.GetHostCharacter()) == 0 then
+        ASFTCDebug(2, "Target object is not in party with host.")
+        return
+    end
+
+    if MCM.Get('send_items_moved_automatically') then
+        processMovedItem(object, object, targetObject, nil)
     end
 end
 
