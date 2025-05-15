@@ -25,9 +25,7 @@ function SubscribedEvents.SubscribeToEvents()
     Ext.Osiris.RegisterListener("RequestCanPickup", 3, "after", conditionalWrapper(EHandlers.OnRequestCanPickup))
     Ext.Osiris.RegisterListener("PickupFailed", 2, "after", conditionalWrapper(EHandlers.OnPickupFailed))
 
-    if MCM.Get('send_existing_food') then
-        Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", conditionalWrapper(EHandlers.OnTeleportedToCamp))
-    end
+    Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", conditionalWrapper(EHandlers.OnTeleportedToCamp))
 
     -- TODO:
     -- CharacterStoleItem

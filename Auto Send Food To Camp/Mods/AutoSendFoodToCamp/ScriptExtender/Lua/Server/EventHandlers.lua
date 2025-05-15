@@ -113,7 +113,7 @@ function EHandlers.OnPickupFailed(character, object)
 end
 
 function EHandlers.OnTeleportedToCamp(character)
-    if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
+    if MCM.Get('send_existing_food') and Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
         ASFTCPrint(2, "Sending existing food to chest from " .. character)
         FoodDelivery.SendInventoryFoodToChest(character)
     end
