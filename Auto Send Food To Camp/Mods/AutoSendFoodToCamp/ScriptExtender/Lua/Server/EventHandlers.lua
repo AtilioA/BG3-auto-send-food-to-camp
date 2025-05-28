@@ -57,6 +57,8 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
     local isToObjectInParty = toObject and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 or false
     local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(fromObject)
     local isToObjectInCamp = VCHelpers.Character:IsCharacterInCamp(toObject)
+    local isFromObjectInCampChest = VCHelpers.Inventory:IsItemInCampChest(fromObject)
+    local isToObjectInCampChest = VCHelpers.Inventory:IsItemInCampChest(toObject)
 
     if isFromObjectInParty and isToObjectInParty then
         ASFTCPrint(2, "Item is being moved between party members, not trying to send to chest.")
@@ -65,6 +67,11 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
 
     if isFromObjectInCamp or isToObjectInCamp then
         ASFTCPrint(2, "Item is being moved from or to camp, not trying to send to chest.")
+        return false
+    end
+
+    if isFromObjectInCampChest or isToObjectInCampChest then
+        ASFTCPrint(2, "Item is being moved from or to camp chest, not trying to send to chest.")
         return false
     end
 
