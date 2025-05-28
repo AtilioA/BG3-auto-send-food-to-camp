@@ -317,10 +317,6 @@
                                         "enabled": true
                                     },
                                     {
-                                        "name": "CONS_FOOD_Fruit_Apple_A",
-                                        "enabled": false
-                                    },
-                                    {
                                         "name": "CONS_GEN_Food_Bowl_Milk_A",
                                         "enabled": true
                                     },
