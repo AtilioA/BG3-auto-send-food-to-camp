@@ -99,18 +99,18 @@
                             "Name": "Move alcoholic items to camp chest",
                             "Type": "checkbox",
                             "Default": true,
-                            "Description": "Whether to move alcoholic items to the camp chest.",
+                            "Description": "Whether to move alcoholic items to the camp chest. Has precedence over 'move consumables'.",
                             "Handles": {
                                 "NameHandle": "ha481444953724934a8f1e9b26c8688af6c0c",
                                 "DescriptionHandle": "hd71576de4e704865bb74b6c2cd9df88fa61a"
                             }
                         },
                         {
-                            "Id": "move_consumable",
+                            "Id": "move_consumables",
                             "Name": "Move consumables to camp chest",
                             "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to move consumable items (e.g. raspberry, alcohol) to the camp chest.",
+                            "Default": false,
+                            "Description": "Whether to move consumable items (e.g. raspberry, healing items, alcohol if move alcoholic is unchecked, etc) to the camp chest.",
                             "Handles": {
                                 "DescriptionHandle": "hf81ec564928e439aac227e9a81aa013f1386",
                                 "NameHandle": "he4962d23a0564e129f48fa170c22e92306b1"
@@ -319,6 +319,14 @@
                                     {
                                         "name": "CONS_FOOD_Fruit_Apple_A",
                                         "enabled": false
+                                    },
+                                    {
+                                        "name": "CONS_GEN_Food_Bowl_Milk_A",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "CONS_GEN_Food_Tart_Treacle_A_Spoiled_A",
+                                        "enabled": true
                                     }
                                 ]
                             },

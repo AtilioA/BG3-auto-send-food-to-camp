@@ -203,10 +203,10 @@ function FoodDelivery.ShouldMoveItem(object)
 
     if VCHelpers.Food:IsConsumableFood(object) then
         local moveAlcohol = MCM.Get('move_alcohol')
-        local moveConsumables = MCM.Get('move_consumable')
+        local moveConsumables = MCM.Get('move_consumables')
 
         ASFTCPrint(2, object .. " is a consumable item. " ..
-            "move_consumable=" .. tostring(moveConsumables) .. ", " ..
+            "move_consumables=" .. tostring(moveConsumables) .. ", " ..
             "move_alcohol=" .. tostring(moveAlcohol))
 
         -- Check if item is alcoholic and gate on the appropriate setting
@@ -251,6 +251,7 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
         targetInventory = targetInventory.Guid
     end
 
+    -- REVIEW: possibly duplicating items
     VCHelpers.Timer:OnTicks(ticksToWait, function()
         FoodDelivery.is_mod_moving_item = true
 
