@@ -69,25 +69,24 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     end
 
     if isHealingItem then
-        ASFTCPrint(2, "Moved item is a healing item. Not trying to send to chest.")
+        ASFTCPrint(2, "Moved item is in the healing items list. Not trying to send to chest.")
         return true
     else
-        ASFTCPrint(1, "Moved item is a healing item, but ignore.healing is set to false. May try to send to chest.")
+        ASFTCPrint(1, "Moved item is not in the healing items list. May try to send to chest.")
     end
 
     if isWeapon then
-        ASFTCPrint(2, "Moved item is a weapon. Not trying to send to chest.")
+        ASFTCPrint(2, "Moved item is in the weapons list. Not trying to send to chest.")
         return true
     else
-        ASFTCPrint(1, "Moved item is a weapon, but ignore.weapons is set to false. May try to send to chest.")
+        ASFTCPrint(1, "Moved item is not in the weapons list. May try to send to chest.")
     end
 
     if isUserDefined then
-        ASFTCPrint(2, "Moved item is user defined. Not trying to send to chest.")
+        ASFTCPrint(2, "Moved item is in the user defined list. Not trying to send to chest.")
         return true
     else
-        ASFTCPrint(1,
-            "Moved item is user defined, but ignore.user_defined is set to false. May try to send to chest.")
+        ASFTCPrint(1, "Moved item is not in the user defined list. May try to send to chest.")
     end
 
     if not isRare then
@@ -184,7 +183,7 @@ end
 --- Check if an item should be moved to the camp chest.
 ---@param object GUIDSTRING The item to check.
 function FoodDelivery.ShouldMoveItem(object)
-    ASFTCPrint(2, "Checking if item should be moved: " .. object)
+    ASFTCPrint(2, "Checking if item should be sent to camp chest: " .. object)
 
     if not VCHelpers.Object:IsItem(VCHelpers.Format:Guid(object)) then
         ASFTCPrint(2, object .. " is not an item, won't move")
