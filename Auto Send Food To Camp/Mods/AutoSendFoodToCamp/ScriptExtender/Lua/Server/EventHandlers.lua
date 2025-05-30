@@ -131,7 +131,7 @@ end
 function EHandlers.OnToInventory(object, targetObject, _amount, _showNotification, _clearOriginalOwner)
     -- Check if this move was initiated by this mod - if so, skip processing
     if FoodDelivery.is_mod_moving_item then
-        ASFTCPrint(2, "Ignoring ToInventory event for item moved by this mod: " .. object)
+        ASFTCDebug(2, "Ignoring ToInventory event for item moved by us: " .. object)
         return
     end
 

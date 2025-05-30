@@ -114,7 +114,7 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     end
 
     if not isRare then
-        ASFTCPrint(2, "Moved item is not rare. May try to send to chest.")
+        ASFTCPrint(2, "Moved item is not rarer than " .. MCM.Get('maximum_rarity') .. ". May try to send to chest.")
     else
         ASFTCPrint(1,
             "Moved item is more rare than " ..
@@ -127,7 +127,8 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
             ASFTCPrint(2, "Moved item is a ware. Not trying to send to chest.")
             return true
         else
-            ASFTCPrint(1, "Moved item is a ware, but ignore.wares is set to false. Trying to send to chest.")
+            ASFTCPrint(1,
+                "Moved item is a ware, but ignore.wares is set to false. Trying to send to chest.")
         end
     end
 
@@ -280,6 +281,7 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
 
         -- Osi can't be trusted
         xpcall(function()
+                ASFTCPrint(2, "Moving " .. object .. " to " .. targetInventory .. " with amount " .. totalamount)
                 Osi.ToInventory(object, targetInventory, totalamount, 0, 0)
             end,
             function(err)
@@ -299,21 +301,20 @@ function FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
         return nil
     end
 
-    ASFTCPrint(2, "Sending food to supply sack")
+    ASFTCPrint(2, "Sending food to camp chest")
     if campChestSack ~= nil then
         ASFTCPrint(2, "Using provided supply sack")
         return campChestSack
     end
 
-    ASFTCPrint(2, "Supply sack not provided, trying to find one")
+    ASFTCPrint(3, "Supply sack not provided, trying to find one")
     local getCampChestSack = CheckForCampChestSupplySack()
     if getCampChestSack ~= nil then
-        ASFTCPrint(2, "Found supply sack")
+        ASFTCPrint(2, "Found supply sack in camp chest to send food to.")
         return getCampChestSack
     end
 
-    ASFTCPrint(1, "Camp chest supply sack not found.")
-    ASFTCPrint(2, "Sending food to camp chest instead")
+    ASFTCPrint(1, "Camp chest supply sack not found, sending food to camp chest instead")
     return VCHelpers.Camp:GetChestTemplateUUID()
 end
 
