@@ -62,31 +62,55 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
         MCM.Get('maximum_rarity'))
 
     if isQuestItem then
-        ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
-        return true
+        local questList = MCM.GetList('ignore_quests')
+        if questList.enabled then
+            ASFTCPrint(2, "Moved item is a quest item. Not trying to send to chest.")
+            return true
+        else
+            ASFTCPrint(1,
+                "Moved item is a quest item but quest items list is disabled in settings. May try to send to chest.")
+        end
     else
         ASFTCPrint(1, "Moved item is not a quest item. May try to send to chest.")
     end
 
     if isHealingItem then
-        ASFTCPrint(2, "Moved item is in the healing items list. Not trying to send to chest.")
-        return true
+        local healingList = MCM.GetList('ignore_healing')
+        if healingList.enabled then
+            ASFTCPrint(2, "Moved item is in the healing items list. Not trying to send to chest.")
+            return true
+        else
+            ASFTCPrint(1,
+                "Moved item is in the healing items list but healing items list is disabled in settings. May try to send to chest.")
+        end
     else
         ASFTCPrint(1, "Moved item is not in the healing items list. May try to send to chest.")
     end
 
     if isWeapon then
-        ASFTCPrint(2, "Moved item is in the weapons list. Not trying to send to chest.")
-        return true
+        local weaponList = MCM.GetList('ignore_weapons')
+        if weaponList.enabled then
+            ASFTCPrint(2, "Moved item is in the weapons list. Not trying to send to chest.")
+            return true
+        else
+            ASFTCPrint(1,
+                "Moved item is in the weapons list but weapons list is disabled in settings. May try to send to chest.")
+        end
     else
         ASFTCPrint(1, "Moved item is not in the weapons list. May try to send to chest.")
     end
 
     if isUserDefined then
-        ASFTCPrint(2, "Moved item is in the user defined list. Not trying to send to chest.")
-        return true
+        local userDefinedList = MCM.GetList('ignore_user_defined')
+        if userDefinedList.enabled then
+            ASFTCPrint(2, "Moved item is in the user-defined list. Not trying to send to chest.")
+            return true
+        else
+            ASFTCPrint(1,
+                "Moved item is in the user-defined list but user-defined list is disabled in settings. May try to send to chest.")
+        end
     else
-        ASFTCPrint(1, "Moved item is not in the user defined list. May try to send to chest.")
+        ASFTCPrint(1, "Moved item is not in the user-defined list. May try to send to chest.")
     end
 
     if not isRare then
