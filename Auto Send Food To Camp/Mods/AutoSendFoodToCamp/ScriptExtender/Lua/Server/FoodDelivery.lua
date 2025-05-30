@@ -262,7 +262,7 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     end
 
     ASFTCPrint(2, "Should move " .. object .. " to camp chest.")
-    local ticksToWait = MCM.Get('ticks_to_wait_for_delivery')
+    local ticksToWait = MCM.Get('ticks_to_wait_before_delivery')
     if ticksToWait == nil then
         ticksToWait = 1
     end

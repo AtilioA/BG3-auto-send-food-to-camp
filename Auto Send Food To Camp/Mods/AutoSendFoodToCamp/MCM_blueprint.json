@@ -53,10 +53,10 @@
                             }
                         },
                         {
-                            "Id": "ticks_to_wait_for_delivery",
+                            "Id": "ticks_to_wait_before_delivery",
                             "Name": "Ticks to wait before delivery",
                             "Type": "slider_int",
-                            "Default": 1,
+                            "Default": 2,
                             "Description": "If items aren't getting sent to camp, try increasing this.\nIf you have to change this, please report it on the Nexus page.",
                             "Options": {
                                 "Min": 1,
