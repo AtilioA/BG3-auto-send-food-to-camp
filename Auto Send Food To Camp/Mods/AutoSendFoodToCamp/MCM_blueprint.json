@@ -243,7 +243,7 @@
             }
         },
         {
-            "TabName": "Ignore",
+            "TabName": "Ignore lists",
             "TabId": "ignore_settings",
             "Sections": [
                 {
