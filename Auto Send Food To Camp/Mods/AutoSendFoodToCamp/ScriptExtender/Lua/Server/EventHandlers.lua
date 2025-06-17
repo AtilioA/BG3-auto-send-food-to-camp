@@ -100,6 +100,11 @@ function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
 end
 
 function EHandlers.OnRequestCanPickup(character, object, requestID)
+    if not character or not object then
+        ASFTCWarn(1, "One or more parameters are nil, won't handle movement.")
+        return
+    end
+
     if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
         local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(character)
         local isToObjectInCamp = VCHelpers.Character:IsCharacterInCamp(object)
