@@ -195,7 +195,7 @@ end
 --- Send food to camp chest or supply sack.
 ---@param object GUIDSTRING The item to deliver.
 ---@param from? GUIDSTRING The inventory to deliver from.
----@param campChestSack? GUIDSTRING The supply sack to deliver to.
+---@param campChestSack EntityHandle|nil The supply sack entity to deliver to.
 function FoodDelivery.DeliverFood(object, from, campChestSack)
     local shouldMove = FoodDelivery.ShouldMoveItem(object)
     if shouldMove then
@@ -250,7 +250,7 @@ end
 --- Move an item to the camp chest.
 ---@param object GUIDSTRING The item to move.
 ---@param from? GUIDSTRING The inventory to move from.
----@param campChestSack? GUIDSTRING The optional supply sack/inventory to move to.
+---@param campChestSack EntityHandle|nil The optional supply sack entity to move to.
 function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     if object == nil then
         return
@@ -268,11 +268,9 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     end
 
     local targetInventory = FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
-    if targetInventory == nil then
-        ASFTCPrint(1, "No target inventory found for food delivery, defaulting to camp chest.")
-        targetInventory = VCHelpers.Camp:GetChestTemplateUUID()
-    else
-        targetInventory = targetInventory.Guid
+    if type(targetInventory) ~= "string" or targetInventory == "" then
+        ASFTCWarn(0, "Invalid food delivery target inventory: expected a non-empty string.")
+        return
     end
 
     -- REVIEW: possibly duplicating items
@@ -293,25 +291,26 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
 end
 
 --- Get the target inventory for food delivery.
----@param campChestSack? GUIDSTRING The optional supply sack to deliver to.
+---@param campChestSack EntityHandle|nil The optional supply sack entity to deliver to.
 ---@return GUIDSTRING|nil - The target inventory. Supply sack if provided or camp chest otherwise.
 function FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     -- tfw this is all useless because the supply sack is always used anyways
     if not MCM.Get('send_to_supply_sack') then
-        return nil
+        ASFTCPrint(1, "No target inventory found for food delivery, defaulting to camp chest.")
+        return VCHelpers.Camp:GetChestTemplateUUID()
     end
 
     ASFTCPrint(2, "Sending food to camp chest")
     if campChestSack ~= nil then
         ASFTCPrint(2, "Using provided supply sack")
-        return campChestSack
+        return campChestSack.Guid
     end
 
     ASFTCPrint(3, "Supply sack not provided, trying to find one")
     local getCampChestSack = CheckForCampChestSupplySack()
     if getCampChestSack ~= nil then
         ASFTCPrint(2, "Found supply sack in camp chest to send food to.")
-        return getCampChestSack
+        return getCampChestSack.Guid
     end
 
     ASFTCPrint(1, "Camp chest supply sack not found, sending food to camp chest instead")
