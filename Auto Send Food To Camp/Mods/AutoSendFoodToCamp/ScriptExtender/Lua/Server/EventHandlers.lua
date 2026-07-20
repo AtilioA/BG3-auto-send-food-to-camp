@@ -1,16 +1,23 @@
 EHandlers = {}
 
+--- Handles the start of gameplay in a level.
+---@return nil
 function EHandlers.OnLevelGameplayStarted()
     if MCM.Get('send_existing_food') and MCM.Get('create_supply_sack') then
         Osi.TimerLaunch("CreateSupplySackTimer", 1500)
     end
 end
 
+--- Creates the configured camp supply sack.
+---@return nil
 local function CreateSupplySack()
     ASFTCPrint(2, "CreateSupplySack: creating supply sack.")
     AddSupplySackToCampChestIfMissing()
 end
 
+--- Handles completed Osiris timers.
+---@param timerName string The completed timer name.
+---@return nil
 function EHandlers.OnTimerFinished(timerName)
     if timerName == "FoodDeliveryTimer" then
         FoodDelivery.DeliverAwaitingFood()
@@ -21,8 +28,17 @@ function EHandlers.OnTimerFinished(timerName)
     end
 end
 
--- Common helper function for handling logic
+--- Determines whether an item movement should trigger food delivery.
+---@param character GUIDSTRING The character associated with the movement.
+---@param movedObject GUIDSTRING|nil The moved item.
+---@param fromObject GUIDSTRING|nil The source inventory owner.
+---@param toObject GUIDSTRING|nil The destination inventory owner.
+---@param isTrade integer|nil Whether the movement is part of a trade.
+---@return boolean shouldProcess Whether the movement should be processed.
 function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject, toObject, isTrade)
+    --- Checks whether a traded item should be processed.
+    ---@param isFromObjectInParty boolean Whether the source belongs to the party.
+    ---@return boolean|nil shouldProcess Whether the trade movement should be processed.
     local function ShouldProcessTradedItem(isFromObjectInParty)
         if isTrade == 1 then
             if isFromObjectInParty then
@@ -88,6 +104,12 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
     return true
 end
 
+--- Processes a moved item for possible food delivery.
+---@param movedObject GUIDSTRING The moved item.
+---@param fromObject GUIDSTRING The source inventory owner.
+---@param toObject GUIDSTRING|nil The destination inventory owner.
+---@param isTrade integer|nil Whether the movement is part of a trade.
+---@return nil
 local function processMovedItem(movedObject, fromObject, toObject, isTrade)
     local shouldSendToChest = EHandlers.ShouldProcessItemMovement(fromObject, movedObject, fromObject, toObject, isTrade)
     if shouldSendToChest then
@@ -95,10 +117,21 @@ local function processMovedItem(movedObject, fromObject, toObject, isTrade)
     end
 end
 
+--- Handles an Osiris item movement event.
+---@param movedObject GUIDSTRING The moved item.
+---@param fromObject GUIDSTRING The source inventory owner.
+---@param toObject GUIDSTRING The destination inventory owner.
+---@param isTrade integer Whether the movement is part of a trade.
+---@return nil
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
     processMovedItem(movedObject, fromObject, toObject, isTrade)
 end
 
+--- Handles an Osiris pickup request.
+---@param character GUIDSTRING|nil The character requesting the pickup.
+---@param object GUIDSTRING|nil The requested item.
+---@param requestID integer The pickup request identifier.
+---@return boolean|nil
 function EHandlers.OnRequestCanPickup(character, object, requestID)
     if not character or not object then
         ASFTCWarn(1, "One or more parameters are nil, won't handle movement.")
@@ -119,6 +152,10 @@ function EHandlers.OnRequestCanPickup(character, object, requestID)
     end
 end
 
+--- Handles a failed Osiris pickup.
+---@param character GUIDSTRING The character attempting the pickup.
+---@param object GUIDSTRING The item that was not picked up.
+---@return nil
 function EHandlers.OnPickupFailed(character, object)
     ASFTCPrint(2, "OnPickupFailed: " .. character .. " " .. object)
     if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
@@ -126,6 +163,9 @@ function EHandlers.OnPickupFailed(character, object)
     end
 end
 
+--- Handles a character teleporting to camp.
+---@param character GUIDSTRING The teleported character.
+---@return nil
 function EHandlers.OnTeleportedToCamp(character)
     if MCM.Get('send_existing_food') and Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 then
         ASFTCPrint(2, "Sending existing food to chest from " .. character)
@@ -133,6 +173,13 @@ function EHandlers.OnTeleportedToCamp(character)
     end
 end
 
+--- Handles an Osiris inventory transfer.
+---@param object GUIDSTRING The transferred item.
+---@param targetObject GUIDSTRING The destination inventory owner.
+---@param _amount integer The transferred item count.
+---@param _showNotification integer Whether to show a transfer notification.
+---@param _clearOriginalOwner integer Whether to clear the original owner.
+---@return nil
 function EHandlers.OnToInventory(object, targetObject, _amount, _showNotification, _clearOriginalOwner)
     -- Check if this move was initiated by this mod - if so, skip processing
     if FoodDelivery.is_mod_moving_item then

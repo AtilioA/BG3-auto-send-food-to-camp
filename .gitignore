@@ -45,3 +45,4 @@ output/
 *.code-workspace
 *cursor*
 .vscode/
+.osgrep

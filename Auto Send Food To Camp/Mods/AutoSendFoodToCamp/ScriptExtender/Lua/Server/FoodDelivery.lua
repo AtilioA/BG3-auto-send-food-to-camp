@@ -1,10 +1,16 @@
 FoodDelivery = {}
 
+---@class DeliveryState
+---@field item GUIDSTRING|nil
+---@field reason string|nil
+
+---@type DeliveryState
 FoodDelivery.ignore_item = {
     item = nil,
     reason = nil
 }
 
+---@type DeliveryState
 FoodDelivery.awaiting_delivery = {
     item = nil,
     reason = nil
@@ -37,6 +43,8 @@ Ext.ModEvents["BG3MCM"]["MCM_Setting_Saved"]:Subscribe(function(payload)
 end)
 
 
+--- Delivers the pending food item unless it is currently ignored.
+---@return nil
 function FoodDelivery.DeliverAwaitingFood()
     if FoodDelivery.awaiting_delivery.item ~= nil and FoodDelivery.awaiting_delivery.item ~= FoodDelivery.ignore_item.item then
         ASFTCPrint(2, "Delivering awaiting food: " .. FoodDelivery.awaiting_delivery.item)
@@ -45,7 +53,9 @@ function FoodDelivery.DeliverAwaitingFood()
     end
 end
 
--- Don't move items that are in the retainlist according to settings
+--- Checks whether an item should remain in its current inventory.
+---@param foodItem GUIDSTRING The item to check.
+---@return boolean isRetainlisted Whether the item is retained by current settings.
 function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     local foodItemGuid = VCHelpers.Format:GetTemplateName(foodItem)
     if foodItemGuid == nil then
@@ -135,11 +145,19 @@ function FoodDelivery.IsFoodItemRetainlisted(foodItem)
     return false
 end
 
+--- Updates the item currently excluded from delivery.
+---@param item GUIDSTRING|nil The ignored item, or nil to clear it.
+---@param reason string|nil The reason for ignoring the item.
+---@return nil
 function FoodDelivery.UpdateIgnoredItem(item, reason)
     FoodDelivery.ignore_item.item = item
     FoodDelivery.ignore_item.reason = reason
 end
 
+--- Updates the item awaiting delivery.
+---@param item GUIDSTRING|nil The pending item, or nil to clear it.
+---@param reason string|nil The reason delivery is pending.
+---@return nil
 function FoodDelivery.UpdateAwaitingItem(item, reason)
     FoodDelivery.awaiting_delivery.item = item
     FoodDelivery.awaiting_delivery.reason = reason
@@ -147,6 +165,7 @@ end
 
 --- Send food from a character's inventory to the camp chest.
 ---@param character GUIDSTRING The character to send food from.
+---@return nil
 function FoodDelivery.SendInventoryFoodToChest(character)
     local campChestSack = CheckForCampChestSupplySack()
     local shallow = not MCM.Get('nested_containers') or false
@@ -194,8 +213,9 @@ end
 
 --- Send food to camp chest or supply sack.
 ---@param object GUIDSTRING The item to deliver.
----@param from? GUIDSTRING The inventory to deliver from.
----@param campChestSack EntityHandle|nil The supply sack entity to deliver to.
+---@param from GUIDSTRING|nil The inventory to deliver from.
+---@param campChestSack CampSupplySack|nil The supply sack to deliver to.
+---@return nil
 function FoodDelivery.DeliverFood(object, from, campChestSack)
     local shouldMove = FoodDelivery.ShouldMoveItem(object)
     if shouldMove then
@@ -207,6 +227,7 @@ end
 
 --- Check if an item should be moved to the camp chest.
 ---@param object GUIDSTRING The item to check.
+---@return boolean shouldMove Whether the item should be moved.
 function FoodDelivery.ShouldMoveItem(object)
     ASFTCPrint(2, "Checking if item should be sent to camp chest: " .. object)
 
@@ -248,9 +269,10 @@ function FoodDelivery.ShouldMoveItem(object)
 end
 
 --- Move an item to the camp chest.
----@param object GUIDSTRING The item to move.
----@param from? GUIDSTRING The inventory to move from.
----@param campChestSack EntityHandle|nil The optional supply sack entity to move to.
+---@param object GUIDSTRING|nil The item to move.
+---@param from GUIDSTRING|nil The inventory to move from.
+---@param campChestSack CampSupplySack|nil The optional supply sack to move to.
+---@return nil
 function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
     if object == nil then
         return
@@ -291,8 +313,8 @@ function FoodDelivery.MoveItemToCampChest(object, from, campChestSack)
 end
 
 --- Get the target inventory for food delivery.
----@param campChestSack EntityHandle|nil The optional supply sack entity to deliver to.
----@return GUIDSTRING|nil - The target inventory. Supply sack if provided or camp chest otherwise.
+---@param campChestSack CampSupplySack|nil The optional supply sack to deliver to.
+---@return GUIDSTRING|nil targetInventory The supply sack or camp chest inventory.
 function FoodDelivery.GetFoodDeliveryTargetInventory(campChestSack)
     -- tfw this is all useless because the supply sack is always used anyways
     if not MCM.Get('send_to_supply_sack') then
