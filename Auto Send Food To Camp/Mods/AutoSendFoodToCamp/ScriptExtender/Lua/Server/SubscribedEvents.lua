@@ -11,10 +11,6 @@ function SubscribedEvents.SubscribeToEvents()
         end
     end
 
-    ASFTCPrint(2,
-        "Subscribing to events with JSON config: " ..
-        Ext.Json.Stringify(Mods.BG3MCM.MCMAPI:GetAllModSettings(ModuleUUID)))
-
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", conditionalWrapper(EHandlers.OnLevelGameplayStarted))
     Ext.Osiris.RegisterListener("TimerFinished", 1, "before", conditionalWrapper(EHandlers.OnTimerFinished))
 
