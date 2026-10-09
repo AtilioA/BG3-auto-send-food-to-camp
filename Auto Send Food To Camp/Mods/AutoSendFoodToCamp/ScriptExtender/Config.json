@@ -1,5 +1,5 @@
 {
-    "RequiredVersion": 24,
+    "RequiredVersion": 32,
     "ModTable": "AutoSendFoodToCamp",
     "FeatureFlags": [
         "Lua"
