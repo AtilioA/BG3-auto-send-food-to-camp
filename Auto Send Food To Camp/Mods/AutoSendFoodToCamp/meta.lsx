@@ -1,23 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <save>
-  <version major="4" minor="0" revision="0" build="49" />
+  <version major="4" minor="8" revision="0" build="500" />
   <region id="Config">
     <node id="root">
       <children>
+        <node id="Conflicts" />
         <node id="Dependencies">
           <children>
             <node id="ModuleShortDesc">
-              <attribute id="Folder" type="LSWString" value="VolitionCabinet" />
+              <attribute id="Folder" type="LSString" value="VolitionCabinet" />
               <attribute id="MD5" type="LSString" value="" />
-              <attribute id="Name" type="FixedString" value="VolitionCabinet" />
-              <attribute id="UUID" type="FixedString" value="f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca" />
+              <attribute id="Name" type="LSString" value="VolitionCabinet" />
+              <attribute id="PublishHandle" type="uint64" value="0" />
+              <attribute id="UUID" type="guid" value="f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca" />
               <attribute id="Version64" type="int64" value="37999121855938560" />
             </node>
             <node id="ModuleShortDesc">
-              <attribute id="Folder" type="LSWString" value="BG3MCM" />
+              <attribute id="Folder" type="LSString" value="BG3MCM" />
               <attribute id="MD5" type="LSString" value="" />
-              <attribute id="Name" type="FixedString" value="Mod Configuration Menu" />
-              <attribute id="UUID" type="FixedString" value="755a8a72-407f-4f0d-9a33-274ac0f0b53d" />
+              <attribute id="Name" type="LSString" value="Mod Configuration Menu" />
+              <attribute id="PublishHandle" type="uint64" value="0" />
+              <attribute id="UUID" type="guid" value="755a8a72-407f-4f0d-9a33-274ac0f0b53d" />
               <attribute id="Version64" type="int64" value="40250921669623808" />
             </node>
           </children>
@@ -29,14 +32,13 @@
           <attribute id="Folder" type="LSString" value="AutoSendFoodToCamp" />
           <attribute id="LobbyLevelName" type="FixedString" value="" />
           <attribute id="MD5" type="LSString" value="" />
-          <attribute id="MainMenuBackgroundVideo" type="FixedString" value="" />
           <attribute id="MenuLevelName" type="FixedString" value="" />
-          <attribute id="Name" type="FixedString" value="Auto Send Food To Camp" />
+          <attribute id="Name" type="LSString" value="Auto Send Food To Camp" />
           <attribute id="NumPlayers" type="uint8" value="4" />
           <attribute id="PhotoBooth" type="FixedString" value="" />
-          <attribute id="StartupLevelName" type="FixedString" value="" />
-          <attribute id="Tags" type="LSString" value="" />
           <attribute id="Type" type="FixedString" value="Add-on" />
+          <attribute id="Tags" type="LSString" value="" />
+          <attribute id="StartupLevelName" type="FixedString" value="" />
           <attribute id="UUID" type="FixedString" value="1c132ec4-4cd2-4c40-aeb9-ff6ee0467da8" />
           <attribute id="Version64" type="int64" value="72761283627188224" />
           <children>
@@ -44,13 +46,6 @@
               <attribute id="Version64" type="int64" value="72761283627188224" />
             </node>
             <node id="Scripts" />
-            <node id="TargetModes">
-              <children>
-                <node id="Target">
-                  <attribute id="Object" type="FixedString" value="Story" />
-                </node>
-              </children>
-            </node>
           </children>
         </node>
       </children>
