@@ -24,13 +24,13 @@ end
 
 --- Finds the party character holding an inventory, directly or through containers.
 ---@param object GUIDSTRING The destination inventory.
----@return Guid|nil
+---@return GUIDSTRING|nil
 local function GetPartyInventoryOwner(object)
     local entity = VCHelpers.Object:GetEntity(object)
     local host = Osi.GetHostCharacter()
     while entity do
-        local guid = entity.Uuid.EntityUuid
-        if Osi.IsInPartyWith(guid, host) == 1 then
+        local guid = entity.Uuid and entity.Uuid.EntityUuid
+        if guid and Osi.IsInPartyWith(guid, host) == 1 then
             return guid
         end
         entity = VCHelpers.Inventory:GetHolder(entity)
@@ -91,31 +91,32 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
         end
     end
 
-    if not movedObject or not fromObject then
+    if not movedObject or not fromObject or not toObject then
         ASFTCWarn(1, "One or more parameters are nil, won't handle movement.")
         return false
     end
 
     ASFTCPrint(2,
-        "ShouldProcessItemMovement called: " ..
-        character .. " moved " .. movedObject .. " from " .. (fromObject or "nil") .. " to " .. (toObject or "nil"))
+        "ShouldProcessItemMovement called: %s moved %s from %s to %s",
+        character, movedObject, fromObject, toObject)
+
+    if not VCHelpers.Camp:GetChestTemplateUUID() then
+        ASFTCWarn(1, "Chest name is nil, won't handle movement.")
+        return false
+    end
 
     local isFromObjectInParty = Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) == 1
-    local isToObjectInParty = toObject and Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1 or false
+    local isToObjectInParty = Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1
 
     if isFromObjectInParty and isToObjectInParty then
         ASFTCPrint(2, "Item is being moved between party members, not trying to send to chest.")
         return false
     end
 
-    if VCHelpers.Character:IsCharacterInCamp(fromObject)
-        or (toObject and VCHelpers.Character:IsCharacterInCamp(toObject)) then
+    local isFromObjectInCamp = VCHelpers.Character:IsCharacterInCamp(fromObject)
+    local isToObjectInCamp = VCHelpers.Character:IsCharacterInCamp(toObject)
+    if isFromObjectInCamp or isToObjectInCamp then
         ASFTCPrint(2, "Item is being moved from or to camp, not trying to send to chest.")
-        return false
-    end
-
-    if not VCHelpers.Camp:GetChestTemplateUUID() then
-        ASFTCWarn(1, "Chest name is nil, won't handle movement.")
         return false
     end
 
@@ -145,7 +146,10 @@ end
 ---@param isTrade integer|nil Whether the movement is part of a trade.
 ---@return nil
 local function processMovedItem(movedObject, fromObject, toObject, isTrade)
-    local shouldSendToChest = EHandlers.ShouldProcessItemMovement(fromObject, movedObject, fromObject, toObject, isTrade)
+    -- Classify the destination's holder so the party and camp rules see the carrying character.
+    local destinationOwner = GetPartyInventoryOwner(toObject) or toObject
+    local shouldSendToChest =
+        EHandlers.ShouldProcessItemMovement(fromObject, movedObject, fromObject, destinationOwner, isTrade)
     if shouldSendToChest then
         FoodDelivery.DeliverFood(movedObject, fromObject)
     end
@@ -217,7 +221,7 @@ end
 function EHandlers.OnToInventory(object, targetObject, _amount, _showNotification, _clearOriginalOwner)
     -- Check if this move was initiated by this mod - if so, skip processing
     if FoodDelivery.is_mod_moving_item then
-        ASFTCDebug(2, "Ignoring ToInventory event for item moved by us: " .. object)
+        ASFTCDebug(2, "Ignoring ToInventory event for item moved by us: %s", object)
         return
     end
 
