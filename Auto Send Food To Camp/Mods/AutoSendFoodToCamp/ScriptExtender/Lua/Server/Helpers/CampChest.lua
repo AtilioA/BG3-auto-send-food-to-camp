@@ -17,10 +17,17 @@ function TryToGetCampChestSupplyPack(inventoryItems)
   return nil
 end
 
---- Finds the supply sack in the camp chest.
+--- Finds the supply sack in any camp chest.
 ---@return CampSupplySack|nil supplySack The camp chest supply sack, if present.
 function CheckForCampChestSupplySack()
-  return TryToGetCampChestSupplyPack(VCHelpers.Inventory:GetCampChestInventory(true))
+  for _, chestUUID in ipairs(VCHelpers.Camp:GetAllCampChestUUIDs()) do
+    local supplySack = TryToGetCampChestSupplyPack(VCHelpers.Inventory:GetInventory(chestUUID, true, true))
+    if supplySack ~= nil then
+      return supplySack
+    end
+  end
+
+  return nil
 end
 
 --- Adds a supply sack to the camp chest.
