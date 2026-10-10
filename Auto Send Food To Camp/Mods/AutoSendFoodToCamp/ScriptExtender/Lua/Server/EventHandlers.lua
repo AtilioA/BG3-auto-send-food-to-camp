@@ -100,11 +100,6 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
         "ShouldProcessItemMovement called: %s moved %s from %s to %s",
         character, movedObject, fromObject, toObject)
 
-    if not VCHelpers.Camp:GetChestTemplateUUID() then
-        ASFTCWarn(1, "Chest name is nil, won't handle movement.")
-        return false
-    end
-
     local isFromObjectInParty = Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter()) == 1
     local isToObjectInParty = Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) == 1
 
@@ -133,6 +128,11 @@ function EHandlers.ShouldProcessItemMovement(character, movedObject, fromObject,
 
     if isFromObjectInParty and not isToObjectInParty then
         ASFTCPrint(2, "Item is being moved from party, not trying to send to chest.")
+        return false
+    end
+
+    if not VCHelpers.Camp:GetChestTemplateUUID() then
+        ASFTCWarn(1, "Chest name is nil, won't handle movement.")
         return false
     end
 
